@@ -75,7 +75,6 @@
 		<commons.compress.version>1.8.1</commons.compress.version>
 		<jackson.mapper.version>1.7.8</jackson.mapper.version>
 		<unitils.core.version>3.4.2</unitils.core.version>
-		<resthub.version>1.1.2.9</resthub.version>
 	</properties>
 
 	<dependencyManagement>
@@ -185,11 +184,6 @@
 				<groupId>org.unitils</groupId>
 				<artifactId>unitils-core</artifactId>
 				<version>${unitils.core.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.resthub</groupId>
-				<artifactId>resthub-identity-core</artifactId>
-				<version>${resthub.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
