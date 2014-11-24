@@ -46,6 +46,10 @@
 		</developer>
 	</developers>
 
+	<modules>
+		<module>easycukes-commons</module>
+	</modules>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Versions -->
@@ -66,6 +70,8 @@
 		<commons.lang.version>3.3</commons.lang.version>
 		<commons.io.version>2.4</commons.io.version>
 		<commons.compress.version>1.8.1</commons.compress.version>
+		<jackson.mapper.version>1.7.8</jackson.mapper.version>
+		<unitils.core.version>3.4.2</unitils.core.version>
 	</properties>
 
 	<dependencyManagement>
@@ -165,6 +171,16 @@
 				<groupId>org.tmatesoft.hg4j</groupId>
 				<artifactId>hg4j</artifactId>
 				<version>${hg4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${jackson.mapper.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.unitils</groupId>
+				<artifactId>unitils-core</artifactId>
+				<version>${unitils.core.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
