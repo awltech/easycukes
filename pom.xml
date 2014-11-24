@@ -50,6 +50,7 @@
 		<module>easycukes-commons</module>
 		<module>easycukes-scm</module>
 		<module>easycukes-rest</module>
+		<module>easycukes-selenium</module>
 	</modules>
 
 	<properties>
