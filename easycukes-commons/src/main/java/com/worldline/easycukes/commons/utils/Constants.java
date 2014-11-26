@@ -21,13 +21,13 @@ package com.worldline.easycukes.commons.utils;
  * This {@link Constants} class contains all constants that could be manipulated
  * in this project. It mainly consists in keys you can use in order to retrieve
  * some configuration values from the configuration file.
- * 
+ *
  * @author mechikhi
  * @version 1.0
  */
 public interface Constants {
 
-	public static final String CUKES_TESTS_LOGGER = "org.kazansource.tests.cucumber";
+	public static final String CUKES_TESTS_LOGGER = "com.worldline.easycukes";
 
 	/*
 	 * Keys to be used in order to get information from the configuration file
