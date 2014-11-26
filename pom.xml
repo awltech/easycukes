@@ -76,6 +76,13 @@
 		<jackson.mapper.version>1.7.8</jackson.mapper.version>
 		<unitils.core.version>3.4.2</unitils.core.version>
 	</properties>
+	
+	<repositories>
+		<repository>
+			<id>Maven tmatesoft repo</id>
+			<url>http://maven.tmatesoft.com/content/repositories/snapshots</url>
+		</repository>
+    </repositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -239,23 +246,6 @@
 				<configuration>
 					<show>public</show>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${surefire-testng.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>surefire-testng</artifactId>
-						<version>${surefire-testng.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>surefire-testng-utils</artifactId>
-						<version>${surefire-testng.version}</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
