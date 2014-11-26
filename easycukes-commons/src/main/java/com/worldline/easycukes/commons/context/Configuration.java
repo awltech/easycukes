@@ -135,8 +135,20 @@ public class Configuration {
 	}
 
 	/**
-	 * Allows to get the value matching with the specified key from the target
+	 * Allows to get the value matching with the specified key from the
 	 * environment configuration
+	 * 
+	 * @param key
+	 *            a key allowing to get some values from the configuration
+	 * @return the value corresponding to the provided key
+	 */
+	public static String getEnvProperty(final String key) {
+		return environment.getProperty(key);
+	}
+
+	/**
+	 * Allows to get the value matching with the specified key from the target
+	 * application configuration
 	 * 
 	 * @param key
 	 *            a key allowing to get some values from the configuration

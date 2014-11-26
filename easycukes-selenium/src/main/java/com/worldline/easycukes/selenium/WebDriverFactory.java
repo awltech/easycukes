@@ -44,9 +44,9 @@ public class WebDriverFactory {
 	/**
 	 * Creates a new local driver instance. supported browsers : chrome and
 	 * firefox
-	 *
+	 * 
 	 * @return a local WebDriver instance
-	 *
+	 * 
 	 * @throws Exception
 	 */
 	public static WebDriver newLocalWebDriver(String browserName)
@@ -64,21 +64,21 @@ public class WebDriverFactory {
 	/**
 	 * Creates a new remte driver instance. supported browsers : chrome and
 	 * firefox
-	 *
+	 * 
 	 * @return a remote WebDriver instance
-	 *
+	 * 
 	 * @throws Exception
 	 */
 	public static WebDriver newRemoteWebDriver(String browserName)
 			throws Exception {
 		LOGGER.info("Starting a remote Driver");
+		final String remoteAddress = Configuration
+				.getEnvProperty(SeleniumConstants.REMOTE_ADDRESS_KEY);
 		if ("firefox".equals(browserName))
-			return new RemoteWebDriver(new URL(
-					Configuration.get(SeleniumConstants.REMOTE_ADDRESS_KEY)),
+			return new RemoteWebDriver(new URL(remoteAddress),
 					firefoxCapabilities());
 		else if ("chrome".equals(browserName))
-			return new RemoteWebDriver(new URL(
-					Configuration.get(SeleniumConstants.REMOTE_ADDRESS_KEY)),
+			return new RemoteWebDriver(new URL(remoteAddress),
 					chromeCapabilities());
 		else
 			throw new Exception("Unknown or not supported browser : "
@@ -87,7 +87,7 @@ public class WebDriverFactory {
 
 	/**
 	 * Creates a new Firefox driver instance
-	 *
+	 * 
 	 * @return a FirefoxDriver instance
 	 */
 	private static WebDriver newLocalFirefoxDriver() {
@@ -96,7 +96,7 @@ public class WebDriverFactory {
 
 	/**
 	 * Allows to customize and configure the options of a Firefox session
-	 *
+	 * 
 	 * @return DesiredCapabilities
 	 */
 	private static DesiredCapabilities firefoxCapabilities() {
@@ -109,12 +109,13 @@ public class WebDriverFactory {
 
 	/**
 	 * Creates a new chrome driver instance
-	 *
+	 * 
 	 * @return a ChromeDriver instance
 	 */
 	private static WebDriver newLocalChromeDriver() {
 		final File file_chrome = new File(
-				Configuration.get(SeleniumConstants.LOCAL_DRIVER_PATH));
+				Configuration
+						.getEnvProperty(SeleniumConstants.LOCAL_DRIVER_PATH));
 		System.setProperty("webdriver.chrome.driver",
 				file_chrome.getAbsolutePath());
 		return new ChromeDriver(chromeCapabilities());
@@ -123,7 +124,7 @@ public class WebDriverFactory {
 
 	/**
 	 * Allows to customize and configure the options of a chrome session
-	 *
+	 * 
 	 * @return DesiredCapabilities
 	 */
 	private static DesiredCapabilities chromeCapabilities() {

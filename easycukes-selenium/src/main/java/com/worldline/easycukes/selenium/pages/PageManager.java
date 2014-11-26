@@ -28,7 +28,7 @@ import com.worldline.easycukes.selenium.utils.SeleniumConstants;
 
 /**
  * TODO
- *
+ * 
  * @author mechikhi
  * @version 1.0
  */
@@ -49,7 +49,7 @@ public class PageManager {
 	/**
 	 * Allows to initialize this instance of {@link PageManager} by creating the
 	 * {@link WebDriver}
-	 *
+	 * 
 	 * @param baseUrl
 	 *            the base url
 	 * @throws Exception
@@ -61,10 +61,11 @@ public class PageManager {
 		if (page.get() == null) {
 			String browserName = ExecutionContext.get("browserName");
 			if (browserName == null)
-				browserName = Configuration.get(SeleniumConstants.BROWSER_KEY);
+				browserName = Configuration
+						.getEnvProperty(SeleniumConstants.BROWSER_KEY);
 			WebDriver driver = null;
 			if (!"true".equals(Configuration
-					.get(SeleniumConstants.USE_REMOTE_KEY)))
+					.getEnvProperty(SeleniumConstants.USE_REMOTE_KEY)))
 				driver = WebDriverFactory.newLocalWebDriver(browserName);
 			else
 				try {
@@ -80,7 +81,7 @@ public class PageManager {
 
 	/**
 	 * TODO
-	 *
+	 * 
 	 * @return
 	 */
 	public static Page getPage() {
