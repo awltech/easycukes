@@ -1,4 +1,4 @@
-package org.kazansource.tests.common.utils;
+package com.worldline.easycukes.commons.utils;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
 /**
  * This {@link JSONHelper} class provides various methods allowing to manipulate
  * JSON data. It uses internally {@link JSONObject} from <i>org.json.simple</i>.
- * 
+ *
  * @author aneveux
  * @version 1.0
  */
@@ -34,7 +34,7 @@ public class JSONHelper {
 
 	/**
 	 * Returns <b>true</b> if JSON object o1 is equals to JSON object o2.
-	 * 
+	 *
 	 * @param o1
 	 *            a {@link JSONObject} containing some JSON data
 	 * @param o2
@@ -47,34 +47,30 @@ public class JSONHelper {
 		if (o1.size() != o2.size())
 			return false;
 		try {
-			Iterator<Entry<String, Object>> i = o1.entrySet().iterator();
+			final Iterator<Entry<String, Object>> i = o1.entrySet().iterator();
 			while (i.hasNext()) {
-				Entry<String, Object> e = i.next();
-				String key = e.getKey();
-				Object value1 = e.getValue();
-				Object value2 = o2.get(key);
+				final Entry<String, Object> e = i.next();
+				final String key = e.getKey();
+				final Object value1 = e.getValue();
+				final Object value2 = o2.get(key);
 				if (value1 == null) {
 					if (!(o2.get(key) == null && o2.containsKey(key)))
 						return false;
 				} else if (value1 instanceof JSONObject) {
-					if (!(value2 instanceof JSONObject)) {
+					if (!(value2 instanceof JSONObject))
 						return false;
-					}
 					if (!equals((JSONObject) value1, (JSONObject) value2))
 						return false;
 				} else if (value1 instanceof JSONArray) {
 
-					if (!(value2 instanceof JSONArray)) {
+					if (!(value2 instanceof JSONArray))
 						return false;
-					}
 					if (!equals((JSONArray) value1, (JSONArray) value2))
 						return false;
-				} else {
-					if (!value1.equals(value2))
-						return false;
-				}
+				} else if (!value1.equals(value2))
+					return false;
 			}
-		} catch (Exception unused) {
+		} catch (final Exception unused) {
 			unused.printStackTrace();
 			return false;
 		}
@@ -83,7 +79,7 @@ public class JSONHelper {
 
 	/**
 	 * Returns <b>true</b> if JSON array a1 is equals to JSON array a2.
-	 * 
+	 *
 	 * @param a1
 	 *            a {@link JSONArray} containing some JSON data
 	 * @param a2
@@ -96,44 +92,37 @@ public class JSONHelper {
 		if (a1.size() != a2.size())
 			return false;
 
-		ListIterator i1 = a1.listIterator();
+		final ListIterator i1 = a1.listIterator();
 		ListIterator i2 = null;
 		boolean found = false;
 		while (i1.hasNext()) {
-			Object o1 = i1.next();
+			final Object o1 = i1.next();
 			found = false;
 			i2 = a2.listIterator();
-			if (o1 instanceof JSONObject) {
+			if (o1 instanceof JSONObject)
 				while (i2.hasNext()) {
-					Object o2 = i2.next();
-					if (!(o2 instanceof JSONObject)) {
+					final Object o2 = i2.next();
+					if (!(o2 instanceof JSONObject))
 						return false;
-					}
-					if (equals((JSONObject) o1, (JSONObject) o2)) {
+					if (equals((JSONObject) o1, (JSONObject) o2))
 						found = true;
-					}
 				}
-			} else if (o1 instanceof JSONArray) {
+			else if (o1 instanceof JSONArray)
 				while (i2.hasNext()) {
-					Object o2 = i2.next();
-					if (!(o2 instanceof JSONArray)) {
+					final Object o2 = i2.next();
+					if (!(o2 instanceof JSONArray))
 						return false;
-					}
-					if (equals((JSONArray) o1, (JSONArray) o2)) {
+					if (equals((JSONArray) o1, (JSONArray) o2))
 						found = true;
-					}
 				}
-			} else {
+			else
 				while (i2.hasNext()) {
-					Object o2 = i2.next();
-					if (o1.equals(o2)) {
+					final Object o2 = i2.next();
+					if (o1.equals(o2))
 						found = true;
-					}
 				}
-			}
-			if (!found) {
+			if (!found)
 				return false;
-			}
 
 		}
 		return true;
@@ -142,7 +131,7 @@ public class JSONHelper {
 	/**
 	 * Returns <b>true</b> if JSON format of s1 is equals to JSON format of s2,
 	 * ignoring the case.
-	 * 
+	 *
 	 * @param s1
 	 *            a {@link String} containing some JSON data
 	 * @param s2
@@ -163,7 +152,7 @@ public class JSONHelper {
 
 	/**
 	 * Returns <b>true</b> if JSON format of s1 is containing JSON format of s2
-	 * 
+	 *
 	 * @param s1
 	 *            a {@link String} containing some JSON data
 	 * @param s2
@@ -184,7 +173,7 @@ public class JSONHelper {
 	/**
 	 * Returns a proper representation in JSON of a {@link String} object
 	 * already containing JSON (it basically deals with indentation)
-	 * 
+	 *
 	 * @param s
 	 *            a {@link String} containing JSON to be cleaned
 	 * @return a clean JSON representation of the JSON data contained in the
@@ -205,7 +194,7 @@ public class JSONHelper {
 	/***
 	 * Converts given {@link String} s to {@link JSONObject} format and returns
 	 * it
-	 * 
+	 *
 	 * @param s
 	 *            a {@link String} containing some JSON data
 	 * @return a {@link JSONObject} corresponding to the JSON data contained in
@@ -226,7 +215,7 @@ public class JSONHelper {
 	/**
 	 * Returns the value of a given property from a particular
 	 * {@link JSONObject}
-	 * 
+	 *
 	 * @param jsonObject
 	 *            the {@link JSONObject} to be used for extracting values
 	 * @param property
@@ -239,13 +228,12 @@ public class JSONHelper {
 	public static String getPropertyValue(final String s, final String property)
 			throws ParseException {
 		try {
-			Object obj = parser.parse(s);
-			if (obj != null) {
+			final Object obj = parser.parse(s);
+			if (obj != null)
 				if (obj instanceof JSONObject)
 					return JSONHelper.getValue((JSONObject) obj, property);
 				else if (obj instanceof JSONArray)
 					return JSONHelper.getValue((JSONArray) obj, property);
-			}
 		} catch (final ParseException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw e;
@@ -256,7 +244,7 @@ public class JSONHelper {
 	/**
 	 * Returns the value of a given property from a particular
 	 * {@link JSONObject}
-	 * 
+	 *
 	 * @param jsonObject
 	 *            the {@link JSONObject} to be used for extracting values
 	 * @param property
@@ -270,17 +258,16 @@ public class JSONHelper {
 		if (jsonObject != null)
 			if (jsonObject.get(property) != null)
 				return jsonObject.get(property).toString();
-		int index = property.indexOf(".");
+		final int index = property.indexOf(".");
 		if (index > 0) {
-			Object object = getProperty(jsonObject,
+			final Object object = getProperty(jsonObject,
 					property.substring(0, index));
 			if (object != null) {
-				if (object instanceof JSONObject) {
+				if (object instanceof JSONObject)
 					return getValue((JSONObject) object,
 							property.substring(index + 1));
-				}
 				if (object instanceof JSONArray) {
-					JSONArray jsonArray = (JSONArray) object;
+					final JSONArray jsonArray = (JSONArray) object;
 					if (jsonArray.size() > 0)
 						return getValue((JSONObject) jsonArray.get(0),
 								property.substring(index + 1));
@@ -293,7 +280,7 @@ public class JSONHelper {
 	/**
 	 * Returns the value of a given property from a particular
 	 * {@link JSONObject}
-	 * 
+	 *
 	 * @param jsonObject
 	 *            the {@link JSONObject} to be used for extracting values
 	 * @param property
@@ -306,18 +293,17 @@ public class JSONHelper {
 			final String property) {
 		if (jsonArray == null)
 			return null;
-		int index = property.indexOf(".");
+		final int index = property.indexOf(".");
 		if (index > 0) {
-			Object object = getProperty(jsonArray, property.substring(0, index));
+			final Object object = getProperty(jsonArray,
+					property.substring(0, index));
 			if (object != null) {
-				if (object instanceof JSONObject) {
+				if (object instanceof JSONObject)
 					return getValue((JSONObject) object,
 							property.substring(index + 1));
-				}
-				if (object instanceof JSONArray) {
+				if (object instanceof JSONArray)
 					return getValue((JSONArray) object,
 							property.substring(index + 1));
-				}
 			}
 		} else
 			return getProperty(jsonArray, property).toString();
@@ -325,9 +311,9 @@ public class JSONHelper {
 	}
 
 	private static Object getProperty(JSONObject jsonObject, String simpleProp) {
-		int idx1 = simpleProp.indexOf("[");
+		final int idx1 = simpleProp.indexOf("[");
 		if (idx1 > 0) {
-			JSONArray jsonArray = (JSONArray) jsonObject.get(simpleProp
+			final JSONArray jsonArray = (JSONArray) jsonObject.get(simpleProp
 					.substring(0, idx1));
 			return getProperty(jsonArray, simpleProp.substring(idx1));
 		} else
@@ -336,23 +322,21 @@ public class JSONHelper {
 
 	private static Object getProperty(JSONArray jsonArray, String simpleProp) {
 		if (simpleProp.startsWith("[")) {
-			int idx2 = simpleProp.indexOf("]");
+			final int idx2 = simpleProp.indexOf("]");
 			if (idx2 > 0) {
-				String exp = simpleProp.substring(1, idx2);
+				final String exp = simpleProp.substring(1, idx2);
 				if (exp.contains("=")) {
-					String[] expParams = exp.split("=");
-					for (Iterator<JSONObject> iterator = jsonArray.iterator(); iterator
-							.hasNext();) {
-						JSONObject jsonObject = iterator.next();
+					final String[] expParams = exp.split("=");
+					for (final Iterator<JSONObject> iterator = jsonArray
+							.iterator(); iterator.hasNext();) {
+						final JSONObject jsonObject = iterator.next();
 						if (getValue(jsonObject, expParams[0]).equals(
-								expParams[1])) {
+								expParams[1]))
 							return jsonObject;
-						}
 					}
 				} else if (StringUtils.isNumeric(exp)
-						&& jsonArray.size() > Integer.parseInt(exp)) {
+						&& jsonArray.size() > Integer.parseInt(exp))
 					return jsonArray.get(Integer.parseInt(exp));
-				}
 			}
 		}
 		return null;
@@ -361,7 +345,7 @@ public class JSONHelper {
 	/**
 	 * Returns a {@link JSONArray} format from a given String containing some
 	 * JSON data
-	 * 
+	 *
 	 * @param s
 	 *            a {@link String} containing some JSON data
 	 * @return a {@link JSONArray} representation of the provided {@link String}
@@ -381,7 +365,7 @@ public class JSONHelper {
 	/**
 	 * Returns a proper representation in JSON of a {@link String} object
 	 * already containing JSON (it basically deals with indentation)
-	 * 
+	 *
 	 * @param s
 	 *            a {@link String} containing JSON to be cleaned
 	 * @return a clean JSON representation of the JSON data contained in the
