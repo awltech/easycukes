@@ -32,7 +32,7 @@ import cucumber.api.java.en.When;
  * This class aims at containing all the common operations you may use in the
  * tests scenarios. Things like dealing with the configuration, or manipulating
  * external tools, etc.
- *
+ * 
  * @author mechikhi
  * @version 1.0
  */
@@ -57,8 +57,8 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Given("^move to and click element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void move_to_and_click_element_having_equal_to(String selector,
-			String value) throws Exception {
+	public void move_to_and_click_element_having(String selector, String value)
+			throws Exception {
 
 		LOGGER.info("move to and click element identified by [" + selector
 				+ " = " + value + "]");
@@ -66,8 +66,8 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Given("^select element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" by text \"([^\"]*)\"$")
-	public void select_element_having_equal_to_by_text(String selector,
-			String value, String text) throws Exception {
+	public void select_element_having_by_text(String selector, String value,
+			String text) throws Exception {
 
 		LOGGER.info("select element identified by [" + selector + " = " + value
 				+ "]");
@@ -76,8 +76,8 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Given("^select element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" by value \"([^\"]*)\"$")
-	public void select_element_having_equal_to_by_value(String selector,
-			String value, String text) throws Exception {
+	public void select_element_having_by_value(String selector, String value,
+			String text) throws Exception {
 
 		LOGGER.info("select element identified by [" + selector + " = " + value
 				+ "]");
@@ -86,7 +86,7 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Given("^click element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void click_element_having_equal_to(String selector, String value)
+	public void click_element_having(String selector, String value)
 			throws Exception {
 
 		LOGGER.info("Click on element identified by [" + selector + " = "
@@ -97,7 +97,7 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Given("^submit element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void submit_element_having_equal_to(String selector, String value)
+	public void submit_element_having(String selector, String value)
 			throws Exception {
 
 		LOGGER.info("Submit on element identified by [" + selector + " = "
@@ -108,8 +108,8 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Given("^send a text \"([^\"]*)\" to element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void send_a_text_to_element_having_equal_to(String text,
-			String selector, String value) throws Exception {
+	public void send_a_text_to_element_having(String text, String selector,
+			String value) throws Exception {
 
 		LOGGER.info("Send text to element identified by [" + selector + " = "
 				+ value + "]");
@@ -126,7 +126,7 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Then("^the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should be present$")
-	public void the_element_having_equal_to_should_be_present(String selector,
+	public void the_element_having_should_be_present(String selector,
 			String value) throws Throwable {
 		LOGGER.info("Check the presence of element identified by [" + selector
 				+ " = " + value + "]");
@@ -135,8 +135,8 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Then("^the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should not be present$")
-	public void the_element_having_equal_to_should_not_be_present(
-			String selector, String value) throws Throwable {
+	public void the_element_having_should_not_be_present(String selector,
+			String value) throws Throwable {
 		LOGGER.info("Check the presence of element identified by [" + selector
 				+ " = " + value + "]");
 		Assert.assertFalse(PageManager.getPage().isElementPresent(
@@ -144,7 +144,7 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Then("^the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should contain \"([^\"]*)\"$")
-	public void the_element_having_equal_to_should_contain(String selector,
+	public void the_element_having_should_contain(String selector,
 			String value, String text) throws Throwable {
 		LOGGER.info("Check if the element identified by [" + selector + " = "
 				+ value + "] contains " + text);
@@ -164,17 +164,20 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@When("^wait until loading the attribute \"([^\"]*)\" of element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void wait_until_loading_the_attribute_of_element_having_equal_to(
+	public void wait_until_loading_the_attribute_of_element_having(
 			String attribute, String selector, String value) throws Throwable {
+
+		LOGGER.info("wait until loading the attribute " + attribute
+				+ " of element having [" + selector + " = " + value + "]");
 
 		PageManager.getPage().waitUntilElementContainsAttribute(
 				getSelector(selector, value), attribute);
 	}
 
 	@Then("^the attribute \"([^\"]*)\" of element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should contain \"([^\"]*)\"$")
-	public void the_attribute_of_element_having_equal_to_should_contain(
+	public void the_attribute_of_element_having_should_contain(
 			String attribute, String selector, String value, String text)
-					throws Throwable {
+			throws Throwable {
 		LOGGER.info("Check if the element identified by [" + selector + " = "
 				+ value + "] contains " + text);
 
@@ -185,17 +188,16 @@ public class CommonStepdefs extends AbstractStepdefs {
 	}
 
 	@Then("^save with \"([^\"]*)\" key the attribute \"([^\"]*)\" of element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void save_with_key_the_attribute_of_element_having_equal_to(
-			String key, String attribute, String selector, String value)
-					throws Throwable {
+	public void save_with_key_the_attribute_of_element_having(String key,
+			String attribute, String selector, String value) throws Throwable {
 		LOGGER.info("save with " + key + " key the attribute " + attribute
 				+ " of element identified by [" + selector + " = " + value
 				+ "]");
 		ExecutionContext.put(
 				key,
 				PageManager.getPage()
-				.getWebElement(getSelector(selector, value))
-				.getAttribute(attribute));
+						.getWebElement(getSelector(selector, value))
+						.getAttribute(attribute));
 	}
 
 	@Then("^the text of the page source should contain \"([^\"]*)\"$")
@@ -208,19 +210,24 @@ public class CommonStepdefs extends AbstractStepdefs {
 
 	@Then("^accept the alert$")
 	public void accept_the_alert() {
+		LOGGER.info("accept the alert");
 		PageManager.getPage().acceptAlert();
 	}
 
 	@When("^move to element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void move_to_element_having_equal_to(String selector, String value)
+	public void move_to_element_having(String selector, String value)
 			throws Throwable {
 		LOGGER.info("move to [" + selector + "=" + value + "]");
 		PageManager.getPage().moveToElement(getSelector(selector, value));
 	}
 
 	@When("^wait (\\d+) seconds for element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" contains \"([^\"]*)\"$")
-	public void wait_seconds_for_element_having_equal_to_contains(int timeout,
+	public void wait_seconds_for_element_having_contains(int timeout,
 			String selector, String value, String text) throws Throwable {
+
+		LOGGER.info("wait " + timeout + " seconds for element having ["
+				+ selector + " = " + value + "]");
+
 		PageManager.getPage().waitUntilElementContainsText(
 				getSelector(selector, value), DataInjector.injectData(text),
 				timeout);
@@ -228,12 +235,15 @@ public class CommonStepdefs extends AbstractStepdefs {
 
 	@When("^wait for (\\d+) seconds$")
 	public void wait_for_seconds(int seconds) throws Throwable {
+		LOGGER.info("waiting " + seconds + " seconds");
 		Sleeper.sleepTightInSeconds(seconds);
 	}
 
 	@When("^wait until element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" contains \"([^\"]*)\"$")
-	public void wait_until_element_having_equal_to_contains(String selector,
+	public void wait_until_element_having_contains(String selector,
 			String value, String text) throws Throwable {
+		LOGGER.info("wait until element having [" + selector + " = " + value
+				+ "] contains " + text);
 		PageManager.getPage().waitUntilElementContainsText(
 				getSelector(selector, value), DataInjector.injectData(text));
 	}
@@ -241,11 +251,13 @@ public class CommonStepdefs extends AbstractStepdefs {
 	@When("^wait until element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" is present$")
 	public void wait_until_element_having_equal_is_present(String selector,
 			String value) throws Throwable {
+		LOGGER.info("wait until element having [" + selector + " = " + value
+				+ "] contains is present");
 		PageManager.getPage().isElementPresent(getSelector(selector, value));
 	}
 
 	@Given("^switch to frame having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void switch_to_frame_having_equal_to(String selector, String value)
+	public void switch_to_frame_having(String selector, String value)
 			throws Throwable {
 		LOGGER.info("Switching to frame identified by [" + selector + " = "
 				+ value + "]");

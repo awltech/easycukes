@@ -30,14 +30,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.browserlaunchers.Sleeper;
 import org.openqa.selenium.interactions.Actions;
 
-import com.worldline.easycukes.commons.context.Configuration;
-import com.worldline.easycukes.selenium.utils.SeleniumConstants;
 import com.worldline.easycukes.selenium.utils.SeleniumHelper;
 
 /**
  * Page Object base class. It provides the base structure and properties for a
  * page object to extend.
- *
+ * 
  * @author mechikhi
  * @version 1.0
  */
@@ -48,27 +46,34 @@ public class Page {
 	/** This page's WebDriver */
 	private final WebDriver driver;
 
-	private final By notifBy = By.cssSelector(Configuration
-			.get(SeleniumConstants.NOTIFICATON_BY_CSS_KEY));
+	private By notifyBy = null;
 
-	private final By loadProgress = By.cssSelector(Configuration
-			.get(SeleniumConstants.LOADING_PROGRESS_BY_CSS_KEY));
+	private boolean waitNotificationToHide = false;
+
+	private By loadProgressBy = null;
 
 	private final List<String> handledWindowList = new ArrayList<String>();
 
 	/**
-	 * @param baseUrl
-	 *            the base URL
+	 * Sets the
+	 * 
 	 * @param driver
 	 */
-	public Page(WebDriver driver, String baseUrl) {
+	public Page(WebDriver driver) {
 		this.driver = driver;
+	}
+
+	/**
+	 * @param baseUrl
+	 *            the base URL
+	 */
+	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
 	}
 
 	/**
 	 * Send text keys to the element that finds by selector.
-	 *
+	 * 
 	 * @param by
 	 *            selector to find the element
 	 * @param text
@@ -90,7 +95,7 @@ public class Page {
 	/**
 	 * switch focus of WebDriver to the next found window handle (that's your
 	 * newly opened window)
-	 *
+	 * 
 	 */
 	public void switchToNewWindow() {
 		handledWindowList.add(driver.getWindowHandle());
@@ -104,7 +109,7 @@ public class Page {
 
 	/**
 	 * switch focus of WebDriver to the previous window
-	 *
+	 * 
 	 */
 	public void switchToPreviousWindow() {
 
@@ -117,7 +122,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param by
 	 *            selector to find the element
 	 */
@@ -126,7 +131,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param by
 	 *            selector to find the element
 	 * @return
@@ -136,7 +141,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param by
 	 *            selector to find the element
 	 */
@@ -153,7 +158,7 @@ public class Page {
 
 	/**
 	 * Is the text present in page.
-	 *
+	 * 
 	 * @param text
 	 * @return
 	 */
@@ -164,7 +169,7 @@ public class Page {
 	/**
 	 * Is the Element in page. if it does not find the element throw
 	 * NoSuchElementException, thus returns false.
-	 *
+	 * 
 	 * @param by
 	 *            selector to find the element
 	 * @return
@@ -181,7 +186,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param by
 	 * @param text
 	 * @return
@@ -192,7 +197,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param by
 	 * @param text
 	 * @return
@@ -202,7 +207,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param by
 	 * @param attribute
 	 * @return
@@ -214,7 +219,7 @@ public class Page {
 
 	/**
 	 * Checks if the elment is in the DOM and displayed.
-	 *
+	 * 
 	 * @param by
 	 *            selector to find the element
 	 * @return true or false
@@ -237,40 +242,43 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param by
 	 *            selector to find the element
 	 * @return the first WebElement
 	 */
 	public WebElement getWebElement(final By by) {
 
-		if (!by.equals(notifBy))
+		if (!by.equals(notifyBy))
 			waitLoadingPage();
 		return SeleniumHelper.waitForElementToBePresent(driver, by);
 	}
 
 	/**
-	 *
+	 * 
 	 * @return
 	 */
 	public void waitLoadingPage() {
-		waitUntilElementIsHidden(loadProgress);
-		waitUntilElementIsHidden(notifBy);
+		if (loadProgressBy != null)
+			waitUntilElementIsHidden(loadProgressBy);
+		if (waitNotificationToHide && notifyBy != null)
+			waitUntilElementIsHidden(notifyBy);
 		Sleeper.sleepTightInSeconds(1);
 	}
 
 	/**
-	 *
+	 * 
 	 * @return
 	 */
 	public String waitNotification() {
-		final String notification = getWebElement(notifBy).getText();
-		waitUntilElementIsHidden(notifBy);
+		final String notification = getWebElement(notifyBy).getText();
+		if (waitNotificationToHide)
+			waitUntilElementIsHidden(notifyBy);
 		return notification;
 	}
 
 	/**
-	 *
+	 * 
 	 * @return
 	 */
 	public void waitUntilElementIsHidden(final By by) {
@@ -279,7 +287,7 @@ public class Page {
 
 	/**
 	 * Allows to navigate to a given URL through the WebDriver .
-	 *
+	 * 
 	 * @param path
 	 */
 	public void navigateTo(String path) {
@@ -290,7 +298,7 @@ public class Page {
 
 	/**
 	 * Allows TODO
-	 *
+	 * 
 	 */
 	public void refresh() {
 		driver.navigate().refresh();
@@ -299,7 +307,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param selector
 	 */
 	public void moveToElement(By selector) {
@@ -323,7 +331,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param text
 	 */
 	public void sendTextToAlertAndAccept(String text) {
@@ -334,7 +342,7 @@ public class Page {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param by
 	 * @param text
 	 */
@@ -346,4 +354,15 @@ public class Page {
 		SeleniumHelper.waitUntilValueIsSelected(driver, by, value);
 	}
 
+	public void setLoadingProgress(By by) {
+		this.loadProgressBy = by;
+	}
+
+	public void setNotificationBy(By by) {
+		this.notifyBy = by;
+	}
+
+	public void enableWaitNotificationToHide() {
+		this.waitNotificationToHide = true;
+	}
 }

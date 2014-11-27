@@ -50,11 +50,9 @@ public class PageManager {
 	 * Allows to initialize this instance of {@link PageManager} by creating the
 	 * {@link WebDriver}
 	 * 
-	 * @param baseUrl
-	 *            the base url
 	 * @throws Exception
 	 */
-	public static void initialize(String baseUrl) throws Exception {
+	public static void initialize() throws Exception {
 
 		if (Configuration.isProxyNeeded())
 			Configuration.configureProxy();
@@ -75,7 +73,7 @@ public class PageManager {
 					driver = WebDriverFactory.newLocalWebDriver(browserName);
 				}
 			driver.manage().window().maximize();
-			page.set(new Page(driver, baseUrl));
+			page.set(new Page(driver));
 		}
 	}
 
