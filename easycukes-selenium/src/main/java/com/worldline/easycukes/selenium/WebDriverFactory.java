@@ -26,6 +26,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -56,6 +57,8 @@ public class WebDriverFactory {
 			return newLocalFirefoxDriver();
 		else if ("chrome".equals(browserName))
 			return newLocalChromeDriver();
+		else if ("ie".equals(browserName))
+			return newLocalIEDriver();
 		else
 			throw new Exception("Unknown or not supported browser : "
 					+ browserName);
@@ -80,6 +83,8 @@ public class WebDriverFactory {
 		else if ("chrome".equals(browserName))
 			return new RemoteWebDriver(new URL(remoteAddress),
 					chromeCapabilities());
+		else if ("ie".equals(browserName))
+			return new RemoteWebDriver(new URL(remoteAddress), ieCapabilities());
 		else
 			throw new Exception("Unknown or not supported browser : "
 					+ browserName);
@@ -115,7 +120,7 @@ public class WebDriverFactory {
 	private static WebDriver newLocalChromeDriver() {
 		final File file_chrome = new File(
 				Configuration
-						.getEnvProperty(SeleniumConstants.LOCAL_DRIVER_PATH));
+						.getEnvProperty(SeleniumConstants.CHROME_DRIVER_PATH));
 		System.setProperty("webdriver.chrome.driver",
 				file_chrome.getAbsolutePath());
 		return new ChromeDriver(chromeCapabilities());
@@ -132,6 +137,30 @@ public class WebDriverFactory {
 		final ChromeOptions options = new ChromeOptions();
 		options.addArguments("--test-type");
 		capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+		return capabilities;
+	}
+
+	/**
+	 * Creates a new IE driver instance
+	 * 
+	 * @return a InternetExplorerDriver instance
+	 */
+	private static WebDriver newLocalIEDriver() {
+		final File file_chrome = new File(
+				Configuration.getEnvProperty(SeleniumConstants.IE_DRIVER_PATH));
+		System.setProperty("webdriver.ie.driver", file_chrome.getAbsolutePath());
+		return new InternetExplorerDriver(ieCapabilities());
+
+	}
+
+	/**
+	 * Allows to customize and configure the options of a IE session
+	 * 
+	 * @return DesiredCapabilities
+	 */
+	private static DesiredCapabilities ieCapabilities() {
+		final DesiredCapabilities capabilities = DesiredCapabilities
+				.internetExplorer();
 		return capabilities;
 	}
 

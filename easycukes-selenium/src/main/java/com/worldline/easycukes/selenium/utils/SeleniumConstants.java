@@ -58,5 +58,10 @@ public interface SeleniumConstants {
 	/**
 	 * The path of chrome driver binary executable
 	 */
-	public static final String LOCAL_DRIVER_PATH = "local_driver_path";
+	public static final String CHROME_DRIVER_PATH = "chrome_driver_path";
+
+	/**
+	 * The path of IE driver binary executable
+	 */
+	public static final String IE_DRIVER_PATH = "ie_driver_path";
 }
