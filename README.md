@@ -27,6 +27,8 @@ All of our documentation can be found on [our wiki](https://github.com/awltech/e
 - Advanced:
 	- [Extensibility](https://github.com/awltech/easycukes/wiki/Extensibility-of-EasyCukes-framework)
 	- [Tooling](https://github.com/awltech/easycukes/wiki/Tooling-for-developing-with-EasyCukes)
+- DEV:
+	- [Deploying to m2 repo](https://github.com/awltech/easycukes/wiki/%5BDEV%5D-Deploying-EasyCukes-to-github-m2-repo)
 
 ##Usage
 EasyCukes is delivered on its own Maven repository that you can add in your pom.xml:
