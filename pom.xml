@@ -29,7 +29,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/awltech/easycukes.git</connection>
 		<developerConnection>scm:git:https://github.com/awltech/easycukes.git</developerConnection>
-		<url>https://github.com/awltech/easycukes/</url>
+		<url>https://github.com/awltech/easycukes</url>
 	</scm>
 
 	<organization>
@@ -46,6 +46,14 @@
 		</developer>
 	</developers>
 
+	<distributionManagement>
+		<repository>
+			<id>internal.repo</id>
+			<name>Temporary Staging Repository</name>
+			<url>file://${project.build.directory}/mvn-repo</url>
+		</repository>
+	</distributionManagement>
+
 	<modules>
 		<module>easycukes-commons</module>
 		<module>easycukes-scm</module>
@@ -55,6 +63,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<github.global.server>github</github.global.server>
 		<!-- Versions -->
 		<junit.version>4.11</junit.version>
 		<testng.version>6.8.7</testng.version>
@@ -76,13 +85,13 @@
 		<jackson.mapper.version>1.7.8</jackson.mapper.version>
 		<unitils.core.version>3.4.2</unitils.core.version>
 	</properties>
-	
+
 	<repositories>
 		<repository>
 			<id>Maven tmatesoft repo</id>
 			<url>http://maven.tmatesoft.com/content/repositories/snapshots</url>
 		</repository>
-    </repositories>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -246,6 +255,40 @@
 				<configuration>
 					<show>public</show>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.10</version>
+				<configuration>
+					<message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+					<noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+					<branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+					<merge>true</merge>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryName>easycukes</repositoryName>      <!-- github repo name -->
+					<repositoryOwner>awltech</repositoryOwner>    <!-- github username -->
+				</configuration>
+				<executions>
+					<!-- run site-maven-plugin's 'site' target as part of the build's normal 
+						'deploy' phase -->
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -29,9 +29,18 @@ All of our documentation can be found on [our wiki](https://github.com/awltech/e
 	- [Tooling](https://github.com/awltech/easycukes/wiki/Tooling-for-developing-with-EasyCukes)
 
 ##Usage
-EasyCukes isn't yet delivered on Maven Central, so you'll have to build it locally, and/or deliver it to your Maven repository. Hopefuly, we're relying on Maven so building EasyCukes isn't harder than executing a simple `mvn install` from the root of the project.
+EasyCukes is delivered on its own Maven repository that you can add in your pom.xml:
 
-Then, you'll just have to add a dependency to EasyCukes in your project ;)
+```xml
+    <repository>
+        <id>easycukes-mvn-repo</id>
+        <url>https://raw.github.com/awltech/easycukes/mvn-repo/</url>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+        </snapshots>
+    </repository>
+```
 
 ##Contribution
 All [feedbacks](https://github.com/awltech/easycukes/issues) are welcome.
