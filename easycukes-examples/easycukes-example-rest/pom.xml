@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.worldline.easycukes</groupId>
+		<artifactId>easycukes-examples</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>easycukes-example-rest</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Easycukes examples - REST </name>
+	<description>EasyCukes Examples - REST</description>
+	<inceptionYear>2014</inceptionYear>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.worldline.easycukes</groupId>
+			<artifactId>easycukes-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.worldline.easycukes</groupId>
+			<artifactId>easycukes-scm</artifactId>
+		</dependency>
+	</dependencies>
+</project>
