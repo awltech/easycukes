@@ -525,7 +525,7 @@ public class RestService {
 				method.setRequestHeader(header.getKey(), header.getValue());
 			final int statusCode = httpClient.executeMethod(method);
 			response = new ResponseWrapper(method.getResponseBodyAsString(),
-					statusCode);
+					method.getResponseHeaders(), statusCode);
 		} catch (final IOException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw e;
