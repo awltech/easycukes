@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="run tests in parallel" parallel="tests" verbose="1"
+	configfailurepolicy="continue">
+	<test name="Tests in FF" enabled="${firefox}">
+		<parameter name="browserName" value="firefox" />
+		<classes>
+			<class name="com.worldline.kazan.cucumber.selenium.RunCukesTestInFirefox" />
+		</classes>
+	</test>
+	<test name="Tests in Chrome" enabled="${chrome}">
+		<parameter name="browserName" value="chrome" />
+		<!-- If you want to be more specific, replace this with a list of test 
+			classes you'd like to run -->
+		<classes>
+			<class name="com.worldline.kazan.cucumber.selenium.RunCukesTestInChrome" />
+		</classes>
+	</test>
+	<test name="Tests in IE" enabled="${ie}">
+		<parameter name="browserName" value="ie" />
+		<!-- If you want to be more specific, replace this with a list of test 
+			classes you'd like to run -->
+		<classes>
+			<class name="com.worldline.kazan.cucumber.selenium.RunCukesTestInIE" />
+		</classes>
+	</test>
+</suite>
