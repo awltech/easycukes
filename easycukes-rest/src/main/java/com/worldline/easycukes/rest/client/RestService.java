@@ -42,6 +42,7 @@ import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.worldline.easycukes.commons.context.Configuration;
 import com.worldline.easycukes.commons.context.ExecutionContext;
 import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.utils.HtmlHelper;
 import com.worldline.easycukes.commons.utils.JSONHelper;
 import com.worldline.easycukes.rest.utils.RestConstants;
 
@@ -49,7 +50,7 @@ import com.worldline.easycukes.rest.utils.RestConstants;
  * {@link RestService} is actually the main entry point to be used in order to
  * interact with REST services. It provides a way to send requests to the target
  * platform, but also to manipulate the responses.
- *
+ * 
  * @author mechikhi
  * @version 1.0
  */
@@ -88,7 +89,7 @@ public class RestService {
 
 	/**
 	 * Allows to get the singleton instance of {@link RestService}
-	 *
+	 * 
 	 * @return the singleton instance ({@link #_instance}) of
 	 *         {@link RestService}
 	 */
@@ -108,7 +109,7 @@ public class RestService {
 
 	/**
 	 * Creates and returns a new instance of jersey client
-	 *
+	 * 
 	 * @return the instance created of jersey client
 	 */
 	private static Client newJerseyClient() {
@@ -128,7 +129,7 @@ public class RestService {
 	/**
 	 * Allows to initialize the instance of {@link #httpClient} by setting the
 	 * configuration of proxy
-	 *
+	 * 
 	 */
 	public void initialize(String baseUrl) {
 		if (Configuration.isProxyNeeded())
@@ -139,7 +140,7 @@ public class RestService {
 
 	/**
 	 * Allows to send a REST request with parameters in JSON format
-	 *
+	 * 
 	 * @param method
 	 *            the HTTP method you want to use (GET, PUT, DELETE, POST)
 	 * @param path
@@ -201,7 +202,7 @@ public class RestService {
 
 	/**
 	 * Gets the response status of a previous REST call
-	 *
+	 * 
 	 */
 	public int getResponseStatus() {
 		return response.getStatus();
@@ -210,7 +211,7 @@ public class RestService {
 	/**
 	 * Gets the value of the specified property in the response header of a
 	 * previous REST call
-	 *
+	 * 
 	 * @param property
 	 * @return the value if it's found (else it'll be null)
 	 */
@@ -231,28 +232,19 @@ public class RestService {
 
 	/**
 	 * Extract the input value from the last html response.
-	 *
+	 * 
 	 * @param input
 	 *            the name of the input in the html form
 	 * @return The value, if it could be extracted, null otherwise.
 	 */
 	public String extractInputValueFromHtmlResponse(final String input) {
-		String token = null;
-		final String BEGIN = "name=\"" + input + "\" value=\"";
-		int start = response.getResponseString().indexOf(BEGIN);
-		if (start < 0)
-			LOGGER.warn(input + " input not found in response.");
-		else {
-			start += BEGIN.length();
-			final int end = response.getResponseString().indexOf("\"", start);
-			token = response.getResponseString().substring(start, end);
-		}
-		return token;
+		return HtmlHelper.extractInputValueFromHtmlContent(input,
+				response.getResponseString());
 	}
 
 	/**
 	 * Extract the attribute from the header value passed
-	 *
+	 * 
 	 * @param headerValue
 	 *            header value
 	 * @param param
@@ -282,7 +274,7 @@ public class RestService {
 	/**
 	 * Allows to get the specified property from the response of a previous REST
 	 * call
-	 *
+	 * 
 	 * @throws ParseException
 	 *             if there's something wrong while parsing the JSON content
 	 */
@@ -294,7 +286,7 @@ public class RestService {
 	/**
 	 * Allows to get the specified property randomly from the response array of
 	 * a previous REST call
-	 *
+	 * 
 	 * @param property
 	 * @return the value if it's found (else it'll be null)
 	 * @throws ParseException
@@ -312,7 +304,7 @@ public class RestService {
 	/**
 	 * Allows to get an item randomly from the response array of a previous REST
 	 * call
-	 *
+	 * 
 	 * @return the value if it's found (else it'll be null)
 	 * @throws ParseException
 	 */
@@ -327,7 +319,7 @@ public class RestService {
 
 	/**
 	 * Gets response content from the response
-	 *
+	 * 
 	 */
 	public String getResponseContent() {
 		return response.getResponseString();
@@ -336,7 +328,7 @@ public class RestService {
 	/**
 	 * Gets the result of the execution of a get request. the attempt will be
 	 * repeated until obtain the exepected result
-	 *
+	 * 
 	 * @param path
 	 *            the path on which the request should be executed
 	 * @param expression
@@ -411,7 +403,7 @@ public class RestService {
 	/**
 	 * Gets the result of the execution of a get request. the attempt will be
 	 * repeated several times in case of failures
-	 *
+	 * 
 	 * @param path
 	 *            the path on which the request should be sent
 	 * @throws Exception
@@ -467,7 +459,7 @@ public class RestService {
 
 	/**
 	 * Allows to send a POST request, with parameters using JSON format
-	 *
+	 * 
 	 * @param path
 	 *            path to be used for the POST request
 	 * @param data
@@ -481,6 +473,8 @@ public class RestService {
 
 		LOGGER.info("Sending POST request to " + fullpath);
 		final PostMethod method = new PostMethod(fullpath);
+		for (final Map.Entry<String, String> header : requestHeaders.entrySet())
+			method.setRequestHeader(header.getKey(), header.getValue());
 		if (data != null) {
 			JSONObject jsonObject = null;
 			try {
@@ -488,7 +482,10 @@ public class RestService {
 				for (final Iterator<String> iterator = jsonObject.keySet()
 						.iterator(); iterator.hasNext();) {
 					final String param = iterator.next();
-					method.setParameter(param, (String) jsonObject.get(param));
+					method.setParameter(
+							param,
+							(jsonObject.get(param) != null) ? jsonObject.get(
+									param).toString() : null);
 				}
 			} catch (final ParseException e) {
 				LOGGER.error("Sorry, parameters are not proper JSON...", e);
@@ -510,7 +507,7 @@ public class RestService {
 
 	/**
 	 * Allows to send a GET request to the path passed using the http client
-	 *
+	 * 
 	 * @param path
 	 *            the path on which the request should be sent
 	 */
@@ -541,7 +538,7 @@ public class RestService {
 	/**
 	 * Allows to setup request specific parameters. it will be used to define a
 	 * custom headers for all http requests.(example cookie header).
-	 *
+	 * 
 	 * @param header
 	 *            the header name to add
 	 * @param value

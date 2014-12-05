@@ -81,5 +81,9 @@
 			<groupId>org.unitils</groupId>
 			<artifactId>unitils-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+		</dependency>
 	</dependencies>
 </project>
