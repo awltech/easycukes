@@ -20,9 +20,5 @@
 			<groupId>com.worldline.easycukes</groupId>
 			<artifactId>easycukes-rest</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.worldline.easycukes</groupId>
-			<artifactId>easycukes-scm</artifactId>
-		</dependency>
 	</dependencies>
 </project>

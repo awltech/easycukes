@@ -13,6 +13,7 @@
 
 	<modules>
 		<module>easycukes-example-rest</module>
+		<module>easycukes-example-selenium</module>
 	</modules>
 	
 	<properties>
