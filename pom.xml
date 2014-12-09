@@ -59,7 +59,7 @@
 		<module>easycukes-scm</module>
 		<module>easycukes-rest</module>
 		<module>easycukes-selenium</module>
-		<module>easycukes-selenium-example</module>
+		<module>easycukes-examples</module>
 	</modules>
 
 	<properties>
