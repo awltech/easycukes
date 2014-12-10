@@ -6,12 +6,12 @@
 	<engine>
 		<property name="deploymentExportPath">target/deployments</property>
 	</engine>
-	<container qualifier="jbossas-managed">
+	<container qualifier="jbossas-managed" default="true">
 		<configuration>
 			<property name="jbossHome">target/jboss-as-7.1.1.Final</property>
 		</configuration>
 	</container>
-	<container qualifier="glassfish3-managed" default="true">
+	<container qualifier="glassfish3-managed">
 		<configuration>
 			<property name="glassFishHome">target/glassfish3</property>
 			<property name="adminHost">localhost</property>
