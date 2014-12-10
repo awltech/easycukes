@@ -11,3 +11,7 @@
 .settings
 target/
 bin/
+
+#IntellijIDEA stuff
+*.iml
+.idea
