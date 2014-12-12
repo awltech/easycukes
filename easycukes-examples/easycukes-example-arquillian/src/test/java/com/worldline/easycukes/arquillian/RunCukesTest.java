@@ -14,17 +14,13 @@ import org.junit.runner.RunWith;
 import com.worldline.easycukes.arquillian.example.controller.BellyController;
 import com.worldline.easycukes.arquillian.example.domain.Belly;
 import com.worldline.easycukes.arquillian.example.producer.FacesContextProducer;
-import com.worldline.easycukes.selenium.stepdefs.CommonStepdefs;
-import com.worldline.easycukes.selenium.stepdefs.ConfigurationStepdefs;
 
 import cucumber.api.CucumberOptions;
 import cucumber.runtime.arquillian.CukeSpace;
-import cucumber.runtime.arquillian.api.Glues;
 
 @RunWith(CukeSpace.class)
-@Glues({ ConfigurationStepdefs.class, CommonStepdefs.class })
 @CucumberOptions(features = { "classpath:features/" }, format = { "json",
-		"html:target/cucumber-report/html", "json:target/cucumber-report.json" }, tags = { "~@wip" })
+		"html:target/cucumber-report/html", "json:target/cucumber-report.json" }, tags = { "~@wip" }, glue = { "com.worldline.easycukes" })
 public class RunCukesTest {
 
 	@Deployment(testable = false)
@@ -34,10 +30,10 @@ public class RunCukesTest {
 				.addAsWebInfResource(
 						new StringAsset("<faces-config version=\"2.0\"/>"),
 						"faces-config.xml")
-				.addAsWebResource(new File("src/main/webapp/belly.xhtml"),
-						"belly.xhtml").addClass(Belly.class)
-				.addClass(BellyController.class)
-				.addClass(FacesContextProducer.class);
+						.addAsWebResource(new File("src/main/webapp/belly.xhtml"),
+								"belly.xhtml").addClass(Belly.class)
+								.addClass(BellyController.class)
+								.addClass(FacesContextProducer.class);
 	}
 
 }

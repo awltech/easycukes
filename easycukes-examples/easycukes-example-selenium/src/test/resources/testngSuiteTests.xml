@@ -21,7 +21,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="run tests in parallel" parallel="tests" verbose="1"
 	configfailurepolicy="continue">
-	<test name="Tests in FF" enabled="${firefox}">
+	<test name="Tests in FF" enabled="true">
 		<parameter name="browserName" value="firefox" />
 		<classes>
 			<class name="com.worldline.easycukes.cucumber.selenium.RunCukesTestInFirefox" />

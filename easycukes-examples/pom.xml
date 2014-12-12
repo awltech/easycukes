@@ -2,11 +2,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.worldline.easycukes</groupId>
+	<parent>
+		<groupId>com.worldline.easycukes</groupId>
+		<artifactId>easycukes</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
 	<artifactId>easycukes-examples</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<name>Easycukes examples</name>
 	<description>EasyCukes Examples</description>
 	<inceptionYear>2014</inceptionYear>
@@ -14,15 +18,8 @@
 	<modules>
 		<module>easycukes-example-rest</module>
 		<module>easycukes-example-selenium</module>
+		<module>easycukes-example-arquillian</module>
 	</modules>
-	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- Versions -->
-		<surefire-testng.version>2.16</surefire-testng.version>
-		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
-		<testng.version>6.8.8</testng.version>
-	</properties>
 
 	<build>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
@@ -33,17 +30,17 @@
 			</resource>
 			<resource>
 				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
+				<filtering>false</filtering>
 				<includes>
 					<include>*.xml</include>
 				</includes>
 			</resource>
 			<resource>
-				<directory>src/main/config/${env}</directory>
+				<directory>src/main/config/</directory>
 				<filtering>false</filtering>
 			</resource>
 			<resource>
-				<directory>src/test/config/${targetEnv}</directory>
+				<directory>src/test/config/</directory>
 				<filtering>false</filtering>
 			</resource>
 		</resources>
@@ -75,44 +72,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>local</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<env>local</env>
-				<targetEnv>prod</targetEnv>
-			</properties>
-		</profile>
-		<profile>
-			<id>jenkins</id>
-			<properties>
-				<env>jenkins</env>
-				<targetEnv>prod</targetEnv>
-			</properties>
-		</profile>
-	</profiles>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.worldline.easycukes</groupId>
-				<artifactId>easycukes-rest</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>com.worldline.easycukes</groupId>
-				<artifactId>easycukes-selenium</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.testng</groupId>
-				<artifactId>testng</artifactId>
-				<version>${testng.version}</version>
-				<scope>test</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>
