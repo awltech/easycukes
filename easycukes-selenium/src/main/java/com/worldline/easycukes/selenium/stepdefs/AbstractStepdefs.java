@@ -20,7 +20,7 @@ package com.worldline.easycukes.selenium.stepdefs;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.helpers.Constants;
 
 /**
  * TODO

@@ -22,11 +22,11 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import com.worldline.easycukes.commons.context.DataInjector;
-import com.worldline.easycukes.commons.context.ExecutionContext;
-import com.worldline.easycukes.commons.utils.Constants;
-import com.worldline.easycukes.commons.utils.DomHelper;
-import com.worldline.easycukes.commons.utils.FileHelper;
+import com.worldline.easycukes.commons.DataInjector;
+import com.worldline.easycukes.commons.ExecutionContext;
+import com.worldline.easycukes.commons.helpers.Constants;
+import com.worldline.easycukes.commons.helpers.DomHelper;
+import com.worldline.easycukes.commons.helpers.FileHelper;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

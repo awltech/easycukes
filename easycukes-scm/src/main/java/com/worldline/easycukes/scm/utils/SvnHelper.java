@@ -34,7 +34,7 @@ import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 import org.tmatesoft.svn.core.wc.SVNWCClient;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.helpers.Constants;
 
 /**
  * {@link SvnHelper} allows to ease manipulation of SVN repositories. It uses

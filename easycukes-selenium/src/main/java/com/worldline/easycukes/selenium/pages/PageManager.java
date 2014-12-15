@@ -20,15 +20,15 @@ package com.worldline.easycukes.selenium.pages;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
-import com.worldline.easycukes.commons.context.Configuration;
-import com.worldline.easycukes.commons.context.ExecutionContext;
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.Configuration;
+import com.worldline.easycukes.commons.ExecutionContext;
+import com.worldline.easycukes.commons.helpers.Constants;
 import com.worldline.easycukes.selenium.WebDriverFactory;
 import com.worldline.easycukes.selenium.utils.SeleniumConstants;
 
 /**
  * TODO
- * 
+ *
  * @author mechikhi
  * @version 1.0
  */
@@ -49,7 +49,7 @@ public class PageManager {
 	/**
 	 * Allows to initialize this instance of {@link PageManager} by creating the
 	 * {@link WebDriver}
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public static void initialize() throws Exception {
@@ -59,11 +59,16 @@ public class PageManager {
 		if (page.get() == null) {
 			String browserName = ExecutionContext.get("browserName");
 			if (browserName == null)
-				browserName = Configuration
-						.getEnvProperty(SeleniumConstants.BROWSER_KEY);
+				browserName = Configuration.getEnvironmentSelenium() != null ? Configuration
+						.getEnvironmentSelenium()
+						.get(SeleniumConstants.BROWSER_KEY).toString()
+						: "firefox";
 			WebDriver driver = null;
-			if (!"true".equals(Configuration
-					.getEnvProperty(SeleniumConstants.USE_REMOTE_KEY)))
+			if (Configuration.getEnvironmentSelenium() != null
+								&& Configuration.getEnvironmentSelenium().containsKey(
+										SeleniumConstants.USE_REMOTE_KEY)
+										&& !Boolean.valueOf(Configuration.getEnvironmentSelenium()
+												.get(SeleniumConstants.USE_REMOTE_KEY).toString()))
 				driver = WebDriverFactory.newLocalWebDriver(browserName);
 			else
 				try {
@@ -79,7 +84,7 @@ public class PageManager {
 
 	/**
 	 * TODO
-	 * 
+	 *
 	 * @return
 	 */
 	public static Page getPage() {

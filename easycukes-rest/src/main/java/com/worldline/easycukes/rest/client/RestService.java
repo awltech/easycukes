@@ -39,11 +39,11 @@ import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.ClientFilter;
 import com.sun.jersey.api.client.filter.LoggingFilter;
-import com.worldline.easycukes.commons.context.Configuration;
-import com.worldline.easycukes.commons.context.ExecutionContext;
-import com.worldline.easycukes.commons.utils.Constants;
-import com.worldline.easycukes.commons.utils.HtmlHelper;
-import com.worldline.easycukes.commons.utils.JSONHelper;
+import com.worldline.easycukes.commons.Configuration;
+import com.worldline.easycukes.commons.ExecutionContext;
+import com.worldline.easycukes.commons.helpers.Constants;
+import com.worldline.easycukes.commons.helpers.HtmlHelper;
+import com.worldline.easycukes.commons.helpers.JSONHelper;
 import com.worldline.easycukes.rest.utils.RestConstants;
 
 /**

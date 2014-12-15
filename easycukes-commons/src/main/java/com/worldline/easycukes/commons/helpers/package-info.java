@@ -16,10 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /**
- * This package aims at containing all the classes allowing to deal with the execution context.
- * From classes allowing to store the context, to utilities allowing to
- * manipulate the data stored in it, and even more :)
+ * This package aims at containing various utilities classes to be used by the project.
+ * Constants classes, or helpers, or anything allowing to help for generic tasks should be located here.
  *
  * @author aneveux
  */
-package com.worldline.easycukes.commons.context;
+package com.worldline.easycukes.commons.helpers;

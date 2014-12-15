@@ -33,8 +33,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 
-import com.worldline.easycukes.commons.context.Configuration;
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.Configuration;
+import com.worldline.easycukes.commons.helpers.Constants;
 
 public class SeleniumHelper {
 
@@ -46,8 +46,13 @@ public class SeleniumHelper {
 
 	/** TODO many waiting time sould be defined */
 	static final int WAITING_TIME_OUT_IN_SECONDS = Integer
-			.parseInt(Configuration
-					.get(SeleniumConstants.DEFAULT_WAIT_TIME_SECONDS_KEY));
+			.parseInt(Configuration.getEnvironmentSelenium() != null
+			&& Configuration.getEnvironmentSelenium().get(
+					SeleniumConstants.DEFAULT_WAIT_TIME_SECONDS_KEY) != null ? Configuration
+					.getEnvironmentSelenium()
+					.get(SeleniumConstants.DEFAULT_WAIT_TIME_SECONDS_KEY)
+					.toString()
+							: "10");
 	static final int POLLING_INTERVAL_IN_MILLIS = 500;
 
 	public static WebElement waitForElementToBePresent(final WebDriver driver,

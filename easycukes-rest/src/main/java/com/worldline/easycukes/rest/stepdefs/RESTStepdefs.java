@@ -21,10 +21,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 
-import com.worldline.easycukes.commons.context.DataInjector;
-import com.worldline.easycukes.commons.context.ExecutionContext;
-import com.worldline.easycukes.commons.utils.Constants;
-import com.worldline.easycukes.commons.utils.JSONHelper;
+import com.worldline.easycukes.commons.DataInjector;
+import com.worldline.easycukes.commons.ExecutionContext;
+import com.worldline.easycukes.commons.helpers.Constants;
+import com.worldline.easycukes.commons.helpers.JSONHelper;
 import com.worldline.easycukes.rest.client.RestService;
 import com.worldline.easycukes.rest.utils.CukesHelper;
 import com.worldline.easycukes.rest.utils.DateHelper;

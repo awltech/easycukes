@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package com.worldline.easycukes.commons.context;
+package com.worldline.easycukes.commons;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,10 +26,10 @@ import org.apache.commons.lang3.RandomStringUtils;
  * This {@link DataInjector} class allows to deal with dynamic data to be used
  * in the tests scenarios. It allows to introduce a way of defining variables
  * using the <i>$__variable__$</i> syntax.
- * 
+ *
  * It simply generates some random values for the variables and injects it in
  * the execution context.
- * 
+ *
  * @author aneveux
  * @version 1.0
  */
@@ -59,7 +59,7 @@ public class DataInjector {
 	 * the name of the variable. Also, if the execution context was already
 	 * containing a generated value for the variable, it just retrieves it from
 	 * the context, and injects the data directly.
-	 * 
+	 *
 	 * @param s
 	 *            {@link String} in which you'd like variables to be generated /
 	 *            injected
@@ -75,25 +75,35 @@ public class DataInjector {
 		// 2. While tokens are processed
 		while (m.find()) {
 			// 3. We extract the token content
-			String token = m.group(1);
+			final String token = m.group(1);
 			// 4. If the token has never been identified and is not present in
 			// the context
 			if (!ExecutionContext.contains(token)
-					|| ExecutionContext.get(token) == null) {
+					|| ExecutionContext.get(token) == null)
 				// 5. If the token is present in the config file
-				if (Configuration.get(token) != null)
-					// 6. From the config file, we get a value for the token and
-					// put it in the context
-					ExecutionContext.put(token, Configuration.get(token));
-				else {
+				if (Configuration.getTargetCredentials() != null
+						&& Configuration.getTargetCredentials().containsKey(
+								token))
+					ExecutionContext.put(token, Configuration
+							.getTargetCredentials().get(token).toString());
+				else if (Configuration.getEnvironmentSelenium() != null
+						&& Configuration.getEnvironmentSelenium().containsKey(
+								token))
+					ExecutionContext.put(token, Configuration
+							.getEnvironmentSelenium().get(token).toString());
+				else if (Configuration.getTargetVariable(token) != null)
+					ExecutionContext.put(token,
+							Configuration.getTargetVariable(token));
+				else if (Configuration.getEnvironmentVariable(token) != null)
+					ExecutionContext.put(token,
+							Configuration.getEnvironmentVariable(token));
+				else
 					// 7. We generate a value for the token and put it in
 					// the
 					// context
 					ExecutionContext.put(token, "ktest-"
 							+ RandomStringUtils.randomAlphabetic(11)
-									.toLowerCase());
-				}
-			}
+							.toLowerCase());
 			// 8. Then, we'll inject the value from the context directly in the
 			// result
 			result = result.replace(TOKEN_START + token + TOKEN_END,

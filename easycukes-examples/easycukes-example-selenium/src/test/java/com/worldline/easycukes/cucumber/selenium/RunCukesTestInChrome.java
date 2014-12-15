@@ -21,7 +21,7 @@ import org.apache.log4j.MDC;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 
-import com.worldline.easycukes.commons.context.ExecutionContext;
+import com.worldline.easycukes.commons.ExecutionContext;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.testng.AbstractTestNGCucumberTests;

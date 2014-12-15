@@ -25,8 +25,8 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.worldline.easycukes.commons.context.ExecutionContext;
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.ExecutionContext;
+import com.worldline.easycukes.commons.helpers.Constants;
 
 /**
  * This {@link DateHelper} class provides various methods allowing to manipulate

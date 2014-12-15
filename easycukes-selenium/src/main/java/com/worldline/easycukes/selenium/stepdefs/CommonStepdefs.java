@@ -20,8 +20,8 @@ package com.worldline.easycukes.selenium.stepdefs;
 import org.junit.Assert;
 import org.openqa.selenium.browserlaunchers.Sleeper;
 
-import com.worldline.easycukes.commons.context.DataInjector;
-import com.worldline.easycukes.commons.context.ExecutionContext;
+import com.worldline.easycukes.commons.DataInjector;
+import com.worldline.easycukes.commons.ExecutionContext;
 import com.worldline.easycukes.selenium.pages.PageManager;
 
 import cucumber.api.java.en.Given;

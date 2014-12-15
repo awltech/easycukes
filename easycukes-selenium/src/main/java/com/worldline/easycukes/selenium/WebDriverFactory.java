@@ -30,8 +30,8 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import com.worldline.easycukes.commons.context.Configuration;
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.Configuration;
+import com.worldline.easycukes.commons.helpers.Constants;
 import com.worldline.easycukes.selenium.utils.SeleniumConstants;
 
 public class WebDriverFactory {
@@ -45,9 +45,9 @@ public class WebDriverFactory {
 	/**
 	 * Creates a new local driver instance. supported browsers : chrome and
 	 * firefox
-	 * 
+	 *
 	 * @return a local WebDriver instance
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public static WebDriver newLocalWebDriver(String browserName)
@@ -67,32 +67,34 @@ public class WebDriverFactory {
 	/**
 	 * Creates a new remte driver instance. supported browsers : chrome and
 	 * firefox
-	 * 
+	 *
 	 * @return a remote WebDriver instance
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public static WebDriver newRemoteWebDriver(String browserName)
 			throws Exception {
 		LOGGER.info("Starting a remote Driver");
-		final String remoteAddress = Configuration
-				.getEnvProperty(SeleniumConstants.REMOTE_ADDRESS_KEY);
-		if ("firefox".equals(browserName))
-			return new RemoteWebDriver(new URL(remoteAddress),
-					firefoxCapabilities());
-		else if ("chrome".equals(browserName))
-			return new RemoteWebDriver(new URL(remoteAddress),
-					chromeCapabilities());
-		else if ("ie".equals(browserName))
-			return new RemoteWebDriver(new URL(remoteAddress), ieCapabilities());
-		else
-			throw new Exception("Unknown or not supported browser : "
-					+ browserName);
+		final String remoteAddress = Configuration.getEnvironmentSelenium() != null ? Configuration
+				.getEnvironmentSelenium()
+				.get(SeleniumConstants.REMOTE_ADDRESS_KEY).toString()
+				: "";
+						if ("firefox".equals(browserName))
+							return new RemoteWebDriver(new URL(remoteAddress),
+									firefoxCapabilities());
+						else if ("chrome".equals(browserName))
+							return new RemoteWebDriver(new URL(remoteAddress),
+									chromeCapabilities());
+						else if ("ie".equals(browserName))
+							return new RemoteWebDriver(new URL(remoteAddress), ieCapabilities());
+						else
+							throw new Exception("Unknown or not supported browser : "
+									+ browserName);
 	}
 
 	/**
 	 * Creates a new Firefox driver instance
-	 * 
+	 *
 	 * @return a FirefoxDriver instance
 	 */
 	private static WebDriver newLocalFirefoxDriver() {
@@ -101,7 +103,7 @@ public class WebDriverFactory {
 
 	/**
 	 * Allows to customize and configure the options of a Firefox session
-	 * 
+	 *
 	 * @return DesiredCapabilities
 	 */
 	private static DesiredCapabilities firefoxCapabilities() {
@@ -114,22 +116,25 @@ public class WebDriverFactory {
 
 	/**
 	 * Creates a new chrome driver instance
-	 * 
+	 *
 	 * @return a ChromeDriver instance
 	 */
 	private static WebDriver newLocalChromeDriver() {
-		final File file_chrome = new File(
-				Configuration
-						.getEnvProperty(SeleniumConstants.CHROME_DRIVER_PATH));
-		System.setProperty("webdriver.chrome.driver",
-				file_chrome.getAbsolutePath());
+		if (Configuration.getEnvironmentSelenium() != null
+				&& Configuration.getEnvironmentSelenium().get(
+						SeleniumConstants.CHROME_DRIVER_PATH) != null) {
+			final File file_chrome = new File(Configuration
+					.getEnvironmentSelenium()
+					.get(SeleniumConstants.CHROME_DRIVER_PATH).toString());
+			System.setProperty("webdriver.chrome.driver",
+					file_chrome.getAbsolutePath());
+		}
 		return new ChromeDriver(chromeCapabilities());
-
 	}
 
 	/**
 	 * Allows to customize and configure the options of a chrome session
-	 * 
+	 *
 	 * @return DesiredCapabilities
 	 */
 	private static DesiredCapabilities chromeCapabilities() {
@@ -142,20 +147,25 @@ public class WebDriverFactory {
 
 	/**
 	 * Creates a new IE driver instance
-	 * 
+	 *
 	 * @return a InternetExplorerDriver instance
 	 */
 	private static WebDriver newLocalIEDriver() {
-		final File file_chrome = new File(
-				Configuration.getEnvProperty(SeleniumConstants.IE_DRIVER_PATH));
-		System.setProperty("webdriver.ie.driver", file_chrome.getAbsolutePath());
+		if (Configuration.getEnvironmentSelenium() != null
+				&& Configuration.getEnvironmentSelenium().get(
+						SeleniumConstants.IE_DRIVER_PATH) != null) {
+			final File file_ie = new File(Configuration
+					.getEnvironmentSelenium()
+					.get(SeleniumConstants.IE_DRIVER_PATH).toString());
+			System.setProperty("webdriver.ie.driver", file_ie.getAbsolutePath());
+		}
 		return new InternetExplorerDriver(ieCapabilities());
 
 	}
 
 	/**
 	 * Allows to customize and configure the options of a IE session
-	 * 
+	 *
 	 * @return DesiredCapabilities
 	 */
 	private static DesiredCapabilities ieCapabilities() {

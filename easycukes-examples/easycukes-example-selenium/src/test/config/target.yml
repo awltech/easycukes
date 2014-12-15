@@ -1,0 +1,6 @@
+credentials:
+  username: usereasycukesselenium12
+  password: UserEasyCukes123456
+variables:
+  baseurl: https://github.com
+  email: usereasycukesselenium1@gmail.com

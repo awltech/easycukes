@@ -1,9 +1,4 @@
 Feature: Example 1
- 
-  @conf
-  Scenario: Load the configuration files
-    Given I load the environment configuration file "/env"
-    And I load the application configuration file "/target"
     
   @conf
   Scenario: Setting the base url

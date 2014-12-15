@@ -34,7 +34,7 @@ import org.tmatesoft.hg.util.CancelledException;
 import org.tmatesoft.hg.util.Outcome;
 import org.tmatesoft.hg.util.Path;
 
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.helpers.Constants;
 
 /**
  * {@link MercurialHelper} allows to ease manipulation of Hg repositories. It

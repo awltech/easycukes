@@ -29,7 +29,7 @@ import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.helpers.Constants;
 
 /**
  * {@link GitHelper} allows to ease the manipulation of git repositories. It

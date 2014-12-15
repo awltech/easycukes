@@ -21,8 +21,8 @@ import java.text.ParseException;
 
 import org.apache.log4j.Logger;
 
-import com.worldline.easycukes.commons.context.ExecutionContext;
-import com.worldline.easycukes.commons.utils.Constants;
+import com.worldline.easycukes.commons.ExecutionContext;
+import com.worldline.easycukes.commons.helpers.Constants;
 
 /**
  * This {@link CukesHelper} class provides various methods allowing to

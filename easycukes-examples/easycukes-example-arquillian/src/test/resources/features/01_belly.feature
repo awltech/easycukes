@@ -1,7 +1,8 @@
-Feature: belly
+Feature: Testing belly :)
 
   @eat
   Scenario: Access to join url and enter informations to create account
+    Given the base url is "$__baseurl__$"
     Given navigate to path "/faces/belly.xhtml"
     And send a text "10" to element having id "bellyForm:mouth"
     When click element having id "bellyForm:eatCukes"
