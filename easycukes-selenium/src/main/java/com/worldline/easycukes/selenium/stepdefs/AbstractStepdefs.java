@@ -20,11 +20,12 @@ package com.worldline.easycukes.selenium.stepdefs;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 
+import com.worldline.easycukes.commons.DataInjector;
 import com.worldline.easycukes.commons.helpers.Constants;
 
 /**
  * TODO
- *
+ * 
  * @author mechikhi
  * @version TODO
  */
@@ -38,13 +39,14 @@ public abstract class AbstractStepdefs {
 
 	/**
 	 * TODO
-	 *
+	 * 
 	 * @param selector
-	 * @param value
+	 * @param pValue
 	 * @return
 	 * @throws Exception
 	 */
-	protected By getSelector(String selector, String value) throws Exception {
+	protected By getSelector(String selector, String pValue) throws Exception {
+		String value = DataInjector.injectData(pValue);
 		By by = null;
 		if (selector.equalsIgnoreCase("id"))
 			by = By.id(value);

@@ -92,8 +92,7 @@ public class CommonStepdefs extends AbstractStepdefs {
 		LOGGER.info("Click on element identified by [" + selector + " = "
 				+ value + "]");
 
-		PageManager.getPage().click(
-				getSelector(selector, DataInjector.injectData(value)));
+		PageManager.getPage().click(getSelector(selector, value));
 	}
 
 	@Given("^submit element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
@@ -103,8 +102,7 @@ public class CommonStepdefs extends AbstractStepdefs {
 		LOGGER.info("Submit on element identified by [" + selector + " = "
 				+ value + "]");
 
-		PageManager.getPage().submit(
-				getSelector(selector, DataInjector.injectData(value)));
+		PageManager.getPage().submit(getSelector(selector, value));
 	}
 
 	@Given("^send a text \"([^\"]*)\" to element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
@@ -131,7 +129,7 @@ public class CommonStepdefs extends AbstractStepdefs {
 		LOGGER.info("Check the presence of element identified by [" + selector
 				+ " = " + value + "]");
 		Assert.assertTrue(PageManager.getPage().isElementPresent(
-				getSelector(selector, DataInjector.injectData(value))));
+				getSelector(selector, value)));
 	}
 
 	@Then("^the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should not be present$")
@@ -140,7 +138,7 @@ public class CommonStepdefs extends AbstractStepdefs {
 		LOGGER.info("Check the presence of element identified by [" + selector
 				+ " = " + value + "]");
 		Assert.assertFalse(PageManager.getPage().isElementPresent(
-				getSelector(selector, DataInjector.injectData(value))));
+				getSelector(selector, value)));
 	}
 
 	@Then("^the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should contain \"([^\"]*)\"$")
