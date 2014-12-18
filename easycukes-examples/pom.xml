@@ -19,6 +19,7 @@
 		<module>easycukes-example-rest</module>
 		<module>easycukes-example-selenium</module>
 		<module>easycukes-example-arquillian</module>
+		<module>easycukes-example-dbunit</module>
 	</modules>
 
 	<build>

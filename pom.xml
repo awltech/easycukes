@@ -59,6 +59,7 @@
 		<module>easycukes-scm</module>
 		<module>easycukes-rest</module>
 		<module>easycukes-selenium</module>
+		<module>easycukes-dbunit</module>
 		<module>easycukes-examples</module>
 	</modules>
 
@@ -88,6 +89,8 @@
 		<jsoup.version>1.8.1</jsoup.version>
 		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
 		<snakeyaml.version>1.14</snakeyaml.version>
+		<dbunit.version>2.5.0</dbunit.version>
+		<logback.classic.version>1.1.2</logback.classic.version>
 	</properties>
 
 	<repositories>
@@ -214,6 +217,16 @@
 				<groupId>org.yaml</groupId>
 				<artifactId>snakeyaml</artifactId>
 				<version>${snakeyaml.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dbunit</groupId>
+				<artifactId>dbunit</artifactId>
+				<version>${dbunit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.classic.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
