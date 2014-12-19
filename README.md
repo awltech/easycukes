@@ -16,6 +16,7 @@ All of our documentation can be found on [our wiki](https://github.com/awltech/e
 	- [Available steps](https://github.com/awltech/easycukes/wiki/EasyCukes-Commons-available-steps)
 	- [Generating data for tests](https://github.com/awltech/easycukes/wiki/Generating-data-for-tests)
 	- [Sharing data within tests](https://github.com/awltech/easycukes/wiki/Sharing-data-within-tests)
+	- [Configuration files](https://github.com/awltech/easycukes/wiki/EasyCukes-configuration-files)
 - EasyCukes-REST:
 	- [Available steps](https://github.com/awltech/easycukes/wiki/EasyCukes-REST-available-steps)
 	- [Project creation](https://github.com/awltech/easycukes/wiki/EasyCukes-REST-project-creation)
