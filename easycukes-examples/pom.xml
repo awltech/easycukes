@@ -31,7 +31,7 @@
 			</resource>
 			<resource>
 				<directory>src/test/resources</directory>
-				<filtering>false</filtering>
+				<filtering>true</filtering>
 				<includes>
 					<include>*.xml</include>
 				</includes>
@@ -53,18 +53,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${surefire-testng.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>surefire-testng</artifactId>
-						<version>${surefire-testng.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>surefire-testng-utils</artifactId>
-						<version>${surefire-testng.version}</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>

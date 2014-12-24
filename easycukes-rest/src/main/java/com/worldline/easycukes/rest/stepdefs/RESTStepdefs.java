@@ -38,7 +38,7 @@ import cucumber.api.java.en.When;
  * This class aims at containing all the operations that could be needed in the
  * tests scenarios while dealing with REST operations over an API REST. It also
  * allows to deal with data which are manipulated over that API.
- *
+ * 
  * @author aneveux
  * @version 1.0
  */
@@ -52,7 +52,7 @@ public class RESTStepdefs {
 
 	/**
 	 * Allows to send a GET request
-	 *
+	 * 
 	 * @param path
 	 *            the path on which the request should be executed, from the
 	 *            base URL
@@ -66,10 +66,10 @@ public class RESTStepdefs {
 	/**
 	 * Allows to validate that the result of a REST call is containing
 	 * expectations
-	 *
+	 * 
 	 * @param property
 	 *            the element to search for in the JSON response
-	 *
+	 * 
 	 * @param result
 	 *            the result that should be contained in the response property
 	 *            of a previous REST call
@@ -88,7 +88,7 @@ public class RESTStepdefs {
 	/**
 	 * Allows to validate that the result of a REST call is containing
 	 * expectations
-	 *
+	 * 
 	 * @param property
 	 *            the element to search for in the JSON response
 	 */
@@ -104,10 +104,10 @@ public class RESTStepdefs {
 	/**
 	 * Allows to validate that the result of a REST call is containing
 	 * expectations
-	 *
+	 * 
 	 * @param property
 	 *            the element to search for in the JSON response
-	 *
+	 * 
 	 * @param result
 	 *            the result that should be contained in the response property
 	 *            of a previous REST call
@@ -124,10 +124,10 @@ public class RESTStepdefs {
 	/**
 	 * Allows to validate that the result of a REST call is containing
 	 * expectations
-	 *
+	 * 
 	 * @param property
 	 *            the element to search for in the JSON response
-	 *
+	 * 
 	 * @param result
 	 *            the result that should be contained in the response property
 	 *            of a previous REST call
@@ -146,10 +146,10 @@ public class RESTStepdefs {
 	/**
 	 * Allows to validate that the result of a REST call is containing
 	 * expectations
-	 *
+	 * 
 	 * @param property
 	 *            the element to search for in the JSON response
-	 *
+	 * 
 	 * @param result
 	 *            the result that should be contained in the response property
 	 *            of a previous REST call
@@ -172,9 +172,9 @@ public class RESTStepdefs {
 	/**
 	 * Allows to validate that the response status of a REST call is matching
 	 * with expectations.
-	 *
+	 * 
 	 * Asserts that a response status equals the status passed as parameter
-	 *
+	 * 
 	 * @param status
 	 *            the status that should match the response one
 	 */
@@ -188,7 +188,7 @@ public class RESTStepdefs {
 	/**
 	 * Allows to validate that the result of a REST call is containing
 	 * expectations, using a specific format
-	 *
+	 * 
 	 * @param format
 	 *            the format in which the reponse should be expressed (PLAIN,
 	 *            JSON, etc.)
@@ -208,7 +208,7 @@ public class RESTStepdefs {
 	/**
 	 * Allows to validate that the result of a REST call is containing
 	 * expectations, using a specific format
-	 *
+	 * 
 	 * @param format
 	 *            the format in which the reponse should be expressed (PLAIN,
 	 *            JSON, etc.)
@@ -245,7 +245,7 @@ public class RESTStepdefs {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param prop
 	 * @param result
 	 */
@@ -258,7 +258,7 @@ public class RESTStepdefs {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param prop
 	 * @param result
 	 */
@@ -272,7 +272,7 @@ public class RESTStepdefs {
 
 	/**
 	 * Allows to send a REST request with some JSON parameters
-	 *
+	 * 
 	 * @param method
 	 *            the HTTP method to be used (GET, POST, PUT, DELETE)
 	 * @param path
@@ -292,7 +292,7 @@ public class RESTStepdefs {
 
 	/**
 	 * Allows to send a REST request with some JSON parameters
-	 *
+	 * 
 	 * @param path
 	 *            the path on which the request should be executed, from the
 	 *            base URL
@@ -305,7 +305,7 @@ public class RESTStepdefs {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param param
 	 * @param property
 	 * @throws Throwable
@@ -319,7 +319,7 @@ public class RESTStepdefs {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param param
 	 * @throws Throwable
 	 */

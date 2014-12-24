@@ -20,8 +20,8 @@ package com.worldline.easycukes.dbunit.stepdefs;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import com.worldline.easycukes.commons.helpers.Constants;
 import com.worldline.easycukes.dbunit.DBUnitManager;
@@ -43,7 +43,7 @@ public class DBUnitStepdefs {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger LOGGER = LoggerFactory
+	private static final Logger LOGGER = LogManager
 			.getLogger(Constants.CUKES_TESTS_LOGGER);
 
 	@Before
