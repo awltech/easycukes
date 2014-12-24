@@ -19,12 +19,15 @@ package com.worldline.easycukes.arquillian;
 
 import java.io.File;
 
+import org.hsqldb.server.Server;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import com.worldline.easycukes.example.data.Person;
@@ -45,6 +48,8 @@ import cucumber.runtime.arquillian.CukeSpace;
 @CucumberOptions(features = { "classpath:features/" }, format = { "json",
 		"html:target/cucumber-report/html", "json:target/cucumber-report.json" }, tags = { "~@wip" }, glue = { "com.worldline.easycukes" })
 public class RunCukesTest {
+
+	private static Server server;
 
 	@Deployment(testable = false)
 	public static Archive<?> createDeployment() {
@@ -69,6 +74,27 @@ public class RunCukesTest {
 
 		war.addAsLibraries(libs);
 		return war;
+	}
+
+	@Before
+	public void before() throws Exception {
+		System.err.println("@Before : start and initialize the database");
+		server = new Server();
+		server.setDatabasePath(0, "target/cukes");
+		server.setDatabaseName(0, "xdb");
+		server.start();
+
+		PersistenceManager pm = new PersistenceManager();
+		pm.update("CREATE TABLE TITLE (CODE INTEGER PRIMARY KEY, LABEL VARCHAR(10))");
+		pm.update("CREATE TABLE NATIONALITY (CODE INTEGER PRIMARY KEY, LABEL VARCHAR(10))");
+		pm.update("CREATE TABLE PERSON (CODE INTEGER PRIMARY KEY, NAME VARCHAR(50), TITLE INTEGER, NATIONALITY INTEGER)");
+	}
+
+	@After
+	public void avter() throws Exception {
+		System.err.println("@After : shutdown the database");
+		server.shutdown();
+
 	}
 
 }
