@@ -1,0 +1,6 @@
+credentials:
+  username: easycukesuser
+  password: easycukespassword
+variables:
+  baseurl: https://github.com
+  email: null
