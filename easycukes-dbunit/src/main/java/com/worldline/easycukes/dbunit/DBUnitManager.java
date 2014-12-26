@@ -27,9 +27,15 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.ext.db2.Db2DataTypeFactory;
+import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
+import org.dbunit.ext.mysql.MySqlDataTypeFactory;
+import org.dbunit.ext.oracle.OracleDataTypeFactory;
+import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
 
@@ -94,15 +100,45 @@ public class DBUnitManager {
 	 * @throws ClassNotFoundException
 	 *             when the driverClass was not found
 	 */
-	private IDatabaseTester newDatabaseTester() throws ClassNotFoundException {
+	private IDatabaseTester newDatabaseTester() throws Exception {
 		LOGGER.debug("newDatabaseTester() - start");
-		Map<String, Object> dbunitProps = Configuration.getTargetDBUnit();
+		final Map<String, Object> dbunitProps = Configuration.getTargetDBUnit();
+		final String driverclass = dbunitProps.get("driverclass").toString();
 		return new JdbcDatabaseTester(
 				dbunitProps.get("driverclass").toString(), dbunitProps.get(
 						"connectionurl").toString(), dbunitProps
 						.get("username").toString(),
 				dbunitProps.get("password") != null ? dbunitProps.get(
-						"password").toString() : "");
+						"password").toString() : "") {
+
+			@Override
+			public IDatabaseConnection getConnection() throws Exception {
+				IDatabaseConnection databaseConnection = super.getConnection();
+
+				if (driverclass.contains("hsqldb"))
+					databaseConnection.getConfig().setProperty(
+							DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+							new HsqldbDataTypeFactory());
+				else if (driverclass.contains("oracle"))
+					databaseConnection.getConfig().setProperty(
+							DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+							new OracleDataTypeFactory());
+				else if (driverclass.contains("db2"))
+					databaseConnection.getConfig().setProperty(
+							DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+							new Db2DataTypeFactory());
+				if (driverclass.contains("mysql"))
+					databaseConnection.getConfig().setProperty(
+							DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+							new MySqlDataTypeFactory());
+				if (driverclass.contains("postgresql"))
+					databaseConnection.getConfig().setProperty(
+							DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+							new PostgresqlDataTypeFactory());
+				return databaseConnection;
+			}
+		};
+
 	}
 
 	/**
