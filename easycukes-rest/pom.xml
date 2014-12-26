@@ -31,7 +31,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>${parent.groupId}</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>easycukes-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
