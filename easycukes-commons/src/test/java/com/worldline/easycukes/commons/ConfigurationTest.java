@@ -54,8 +54,8 @@ public class ConfigurationTest {
 		HostConfiguration result = Configuration.configureProxy();
 
 		assertNotNull(result);
-		assertEquals("HostConfiguration[proxyHost=http://proxy:3128]",
-				result.toString());
+		assertTrue(result.toString().contains(
+				"HostConfiguration[proxyHost=http"));
 	}
 
 	/**
