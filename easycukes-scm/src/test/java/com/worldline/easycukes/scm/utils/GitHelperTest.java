@@ -5,13 +5,15 @@ package com.worldline.easycukes.scm.utils;
 
 import java.io.File;
 
-import org.junit.After;
+import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.worldline.easycukes.commons.Configuration;
 import com.worldline.easycukes.commons.helpers.Constants;
+import com.worldline.easycukes.commons.helpers.FileHelper;
 
 /**
  * The class <code>GitHelperTest</code> contains tests for the class
@@ -34,13 +36,39 @@ public class GitHelperTest {
 	 */
 	@Test
 	public void cloneTest() throws Exception {
-		final String fullpath = baseurl + "/awltech/eclipse-appprofiles";
-		final String directory = "/tmp/githelper/test/";
-
+		final String fullpath = baseurl + "/easycukes-test/cukes-test";
+		final String directory = "/tmp/githelpertest/testclone";
 		GitHelper.clone(fullpath, username, password, directory);
 		File file = new File(directory);
+		File gitFile = new File(directory + "/.git");
 		Assert.assertTrue(file.isDirectory());
-		Assert.assertTrue(file.listFiles().length > 0);
+		Assert.assertTrue(gitFile.isDirectory());
+	}
+
+	/**
+	 * Run the void commitAndPush(File,String,String,String) method test.
+	 * 
+	 * @throws Exception
+	 * 
+	 */
+	@Test
+	public void commitAndPushTest() throws Exception {
+		final String cloneDirectory = "/tmp/githelpertest/testclone";
+		File fileToCommit = new File(cloneDirectory + "/test.txt");
+		if (!fileToCommit.exists())
+			fileToCommit.createNewFile();
+		FileUtils.writeStringToFile(fileToCommit,
+				"junit test for commit and push");
+		GitHelper.commitAndPush(new File(cloneDirectory), username, password,
+				"junit test for commit and push");
+		// clone repository again and verify if the file commited is present in
+		// directory
+		final String commitDirectory = "/tmp/githelpertest/testcommit";
+		final String fullpath = baseurl + "/easycukes-test/cukes-test";
+		GitHelper.clone(fullpath, username, password, commitDirectory);
+		File fileCommitted = new File(commitDirectory + "/test.txt");
+		Assert.assertTrue(fileCommitted.exists());
+
 	}
 
 	/**
@@ -71,14 +99,14 @@ public class GitHelperTest {
 	}
 
 	/**
-	 * Perform post-test clean-up.
+	 * Perform clean-up after all tests have been passed.
 	 * 
 	 * @throws Exception
 	 *             if the clean-up fails for some reason
 	 * 
 	 */
-	@After
-	public void tearDown() throws Exception {
-
+	@AfterClass
+	public static void tearDown() throws Exception {
+		FileHelper.deleteDirectory(new File("/tmp/githelpertest/"));
 	}
 }

@@ -9,6 +9,13 @@ import org.junit.Test;
 
 import com.worldline.easycukes.commons.ExecutionContext;
 
+/**
+ * The class <code>CukesHelperTest</code> contains tests for the class
+ * <code>{@link CukesHelper}</code>.
+ * 
+ * @author a513260
+ * 
+ */
 public class CukesHelperTest {
 
 	private static String expression1;
@@ -17,6 +24,10 @@ public class CukesHelperTest {
 	private static String expression4;
 	private static String date_format_json;
 
+	/**
+	 * Perform variable's initialization before tests have been running .
+	 * 
+	 */
 	@BeforeClass
 	public static void setup() {
 		expression1 = "{yesterday}";
@@ -27,6 +38,10 @@ public class CukesHelperTest {
 		date_format_json = "2014-12-25T00:00:00:0Z";
 	}
 
+	/**
+	 * Perform clean-up after all tests have been passed.
+	 * 
+	 */
 	@AfterClass
 	public static void teardown() {
 		expression1 = null;
@@ -35,6 +50,10 @@ public class CukesHelperTest {
 		expression4 = null;
 	}
 
+	/**
+	 * Run the void isExpression(String) method test.
+	 * 
+	 */
 	@Test
 	public void isExpressionTest() {
 		Assert.assertTrue(CukesHelper.isExpression(expression1));
@@ -43,6 +62,10 @@ public class CukesHelperTest {
 		Assert.assertFalse(CukesHelper.isExpression(expression4));
 	}
 
+	/**
+	 * Run the void evalExpression(String) method test.
+	 * 
+	 */
 	@Test
 	public void evalExpressionTest() {
 		try {
