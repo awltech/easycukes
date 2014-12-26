@@ -31,7 +31,7 @@ import org.json.simple.parser.ParseException;
 /**
  * This {@link JSONHelper} class provides various methods allowing to manipulate
  * JSON data. It uses internally {@link JSONObject} from <i>org.json.simple</i>.
- *
+ * 
  * @author aneveux
  * @version 1.0
  */
@@ -51,7 +51,7 @@ public class JSONHelper {
 
 	/**
 	 * Returns <b>true</b> if JSON object o1 is equals to JSON object o2.
-	 *
+	 * 
 	 * @param o1
 	 *            a {@link JSONObject} containing some JSON data
 	 * @param o2
@@ -96,7 +96,7 @@ public class JSONHelper {
 
 	/**
 	 * Returns <b>true</b> if JSON array a1 is equals to JSON array a2.
-	 *
+	 * 
 	 * @param a1
 	 *            a {@link JSONArray} containing some JSON data
 	 * @param a2
@@ -148,7 +148,7 @@ public class JSONHelper {
 	/**
 	 * Returns <b>true</b> if JSON format of s1 is equals to JSON format of s2,
 	 * ignoring the case.
-	 *
+	 * 
 	 * @param s1
 	 *            a {@link String} containing some JSON data
 	 * @param s2
@@ -168,29 +168,9 @@ public class JSONHelper {
 	}
 
 	/**
-	 * Returns <b>true</b> if JSON format of s1 is containing JSON format of s2
-	 *
-	 * @param s1
-	 *            a {@link String} containing some JSON data
-	 * @param s2
-	 *            another {@link String} containing some JSON data
-	 * @return true if s1 contains s2 data
-	 */
-	public static boolean contains(final String s1, final String s2) {
-		try {
-			final JSONObject json1 = (JSONObject) parser.parse(s1);
-			final JSONObject json2 = (JSONObject) parser.parse(s2);
-			return json1.toJSONString().contains(json2.toJSONString());
-		} catch (final ParseException e) {
-			LOGGER.error(e.getMessage(), e);
-			return false;
-		}
-	}
-
-	/**
 	 * Returns a proper representation in JSON of a {@link String} object
 	 * already containing JSON (it basically deals with indentation)
-	 *
+	 * 
 	 * @param s
 	 *            a {@link String} containing JSON to be cleaned
 	 * @return a clean JSON representation of the JSON data contained in the
@@ -211,7 +191,7 @@ public class JSONHelper {
 	/***
 	 * Converts given {@link String} s to {@link JSONObject} format and returns
 	 * it
-	 *
+	 * 
 	 * @param s
 	 *            a {@link String} containing some JSON data
 	 * @return a {@link JSONObject} corresponding to the JSON data contained in
@@ -232,7 +212,7 @@ public class JSONHelper {
 	/**
 	 * Returns the value of a given property from a particular
 	 * {@link JSONObject}
-	 *
+	 * 
 	 * @param jsonObject
 	 *            the {@link JSONObject} to be used for extracting values
 	 * @param property
@@ -261,7 +241,7 @@ public class JSONHelper {
 	/**
 	 * Returns the value of a given property from a particular
 	 * {@link JSONObject}
-	 *
+	 * 
 	 * @param jsonObject
 	 *            the {@link JSONObject} to be used for extracting values
 	 * @param property
@@ -297,7 +277,7 @@ public class JSONHelper {
 	/**
 	 * Returns the value of a given property from a particular
 	 * {@link JSONObject}
-	 *
+	 * 
 	 * @param jsonObject
 	 *            the {@link JSONObject} to be used for extracting values
 	 * @param property
@@ -362,7 +342,7 @@ public class JSONHelper {
 	/**
 	 * Returns a {@link JSONArray} format from a given String containing some
 	 * JSON data
-	 *
+	 * 
 	 * @param s
 	 *            a {@link String} containing some JSON data
 	 * @return a {@link JSONArray} representation of the provided {@link String}
@@ -382,7 +362,7 @@ public class JSONHelper {
 	/**
 	 * Returns a proper representation in JSON of a {@link String} object
 	 * already containing JSON (it basically deals with indentation)
-	 *
+	 * 
 	 * @param s
 	 *            a {@link String} containing JSON to be cleaned
 	 * @return a clean JSON representation of the JSON data contained in the
