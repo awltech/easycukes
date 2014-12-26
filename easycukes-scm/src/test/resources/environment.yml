@@ -1,0 +1,4 @@
+proxy:
+  host: proxy
+  port: 3128
+  enabled: true
