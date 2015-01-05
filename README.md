@@ -25,6 +25,8 @@ All of our documentation can be found on [our wiki](https://github.com/awltech/e
 - EasyCukes-Selenium:
 	- [Available steps](https://github.com/awltech/easycukes/wiki/EasyCukes-Selenium-available-steps)
 	- [Project creation](https://github.com/awltech/easycukes/wiki/EasyCukes-Selenium-project-creation)
+- EasyCukes-DBUnit:
+	- [DBUnit integration](https://github.com/awltech/easycukes/wiki/EasyCukes-&-DbUnit-integration)
 - Advanced:
 	- [Extensibility](https://github.com/awltech/easycukes/wiki/Extensibility-of-EasyCukes-framework)
 	- [Tooling](https://github.com/awltech/easycukes/wiki/Tooling-for-developing-with-EasyCukes)
