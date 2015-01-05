@@ -1,6 +1,7 @@
 package com.worldline.easycukes.commons;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -14,26 +15,26 @@ import org.junit.Test;
 /**
  * The class <code>ConfigurationTest</code> contains tests for the class
  * <code>{@link Configuration}</code>.
- * 
+ *
  * @author m.echikhi
  */
 public class ConfigurationTest {
 
 	/**
 	 * Run the Configuration() constructor test.
-	 * 
+	 *
 	 */
 	@Test
 	public void testConfiguration() throws Exception {
-		Configuration result = new Configuration();
+		final Configuration result = new Configuration();
 		assertNotNull(result);
 	}
 
 	/**
 	 * Run the void load() method test.
-	 * 
+	 *
 	 * @throws Exception
-	 * 
+	 *
 	 */
 	@Test
 	public void testLoad() throws Exception {
@@ -44,30 +45,30 @@ public class ConfigurationTest {
 
 	/**
 	 * Run the HostConfiguration configureProxy() method test.
-	 * 
+	 *
 	 * @throws Exception
-	 * 
+	 *
 	 */
 	@Test
 	public void testConfigureProxy() throws Exception {
 
-		HostConfiguration result = Configuration.configureProxy();
+		final HostConfiguration result = Configuration.configureProxy();
 
 		assertNotNull(result);
-		assertTrue(result.toString().contains(
+		assertFalse(result.toString().contains(
 				"HostConfiguration[proxyHost=http"));
 	}
 
 	/**
 	 * Run the Map<String, Map<String, Object>> getEnvironment() method test.
-	 * 
+	 *
 	 * @throws Exception
-	 * 
+	 *
 	 */
 	@Test
 	public void testGetEnvironment() throws Exception {
 
-		Map<String, Map<String, Object>> result = Configuration
+		final Map<String, Map<String, Object>> result = Configuration
 				.getEnvironment();
 
 		assertNotNull(result);
@@ -78,14 +79,15 @@ public class ConfigurationTest {
 
 	/**
 	 * Run the Map<String, Object> getEnvironmentSelenium() method test.
-	 * 
+	 *
 	 * @throws Exception
-	 * 
+	 *
 	 */
 	@Test
 	public void testGetEnvironmentSelenium() throws Exception {
 
-		Map<String, Object> result = Configuration.getEnvironmentSelenium();
+		final Map<String, Object> result = Configuration
+				.getEnvironmentSelenium();
 
 		assertNotNull(result);
 		assertEquals(6, result.size());
@@ -100,14 +102,15 @@ public class ConfigurationTest {
 
 	/**
 	 * Run the Map<String, Map<String, Object>> getTarget() method test.
-	 * 
+	 *
 	 * @throws Exception
-	 * 
+	 *
 	 */
 	@Test
 	public void testGetTarget() throws Exception {
 
-		Map<String, Map<String, Object>> result = Configuration.getTarget();
+		final Map<String, Map<String, Object>> result = Configuration
+				.getTarget();
 
 		assertNotNull(result);
 		assertEquals(2, result.size());
@@ -117,14 +120,14 @@ public class ConfigurationTest {
 
 	/**
 	 * Run the Map<String, Object> getTargetCredentials() method test.
-	 * 
+	 *
 	 * @throws Exception
-	 * 
+	 *
 	 */
 	@Test
 	public void testGetTargetCredentials() throws Exception {
 
-		Map<String, Object> result = Configuration.getTargetCredentials();
+		final Map<String, Object> result = Configuration.getTargetCredentials();
 
 		assertNotNull(result);
 		assertEquals(2, result.size());
@@ -134,39 +137,39 @@ public class ConfigurationTest {
 
 	/**
 	 * Run the String getTargetVariable(String) method test.
-	 * 
+	 *
 	 * @throws Exception
-	 * 
+	 *
 	 */
 	@Test
 	public void testGetTargetVariable() throws Exception {
-		String key = "baseurl";
+		final String key = "baseurl";
 
-		String result = Configuration.getTargetVariable(key);
+		final String result = Configuration.getTargetVariable(key);
 
 		assertEquals("https://github.com", result);
 	}
 
 	/**
 	 * Run the boolean isProxyNeeded() method test.
-	 * 
+	 *
 	 * @throws Exception
-	 * 
+	 *
 	 */
 	@Test
 	public void testIsProxyNeeded() throws Exception {
 
-		boolean result = Configuration.isProxyNeeded();
+		final boolean result = Configuration.isProxyNeeded();
 
-		assertEquals(true, result);
+		assertEquals(false, result);
 	}
 
 	/**
 	 * Perform pre-test initialization.
-	 * 
+	 *
 	 * @throws Exception
 	 *             if the initialization fails for some reason
-	 * 
+	 *
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -174,10 +177,10 @@ public class ConfigurationTest {
 
 	/**
 	 * Perform post-test clean-up.
-	 * 
+	 *
 	 * @throws Exception
 	 *             if the clean-up fails for some reason
-	 * 
+	 *
 	 */
 	@After
 	public void tearDown() throws Exception {
