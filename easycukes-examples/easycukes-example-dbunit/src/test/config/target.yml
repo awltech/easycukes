@@ -1,6 +1,6 @@
 dbunit:
-  connectionurl:  jdbc:hsqldb:hsql://localhost/xdb
-  driverclass:  org.hsqldb.jdbcDriver
+  connectionurl: jdbc:hsqldb:hsql://localhost/xdb
+  driverclass: org.hsqldb.jdbcDriver
   username: sa
   password: 
  

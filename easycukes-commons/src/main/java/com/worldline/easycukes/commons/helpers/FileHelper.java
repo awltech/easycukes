@@ -20,6 +20,7 @@ package com.worldline.easycukes.commons.helpers;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -32,7 +33,7 @@ import org.apache.log4j.Logger;
 /**
  * {@link FileHelper} allows to perform certain operations in relation to the
  * manipulation of file zip, which containing a bunch of files.
- * 
+ *
  * @author mechikhi
  * @version 1.0
  */
@@ -51,7 +52,7 @@ public class FileHelper {
 
 	/**
 	 * Downloads some content from an URL to a specific directory
-	 * 
+	 *
 	 * @param from
 	 *            a {@link String} representation of the URL on which the
 	 *            content should be downloaded
@@ -72,7 +73,7 @@ public class FileHelper {
 
 	/**
 	 * Extracts the content of a zip folder in a specified directory
-	 * 
+	 *
 	 * @param from
 	 *            a {@link String} representation of the URL containing the zip
 	 *            file to be unzipped
@@ -85,11 +86,10 @@ public class FileHelper {
 	public static void unzip(String from, String to, boolean isRemote)
 			throws IOException {
 		ZipInputStream zip = null;
-		if (isRemote) {
+		if (isRemote)
 			zip = new ZipInputStream(new FileInputStream(from));
-		} else {
+		else
 			zip = new ZipInputStream(FileHelper.class.getResourceAsStream(from));
-		}
 		LOGGER.debug("Extracting zip from: " + from + " to: " + to);
 		// Extract without a container directory if exists
 		ZipEntry entry = zip.getNextEntry();
@@ -100,7 +100,11 @@ public class FileHelper {
 			else {
 				final String filePath = to + entry.getName();
 				// if the entry is a file, extracts it
-				extractFile(zip, filePath);
+				try {
+					extractFile(zip, filePath);
+				} catch (final FileNotFoundException fnfe) {
+					LOGGER.warn(fnfe.getMessage(), fnfe);
+				}
 			}
 		zip.closeEntry();
 		entry = zip.getNextEntry();
@@ -112,7 +116,11 @@ public class FileHelper {
 			final String filePath = to + "/" + entryName;
 			if (!entry.isDirectory())
 				// if the entry is a file, extracts it
-				extractFile(zip, filePath);
+				try {
+					extractFile(zip, filePath);
+				} catch (final FileNotFoundException fnfe) {
+					LOGGER.warn(fnfe.getMessage(), fnfe);
+				}
 			else {
 				// if the entry is a directory, make the directory
 				final File dir = new File(filePath);
@@ -129,7 +137,7 @@ public class FileHelper {
 
 	/**
 	 * Extracts a specific file from a zip folder
-	 * 
+	 *
 	 * @param zip
 	 *            a {@link ZipInputStream} corresponding to the zip folder to be
 	 *            extracted
@@ -152,7 +160,7 @@ public class FileHelper {
 
 	/**
 	 * Deletes directory and its sub directories
-	 * 
+	 *
 	 * @param file
 	 *            the directory to be deleted
 	 * @return true if everything went fine, false otherwise.
