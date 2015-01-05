@@ -2,6 +2,7 @@ package com.worldline.easycukes.commons;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
@@ -53,9 +54,9 @@ public class ConfigurationTest {
 
 		final HostConfiguration result = Configuration.configureProxy();
 
-		assertNotNull(result);
-		assertTrue(result.toString().contains(
-				"HostConfiguration[proxyHost=http"));
+		assertNull(result);
+		// assertTrue(result.toString().contains(
+		// "HostConfiguration[proxyHost=http"));
 	}
 
 	/**
