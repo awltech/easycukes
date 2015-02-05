@@ -35,23 +35,27 @@ import cucumber.api.java.en.Given;
  * @author mechikhi
  * @version 1.0
  */
-public class ConfigurationStepdefs extends AbstractStepdefs {
+public class SeleniumConfigurationStepdefs extends SeleniumAbstractStepdefs {
 
-	@Before
 	/**
-	 * Allows to waiting 2 seconds before the start of each scenario
+	 * Defines the sleeping time to apply for a scenario
+	 *
+	 * @param scenario
 	 */
+	@Before
 	public void before(Scenario scenario) {
 		Sleeper.sleepTightInSeconds(1);
 	}
 
 	/**
-	 * Allows to set base url
+	 * Defines the base URL to be used for running the Selenium tests
 	 *
 	 * @param url
+	 *            URL to be used as a basedir for all paths to test
+	 * @throws Exception
 	 */
 	@Given("^the base url is \"(.*?)\"$")
-	public void the_base_url_is(String url) throws Exception {
+	public void defineBaseUrl(String url) throws Exception {
 		ExecutionContext.put(Constants.BASE_URL_KEY,
 				DataInjector.injectData(url));
 		PageManager.initialize();
@@ -59,22 +63,52 @@ public class ConfigurationStepdefs extends AbstractStepdefs {
 				ExecutionContext.get(Constants.BASE_URL_KEY));
 	}
 
+	/**
+	 * Allows to specify a graphical element from the GUI which is used to
+	 * indicate a loading mechanism (like an icon, a progressbar, or something),
+	 * this can be used later on for checking if some processes are properly
+	 * loaded
+	 *
+	 * @param selector
+	 *            the selector to use for identifying the element
+	 * @param value
+	 *            the value of the selector allowing to identify the loading
+	 *            graphical element
+	 * @throws Throwable
+	 */
 	@Given("^the loading progress is identified by the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void the_loading_progress_is_identified_by_the_element_having(
-			String selector, String value) throws Throwable {
+	public void defineTheElementIdentifyingTheLoadingProgress(String selector,
+			String value) throws Throwable {
 
 		PageManager.getPage().setLoadingProgress(getSelector(selector, value));
 	}
 
+	/**
+	 * Allows to specify a graphical element from the GUI which is used to
+	 * display notifications (like a popup or something). This can be used later
+	 * on in order to check for particular notifications
+	 *
+	 * @param selector
+	 *            the selector to use for identifying the element
+	 * @param value
+	 *            the value of the selector allowing to identify the
+	 *            notification graphical element
+	 * @throws Throwable
+	 */
 	@Given("^the notification is identified by the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
-	public void the_notification_is_identified_by_the_element_having(
-			String selector, String value) throws Throwable {
+	public void defineTheElementIdentifyingTheNotification(String selector,
+			String value) throws Throwable {
 
 		PageManager.getPage().setNotificationBy(getSelector(selector, value));
 	}
 
+	/**
+	 * Defines if you want to wait for notifications to be hidden before
+	 * continuing the tests or if you can proceed with the tests even if the
+	 * notification popup is still visible
+	 */
 	@Given("^enable the waiting for notification to be hidden$")
-	public void enable_the_waiting_for_notification_to_be_hidden() {
+	public void waitTillTheNotificationIsHidden() {
 
 		PageManager.getPage().enableWaitNotificationToHide();
 	}

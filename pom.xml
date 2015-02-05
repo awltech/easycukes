@@ -101,6 +101,17 @@
 		</repository>
 	</repositories>
 
+	<pluginRepositories>
+		<pluginRepository>
+			<id>docukes</id>
+			<url>https://raw.github.com/aneveux/docukes/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -318,6 +329,11 @@
 						<phase>deploy</phase>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.aneveux</groupId>
+				<artifactId>docukes</artifactId>
+				<version>1.0.1</version>
 			</plugin>
 		</plugins>
 	</build>

@@ -25,22 +25,23 @@ import com.worldline.easycukes.rest.client.RestService;
 import cucumber.api.java.en.Given;
 
 /**
- * This class aims at containing all the common operations you may use in the
- * tests scenarios. Things like dealing with the configuration, or manipulating
- * external tools, etc.
+ * RestConfigurationStepdefs are all the step definitions you can use in your
+ * Cucumber features in order to setup some basic configuration for testing your
+ * REST services.
+ *
  *
  * @author aneveux
  * @version 1.0
  */
-public class ConfigurationStepdefs {
+public class RestConfigurationStepdefs {
 
 	/**
-	 * Allows to set base url
+	 * Allows to set base url to be used for calling the REST services
 	 *
 	 * @param url
 	 */
 	@Given("^the base url is \"(.*?)\"$")
-	public void the_base_url_is(String url) {
+	public void setBaseURL(String url) {
 		ExecutionContext.put(Constants.BASE_URL_KEY,
 				DataInjector.injectData(url));
 		RestService.getInstance().initialize(

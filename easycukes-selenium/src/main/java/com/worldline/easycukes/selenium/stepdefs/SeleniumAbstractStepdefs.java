@@ -29,7 +29,7 @@ import com.worldline.easycukes.commons.helpers.Constants;
  * @author mechikhi
  * @version TODO
  */
-public abstract class AbstractStepdefs {
+public abstract class SeleniumAbstractStepdefs {
 
 	/**
 	 * Just a {@link Logger}...

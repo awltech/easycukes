@@ -32,9 +32,11 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 
 /**
- * This class aims at containing all the DBUnit operations you may use in the
- * tests scenarios.
- * 
+ * DBUnitStepdefs are all the step definitions you can use in your Cucumber
+ * features in order to interact with DBUnit. It allows you to manipulate a
+ * database you may use for running tests in order to set up some data in it, or
+ * to put it in a particular state.
+ *
  * @author mechikhi
  * @version 1.0
  */
@@ -43,44 +45,41 @@ public class DBUnitStepdefs {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger LOGGER = LogManager
+	protected static final Logger LOGGER = LogManager
 			.getLogger(Constants.CUKES_TESTS_LOGGER);
 
 	@Before
 	public void before(Scenario scenario) throws Exception {
 		if (scenario.getSourceTagNames() == null
-				|| !scenario.getSourceTagNames().contains("@dbunit")) {
+				|| !scenario.getSourceTagNames().contains("@dbunit"))
 			DBUnitManager.getInstance().setUp();
-		}
 
 	}
 
 	@After
 	public void after(Scenario scenario) throws Exception {
 		if (scenario.getSourceTagNames() == null
-				|| !scenario.getSourceTagNames().contains("@dbunit")) {
+				|| !scenario.getSourceTagNames().contains("@dbunit"))
 			DBUnitManager.getInstance().tearDown();
-		}
 	}
 
 	/**
-	 * Allows to pass the data be inserted in the specified table before
+	 * Allows to pass the data to be inserted in the specified table before
 	 * starting the scenarios
-	 * 
+	 *
 	 * @param table
 	 * @param data
 	 * @throws Throwable
 	 */
 	@Given("^fill the table \"(.*?)\" with data:$")
-	public void fill_the_table_with_data(String table,
-			List<Map<String, String>> data) throws Throwable {
-		StringBuffer xmlBuffer = new StringBuffer();
-		for (Map<String, String> row : data) {
+	public void fillATableWithData(String table, List<Map<String, String>> data)
+			throws Throwable {
+		final StringBuffer xmlBuffer = new StringBuffer();
+		for (final Map<String, String> row : data) {
 			xmlBuffer.append("\t<").append(table);
-			for (String key : row.keySet()) {
+			for (final String key : row.keySet())
 				xmlBuffer.append(" " + key + "=\"").append(row.get(key))
-						.append("\"");
-			}
+				.append("\"");
 			xmlBuffer.append(" />\n");
 		}
 		DBUnitManager.getInstance().addToDataSet(xmlBuffer.toString());
@@ -90,24 +89,24 @@ public class DBUnitStepdefs {
 	/**
 	 * Allows to add the file content to the dataset to be used used during the
 	 * DBUnit operations
-	 * 
+	 *
 	 * @param fileName
 	 * @throws Throwable
 	 */
 	@Given("^add dataset file \"(.*?)\"$")
-	public void the_dataset_file_is(String fileName) throws Throwable {
+	public void defineDatasetFile(String fileName) throws Throwable {
 		DBUnitManager.getInstance().addFileToDataSet(fileName);
 	}
 
 	/**
 	 * Allows to specify the setup operation to be performed before the test
 	 * scenario
-	 * 
+	 *
 	 * @param operation
 	 * @throws Throwable
 	 */
 	@Given("^the operation before executing tests is (NONE|UPDATE|INSERT|REFRESH|DELETE|DELETE_ALL|TRUNCATE_TABLE|CLEAN_INSERT)$")
-	public void the_operation_before_executing_tests_is(String operation)
+	public void defineOperationToBeExecutedBeforeTheTests(String operation)
 			throws Throwable {
 		DBUnitManager.getInstance().setSetUpOperation(operation);
 	}
@@ -115,12 +114,12 @@ public class DBUnitStepdefs {
 	/**
 	 * Allows to specify the cleanup operation to be performed when ending the
 	 * test scenario
-	 * 
+	 *
 	 * @param operation
 	 * @throws Throwable
 	 */
 	@Given("^the operation after executing tests is (NONE|UPDATE|INSERT|REFRESH|DELETE|DELETE_ALL|TRUNCATE_TABLE|CLEAN_INSERT)$")
-	public void the_operation_after_executing_tests_is(String operation)
+	public void defineOperationToBeExecutedAfterTheTests(String operation)
 			throws Throwable {
 		DBUnitManager.getInstance().setTearDownOperation(operation);
 	}

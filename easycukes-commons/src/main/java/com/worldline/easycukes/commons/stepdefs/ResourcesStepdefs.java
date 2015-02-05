@@ -32,9 +32,13 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 /**
- * This class aims at containing all the operations that should be needed during
- * the tests in order to deal with resources to be used for testing, like
- * project templates, or anything like this
+ * ResourcesStepdefs are all the step definitions you can use in your Cucumber
+ * features in order to deal with common actions you may require to do with
+ * resources you'd need to use for your tests.
+ *
+ * This includes for example stepdefs like downloading resources, unzipping
+ * things, etc.
+ *
  *
  * @author aneveux
  * @version 1.0
@@ -61,7 +65,7 @@ public class ResourcesStepdefs {
 	 *             ZIP file
 	 */
 	@When("^I unzip into directory \"([^\"]*)\" a zip file from \"([^\"]*)\"$")
-	public void unzip_into_directory_a_zip_file_from(String target, String url)
+	public void unzipADownloadedZipFileInADirectory(String target, String url)
 			throws IOException {
 		final String localPath = DataInjector.injectData(target);
 		LOGGER.info("Downloading from " + url + " to directory " + localPath);
@@ -94,8 +98,8 @@ public class ResourcesStepdefs {
 	 *             file
 	 */
 	@When("^I unzip into directory \"([^\"]*)\" a zip file from classpath named \"([^\"]*)\"$")
-	public void unzip_into_directory_a_zip_file_from_classpath_named(
-			String target, String name) throws IOException {
+	public void unzipAZipFileFromTheClasspathInADirectory(String target,
+			String name) throws IOException {
 		final String localPath = DataInjector.injectData(target);
 		final String url = "/" + name;
 		LOGGER.info("Unzipping file " + url + " in local repository");
@@ -113,7 +117,7 @@ public class ResourcesStepdefs {
 	 *             if something's going wrong...
 	 */
 	@Then("^delete directory \"([^\"]*)\"$")
-	public void delete_directory(String path) throws Throwable {
+	public void deleteDirectory(String path) throws Throwable {
 		LOGGER.info("Deleting directory : " + path);
 		final boolean result = FileHelper.deleteDirectory(new File(DataInjector
 				.injectData(path)));
@@ -137,7 +141,7 @@ public class ResourcesStepdefs {
 	 *             if there's something wrong while dealing with the response
 	 */
 	@When("^I change the value of element \"(.*?)\" in xml file \"([^\"]*)\" to \"(.*?)\"$")
-	public void change_the_value_of_element_in_xml_file_to(String element,
+	public void changeTheValueOfAnElementInAnXMLFile(String element,
 			String path, String value) throws Throwable {
 
 		DomHelper.setElementContent(DataInjector.injectData(path), element,
@@ -146,7 +150,7 @@ public class ResourcesStepdefs {
 	}
 
 	@When("^I set the parameter \"(.*?)\" to value of element \"(.*?)\" in xml file \"([^\"]*)\"$")
-	public void set_the_parameter_to_value_of_element_in_xml_file(String param,
+	public void setAParameterToASpecifiedValueFromAnXMLFile(String param,
 			String element, String path) throws Throwable {
 
 		ExecutionContext.put(param.toLowerCase(), DomHelper.getElementContent(

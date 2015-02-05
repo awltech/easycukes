@@ -35,9 +35,9 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 
 /**
- * This class aims at containing all the operations that should be needed during
- * the tests in order to deal with SCMs operations (no matter which SCM is
- * impacted)
+ * SCMStepdefs are all the step definitions you can use in your cucumber
+ * features in order to interact with SCMs. It allows you to retrieve Git, Hg,
+ * and SVN repositories, and to perform various actions with them.
  *
  * @author aneveux
  * @version 1.0
@@ -60,20 +60,19 @@ public class SCMStepdefs {
 	 *             if anything's going wrong...
 	 */
 	@Given("^the git repository located in \"([^\"]*)\" is cloned into \"([^\"]*)\"$")
-	public void the_git_repository_located_in_is_cloned_into(String url,
-			String target) throws Exception {
+	public void cloneAGitRepository(String url, String target) throws Exception {
 		final String baseUrl = ExecutionContext.get(Constants.BASE_URL_KEY);
 		String username = "";
 		String password = "";
 		if (Configuration.getTargetCredentials() != null) {
 			username = Configuration.getTargetCredentials().get(
 					Constants.USERNAME_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.USERNAME_KEY)
-					.toString() : "";
-			password = Configuration.getTargetCredentials().get(
-					Constants.PASSWORD_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.PASSWORD_KEY)
-					.toString() : "";
+							.getTargetCredentials().get(Constants.USERNAME_KEY)
+							.toString() : "";
+							password = Configuration.getTargetCredentials().get(
+									Constants.PASSWORD_KEY) != null ? Configuration
+											.getTargetCredentials().get(Constants.PASSWORD_KEY)
+											.toString() : "";
 		}
 		final String fullPath = baseUrl + DataInjector.injectData(url);
 		// then clone
@@ -92,20 +91,20 @@ public class SCMStepdefs {
 	 *             if anything's going wrong...
 	 */
 	@Given("^the mercurial repository located in \"([^\"]*)\" is cloned into \"([^\"]*)\"$")
-	public void the_mercurial_repository_located_in_is_cloned_into(String url,
-			String target) throws Exception {
+	public void cloneAMercurialRepository(String url, String target)
+			throws Exception {
 		final String baseUrl = ExecutionContext.get(Constants.BASE_URL_KEY);
 		String username = "";
 		String password = "";
 		if (Configuration.getTargetCredentials() != null) {
 			username = Configuration.getTargetCredentials().get(
 					Constants.USERNAME_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.USERNAME_KEY)
-					.toString() : "";
-			password = Configuration.getTargetCredentials().get(
-					Constants.PASSWORD_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.PASSWORD_KEY)
-					.toString() : "";
+							.getTargetCredentials().get(Constants.USERNAME_KEY)
+							.toString() : "";
+							password = Configuration.getTargetCredentials().get(
+									Constants.PASSWORD_KEY) != null ? Configuration
+											.getTargetCredentials().get(Constants.PASSWORD_KEY)
+											.toString() : "";
 		}
 
 		final String fullPath = baseUrl + DataInjector.injectData(url);
@@ -129,9 +128,8 @@ public class SCMStepdefs {
 	 *             if there's something wrong while committing the files
 	 */
 	@Then("^I commit and push the Git repository located in \"([^\"]*)\" with the message \"([^\"]*)\"$")
-	public void I_commit_and_push_the_git_repository_located_in_with_the_message(
-			String repository, String message) throws GitAPIException,
-			IOException {
+	public void commitAndPushInAGitRepository(String repository, String message)
+			throws GitAPIException, IOException {
 		LOGGER.info("Commiting the project to Git repository ");
 		final File gitworkDir = new File(DataInjector.injectData(repository));
 
@@ -140,12 +138,12 @@ public class SCMStepdefs {
 		if (Configuration.getTargetCredentials() != null) {
 			username = Configuration.getTargetCredentials().get(
 					Constants.USERNAME_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.USERNAME_KEY)
-					.toString() : "";
-			password = Configuration.getTargetCredentials().get(
-					Constants.PASSWORD_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.PASSWORD_KEY)
-					.toString() : "";
+							.getTargetCredentials().get(Constants.USERNAME_KEY)
+							.toString() : "";
+							password = Configuration.getTargetCredentials().get(
+									Constants.PASSWORD_KEY) != null ? Configuration
+											.getTargetCredentials().get(Constants.PASSWORD_KEY)
+											.toString() : "";
 		}
 
 		GitHelper.commitAndPush(gitworkDir, username, password,
@@ -168,9 +166,8 @@ public class SCMStepdefs {
 	 *             if something's going wrong
 	 */
 	@Then("^I commit and push the Mercurial repository located in \"([^\"]*)\" to \"([^\"]*)\" with the message \"([^\"]*)\"$")
-	public void I_commit_and_push_the_mercurial_repository_located_in_to_with_the_message(
-			String localRepository, String remoteRepository, String message)
-			throws Throwable {
+	public void commitAndPushInAMercurialRepository(String localRepository,
+			String remoteRepository, String message) throws Throwable {
 		LOGGER.info("Commiting the project to Mercurial repository ");
 
 		final String baseUrl = ExecutionContext.get(Constants.BASE_URL_KEY);
@@ -179,12 +176,12 @@ public class SCMStepdefs {
 		if (Configuration.getTargetCredentials() != null) {
 			username = Configuration.getTargetCredentials().get(
 					Constants.USERNAME_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.USERNAME_KEY)
-					.toString() : "";
-			password = Configuration.getTargetCredentials().get(
-					Constants.PASSWORD_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.PASSWORD_KEY)
-					.toString() : "";
+							.getTargetCredentials().get(Constants.USERNAME_KEY)
+							.toString() : "";
+							password = Configuration.getTargetCredentials().get(
+									Constants.PASSWORD_KEY) != null ? Configuration
+											.getTargetCredentials().get(Constants.PASSWORD_KEY)
+											.toString() : "";
 		}
 
 		final String fullPath = baseUrl
@@ -208,8 +205,8 @@ public class SCMStepdefs {
 	 *             if something's going wrong...
 	 */
 	@Given("^the svn repository located in \"([^\"]*)\" is checked out into \"([^\"]*)\"$")
-	public void the_svn_repository_located_in_is_checked_out_into(String url,
-			String target) throws Throwable {
+	public void checkoutAnSVNRepository(String url, String target)
+			throws Throwable {
 		LOGGER.info("Checkouting from " + url + " to " + target);
 
 		final String baseUrl = ExecutionContext.get(Constants.BASE_URL_KEY);
@@ -218,12 +215,12 @@ public class SCMStepdefs {
 		if (Configuration.getTargetCredentials() != null) {
 			username = Configuration.getTargetCredentials().get(
 					Constants.USERNAME_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.USERNAME_KEY)
-					.toString() : "";
-			password = Configuration.getTargetCredentials().get(
-					Constants.PASSWORD_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.PASSWORD_KEY)
-					.toString() : "";
+							.getTargetCredentials().get(Constants.USERNAME_KEY)
+							.toString() : "";
+							password = Configuration.getTargetCredentials().get(
+									Constants.PASSWORD_KEY) != null ? Configuration
+											.getTargetCredentials().get(Constants.PASSWORD_KEY)
+											.toString() : "";
 		}
 
 		final String fullPath = baseUrl + DataInjector.injectData(url);
@@ -245,8 +242,8 @@ public class SCMStepdefs {
 	 *             if something's going wrong
 	 */
 	@Then("^I commit the SVN repository located in \"([^\"]*)\" with the message \"([^\"]*)\"$")
-	public void I_commit_the_svn_repository_located_in_with_the_message(
-			String repository, String message) throws Throwable {
+	public void commitInAnSVNRepository(String repository, String message)
+			throws Throwable {
 		LOGGER.info("Commiting the project to Svn repository ");
 		final File svnWorkDir = new File(DataInjector.injectData(repository));
 
@@ -256,12 +253,12 @@ public class SCMStepdefs {
 		if (Configuration.getTargetCredentials() != null) {
 			username = Configuration.getTargetCredentials().get(
 					Constants.USERNAME_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.USERNAME_KEY)
-					.toString() : "";
-			password = Configuration.getTargetCredentials().get(
-					Constants.PASSWORD_KEY) != null ? Configuration
-					.getTargetCredentials().get(Constants.PASSWORD_KEY)
-					.toString() : "";
+							.getTargetCredentials().get(Constants.USERNAME_KEY)
+							.toString() : "";
+							password = Configuration.getTargetCredentials().get(
+									Constants.PASSWORD_KEY) != null ? Configuration
+											.getTargetCredentials().get(Constants.PASSWORD_KEY)
+											.toString() : "";
 		}
 		SvnHelper.commit(svnWorkDir, username, password,
 				DataInjector.injectData(message));

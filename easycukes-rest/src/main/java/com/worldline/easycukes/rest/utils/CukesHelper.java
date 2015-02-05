@@ -36,7 +36,7 @@ public class CukesHelper {
 	/**
 	 * {@link Logger} to be used in order to log a few things about execution
 	 */
-	private final static Logger LOGGER = Logger
+	protected final static Logger LOGGER = Logger
 			.getLogger(Constants.CUKES_TESTS_LOGGER);
 
 	/**
