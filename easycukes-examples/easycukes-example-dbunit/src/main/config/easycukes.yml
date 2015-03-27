@@ -1,0 +1,10 @@
+proxy:
+  host: proxy
+  port: 3128
+  enabled: false
+dbunit:
+  connectionurl: jdbc:hsqldb:hsql://localhost/xdb
+  driverclass: org.hsqldb.jdbcDriver
+  username: sa
+  password:
+

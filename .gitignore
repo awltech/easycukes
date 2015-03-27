@@ -15,3 +15,6 @@ bin/
 #IntellijIDEA stuff
 *.iml
 .idea
+
+#Maven
+pom.xml.versionsBackup

@@ -27,14 +27,6 @@ package com.worldline.easycukes.selenium.utils;
  */
 public interface SeleniumConstants {
 
-	// jenkins_wait_time_seconds=180
-	// testinstance_wait_time_seconds=90
-	/**
-	 * The default time to wait for loading elements in web page
-	 */
-	public static final String NOTIFICATON_BY_CSS_KEY = "notification_by_css";
-	public static final String LOADING_PROGRESS_BY_CSS_KEY = "loading_progress_by_css";
-
 	/**
 	 * The default time to wait for loading elements in web page
 	 */

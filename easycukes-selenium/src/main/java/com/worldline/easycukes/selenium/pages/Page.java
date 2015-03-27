@@ -35,334 +35,310 @@ import com.worldline.easycukes.selenium.utils.SeleniumHelper;
 /**
  * Page Object base class. It provides the base structure and properties for a
  * page object to extend.
- * 
+ *
  * @author mechikhi
  * @version 1.0
  */
 public class Page {
 
-	private String baseUrl = null;
+    private String baseUrl = null;
 
-	/** This page's WebDriver */
-	private final WebDriver driver;
+    /**
+     * This page's WebDriver
+     */
+    private final WebDriver driver;
 
-	private By notifyBy = null;
+    private By notifyBy = null;
 
-	private boolean waitNotificationToHide = false;
+    private boolean waitNotificationToHide = false;
 
-	private By loadProgressBy = null;
+    private By loadProgressBy = null;
 
-	private final List<String> handledWindowList = new ArrayList<String>();
+    private final List<String> handledWindowList = new ArrayList<String>();
 
-	/**
-	 * Sets the
-	 * 
-	 * @param driver
-	 */
-	public Page(WebDriver driver) {
-		this.driver = driver;
-	}
+    /**
+     * Sets the
+     *
+     * @param driver
+     */
+    public Page(WebDriver driver) {
+        this.driver = driver;
+    }
 
-	/**
-	 * @param baseUrl
-	 *            the base URL
-	 */
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
-	}
+    /**
+     * @param baseUrl the base URL
+     */
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
 
-	/**
-	 * Send text keys to the element that finds by selector.
-	 * 
-	 * @param by
-	 *            selector to find the element
-	 * @param text
-	 */
-	public void sendText(By by, String text) {
-		final WebElement element = getWebElement(by);
-		if ("text".equalsIgnoreCase(element.getAttribute("type")))
-			element.clear();
-		element.sendKeys(text);
-	}
+    /**
+     * Send text keys to the element that finds by selector.
+     *
+     * @param by   selector to find the element
+     * @param text
+     */
+    public void sendText(By by, String text) {
+        final WebElement element = getWebElement(by);
+        if ("text".equalsIgnoreCase(element.getAttribute("type")))
+            element.clear();
+        element.sendKeys(text);
+    }
 
-	/**
-	 *
-	 */
-	public void switchToDefaultContent() {
-		driver.switchTo().defaultContent();
-	}
+    /**
+     *
+     */
+    public void switchToDefaultContent() {
+        driver.switchTo().defaultContent();
+    }
 
-	/**
-	 * switch focus of WebDriver to the next found window handle (that's your
-	 * newly opened window)
-	 * 
-	 */
-	public void switchToNewWindow() {
-		handledWindowList.add(driver.getWindowHandle());
-		Sleeper.sleepTightInSeconds(3);
-		for (final String winHandle : driver.getWindowHandles())
-			if (!handledWindowList.contains(winHandle)) {
-				driver.switchTo().window(winHandle);
-				break;
-			}
-	}
+    /**
+     * switch focus of WebDriver to the next found window handle (that's your
+     * newly opened window)
+     */
+    public void switchToNewWindow() {
+        handledWindowList.add(driver.getWindowHandle());
+        Sleeper.sleepTightInSeconds(3);
+        for (final String winHandle : driver.getWindowHandles())
+            if (!handledWindowList.contains(winHandle)) {
+                driver.switchTo().window(winHandle);
+                break;
+            }
+    }
 
-	/**
-	 * switch focus of WebDriver to the previous window
-	 * 
-	 */
-	public void switchToPreviousWindow() {
+    /**
+     * switch focus of WebDriver to the previous window
+     */
+    public void switchToPreviousWindow() {
+        // close newly opened window
+        driver.close();
+        // switch back to the previous window
+        final int index = handledWindowList.size() - 1;
+        driver.switchTo().window(handledWindowList.get(index));
+        handledWindowList.remove(index);
+    }
 
-		// close newly opened window
-		driver.close();
-		// switch back to the previous window
-		final int index = handledWindowList.size() - 1;
-		driver.switchTo().window(handledWindowList.get(index));
-		handledWindowList.remove(index);
-	}
+    /**
+     * @param by selector to find the element
+     */
+    public void switchToFrame(By by) {
+        driver.switchTo().frame(getWebElement(by));
+    }
 
-	/**
-	 * 
-	 * @param by
-	 *            selector to find the element
-	 */
-	public void switchToFrame(By by) {
-		driver.switchTo().frame(getWebElement(by));
-	}
+    /**
+     * @param by selector to find the element
+     * @return
+     */
+    public String getText(By by) {
+        return getWebElement(by).getText();
+    }
 
-	/**
-	 * 
-	 * @param by
-	 *            selector to find the element
-	 * @return
-	 */
-	public String getText(By by) {
-		return getWebElement(by).getText();
-	}
+    /**
+     * @param by selector to find the element
+     */
+    public void submit(By by) {
+        getWebElement(by).submit();
+    }
 
-	/**
-	 * 
-	 * @param by
-	 *            selector to find the element
-	 */
-	public void submit(By by) {
-		getWebElement(by).submit();
-	}
+    /**
+     *
+     */
+    public void click(By by) {
+        getWebElement(by).click();
+    }
 
-	/**
-	 *
-	 */
-	public void click(By by) {
-		getWebElement(by).click();
-	}
+    /**
+     * Is the text present in page.
+     *
+     * @param text
+     * @return
+     */
+    public boolean isTextPresent(String text) {
+        return driver.getPageSource().contains(text);
+    }
 
-	/**
-	 * Is the text present in page.
-	 * 
-	 * @param text
-	 * @return
-	 */
-	public boolean isTextPresent(String text) {
-		return driver.getPageSource().contains(text);
-	}
+    /**
+     * Is the Element in page. if it does not find the element throw
+     * NoSuchElementException, thus returns false.
+     *
+     * @param by selector to find the element
+     * @return
+     */
+    public boolean isElementPresent(By by) {
+        try {
+            getWebElement(by);
+            return true;
+        } catch (final TimeoutException e) {
+            return false;
+        } catch (final NoSuchElementException e) {
+            return false;
+        }
+    }
 
-	/**
-	 * Is the Element in page. if it does not find the element throw
-	 * NoSuchElementException, thus returns false.
-	 * 
-	 * @param by
-	 *            selector to find the element
-	 * @return
-	 */
-	public boolean isElementPresent(By by) {
-		try {
-			getWebElement(by);
-			return true;
-		} catch (final TimeoutException e) {
-			return false;
-		} catch (final NoSuchElementException e) {
-			return false;
-		}
-	}
+    /**
+     * @param by
+     * @param text
+     * @return
+     */
+    public void waitUntilElementContainsText(final By by, final String text,
+                                             int timeout) {
+        SeleniumHelper.waitUntilElementContainsText(driver, by, text, timeout);
+    }
 
-	/**
-	 * 
-	 * @param by
-	 * @param text
-	 * @return
-	 */
-	public void waitUntilElementContainsText(final By by, final String text,
-			int timeout) {
-		SeleniumHelper.waitUntilElementContainsText(driver, by, text, timeout);
-	}
+    /**
+     * @param by
+     * @param text
+     * @return
+     */
+    public void waitUntilElementContainsText(final By by, final String text) {
+        SeleniumHelper.waitUntilElementContainsText(driver, by, text);
+    }
 
-	/**
-	 * 
-	 * @param by
-	 * @param text
-	 * @return
-	 */
-	public void waitUntilElementContainsText(final By by, final String text) {
-		SeleniumHelper.waitUntilElementContainsText(driver, by, text);
-	}
+    /**
+     * @param by
+     * @param attribute
+     * @return
+     */
+    public void waitUntilElementContainsAttribute(final By by,
+                                                  final String attribute) {
+        SeleniumHelper.waitUntilElementContainsAttribute(driver, by, attribute);
+    }
 
-	/**
-	 * 
-	 * @param by
-	 * @param attribute
-	 * @return
-	 */
-	public void waitUntilElementContainsAttribute(final By by,
-			final String attribute) {
-		SeleniumHelper.waitUntilElementContainsAttribute(driver, by, attribute);
-	}
+    /**
+     * Checks if the elment is in the DOM and displayed.
+     *
+     * @param by selector to find the element
+     * @return true or false
+     */
+    public boolean isDisplayed(By by) {
+        try {
+            return driver.findElement(by).isDisplayed();
+        } catch (final StaleElementReferenceException e) {
+            return false;
+        } catch (final NoSuchElementException e) {
+            return false;
+        }
+    }
 
-	/**
-	 * Checks if the elment is in the DOM and displayed.
-	 * 
-	 * @param by
-	 *            selector to find the element
-	 * @return true or false
-	 */
-	public boolean isDisplayed(By by) {
-		try {
-			return driver.findElement(by).isDisplayed();
-		} catch (final StaleElementReferenceException e) {
-			return false;
-		} catch (final NoSuchElementException e) {
-			return false;
-		}
-	}
+    /**
+     * Close the browser
+     */
+    public void quit() {
+        driver.quit();
+    }
 
-	/**
-	 * Close the browser
-	 */
-	public void quit() {
-		driver.quit();
-	}
+    /**
+     * @param by selector to find the element
+     * @return the first WebElement
+     */
+    public WebElement getWebElement(final By by) {
+        if (!by.equals(notifyBy))
+            waitLoadingPage();
+        return SeleniumHelper.waitForElementToBePresent(driver, by);
+    }
 
-	/**
-	 * 
-	 * @param by
-	 *            selector to find the element
-	 * @return the first WebElement
-	 */
-	public WebElement getWebElement(final By by) {
+    /**
+     * @return
+     */
+    public void waitLoadingPage() {
+        if (loadProgressBy != null)
+            waitUntilElementIsHidden(loadProgressBy);
+        if (waitNotificationToHide && notifyBy != null)
+            waitUntilElementIsHidden(notifyBy);
+        Sleeper.sleepTightInSeconds(1);
+    }
 
-		if (!by.equals(notifyBy))
-			waitLoadingPage();
-		return SeleniumHelper.waitForElementToBePresent(driver, by);
-	}
+    /**
+     * @return
+     */
+    public String waitNotification() {
+        final String notification = getWebElement(notifyBy).getText();
+        if (waitNotificationToHide)
+            waitUntilElementIsHidden(notifyBy);
+        return notification;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public void waitLoadingPage() {
-		if (loadProgressBy != null)
-			waitUntilElementIsHidden(loadProgressBy);
-		if (waitNotificationToHide && notifyBy != null)
-			waitUntilElementIsHidden(notifyBy);
-		Sleeper.sleepTightInSeconds(1);
-	}
+    /**
+     * @return
+     */
+    public void waitUntilElementIsHidden(final By by) {
+        SeleniumHelper.waitUntilElementIsHidden(driver, by);
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public String waitNotification() {
-		final String notification = getWebElement(notifyBy).getText();
-		if (waitNotificationToHide)
-			waitUntilElementIsHidden(notifyBy);
-		return notification;
-	}
+    /**
+     * Allows to navigate to a given URL through the WebDriver .
+     *
+     * @param path
+     */
+    public void navigateTo(String path) {
+        final String url = path.contains(baseUrl) ? path : baseUrl + path;
+        driver.navigate().to(url);
+        waitLoadingPage();
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public void waitUntilElementIsHidden(final By by) {
-		SeleniumHelper.waitUntilElementIsHidden(driver, by);
-	}
+    /**
+     * Allows TODO
+     */
+    public void refresh() {
+        driver.navigate().refresh();
+        Sleeper.sleepTightInSeconds(2);
+        waitLoadingPage();
+    }
 
-	/**
-	 * Allows to navigate to a given URL through the WebDriver .
-	 * 
-	 * @param path
-	 */
-	public void navigateTo(String path) {
-		final String url = path.contains(baseUrl) ? path : baseUrl + path;
-		driver.navigate().to(url);
-		waitLoadingPage();
-	}
+    /**
+     * @param selector
+     */
+    public void moveToElement(By selector) {
+        final Actions builder = new Actions(driver);
+        builder.moveToElement(getWebElement(selector)).perform();
+        builder.release();
+    }
 
-	/**
-	 * Allows TODO
-	 * 
-	 */
-	public void refresh() {
-		driver.navigate().refresh();
-		Sleeper.sleepTightInSeconds(2);
-		waitLoadingPage();
-	}
+    public void moveToAndClick(By selector) {
+        final Actions builder = new Actions(driver);
+        builder.moveToElement(getWebElement(selector)).click().perform();
+        builder.release();
+    }
 
-	/**
-	 * 
-	 * @param selector
-	 */
-	public void moveToElement(By selector) {
-		final Actions builder = new Actions(driver);
-		builder.moveToElement(getWebElement(selector)).perform();
-		builder.release();
-	}
+    /**
+     *
+     */
+    public void acceptAlert() {
+        driver.switchTo().alert().accept();
+        driver.switchTo().defaultContent();
+    }
 
-	public void moveToAndClick(By selector) {
-		final Actions builder = new Actions(driver);
-		builder.moveToElement(getWebElement(selector)).click().perform();
-		builder.release();
-	}
+    /**
+     * @param text
+     */
+    public void sendTextToAlertAndAccept(String text) {
+        final Alert alert = driver.switchTo().alert();
+        alert.sendKeys(text);
+        alert.accept();
+        driver.switchTo().defaultContent();
+    }
 
-	/**
-	 *
-	 */
-	public void acceptAlert() {
-		driver.switchTo().alert().accept();
-		driver.switchTo().defaultContent();
-	}
+    /**
+     * @param by
+     * @param text
+     */
+    public void selectByText(final By by, final String text) {
+        SeleniumHelper.waitUntilTextIsSelected(driver, by, text);
+    }
 
-	/**
-	 * 
-	 * @param text
-	 */
-	public void sendTextToAlertAndAccept(String text) {
-		final Alert alert = driver.switchTo().alert();
-		alert.sendKeys(text);
-		alert.accept();
-		driver.switchTo().defaultContent();
-	}
+    public void selectByValue(final By by, final String value) {
+        SeleniumHelper.waitUntilValueIsSelected(driver, by, value);
+    }
 
-	/**
-	 * 
-	 * @param by
-	 * @param text
-	 */
-	public void selectByText(final By by, final String text) {
-		SeleniumHelper.waitUntilTextIsSelected(driver, by, text);
-	}
+    public void setLoadingProgress(By by) {
+        this.loadProgressBy = by;
+    }
 
-	public void selectByValue(final By by, final String value) {
-		SeleniumHelper.waitUntilValueIsSelected(driver, by, value);
-	}
+    public void setNotificationBy(By by) {
+        this.notifyBy = by;
+    }
 
-	public void setLoadingProgress(By by) {
-		this.loadProgressBy = by;
-	}
-
-	public void setNotificationBy(By by) {
-		this.notifyBy = by;
-	}
-
-	public void enableWaitNotificationToHide() {
-		this.waitNotificationToHide = true;
-	}
+    public void enableWaitNotificationToHide() {
+        this.waitNotificationToHide = true;
+    }
 }

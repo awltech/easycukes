@@ -22,11 +22,12 @@ import java.util.ListIterator;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This {@link JSONHelper} class provides various methods allowing to manipulate
@@ -40,8 +41,8 @@ public class JSONHelper {
 	/**
 	 * {@link Logger} to be used in order to log a few things about execution
 	 */
-	private final static Logger LOGGER = Logger
-			.getLogger(Constants.CUKES_TESTS_LOGGER);
+	private final static Logger LOG = LoggerFactory
+			.getLogger(JSONHelper.class);
 
 	/**
 	 * {@link JSONParser} to be used in order to extract JSON data from the
@@ -162,7 +163,7 @@ public class JSONHelper {
 			final JSONObject json2 = (JSONObject) parser.parse(s2);
 			return equals(json1, json2);
 		} catch (final ParseException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			return false;
 		}
 	}
@@ -204,7 +205,7 @@ public class JSONHelper {
 		try {
 			return (JSONObject) parser.parse(s);
 		} catch (final ParseException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -232,7 +233,7 @@ public class JSONHelper {
 				else if (obj instanceof JSONArray)
 					return JSONHelper.getValue((JSONArray) obj, property);
 		} catch (final ParseException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			throw e;
 		}
 		return null;
@@ -354,7 +355,7 @@ public class JSONHelper {
 		try {
 			return (JSONArray) parser.parse(s);
 		} catch (final ParseException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			throw e;
 		}
 	}
@@ -373,6 +374,5 @@ public class JSONHelper {
 	 */
 	public static Object parseJSON(final String s) throws ParseException {
 		return parser.parse(s);
-
 	}
 }

@@ -188,7 +188,6 @@ public class JerseyClientHelper {
 				&& response.getStatus() != HttpStatus.SC_NO_CONTENT) {
 			responseString = response.getEntity(String.class);
 		}
-		// LOGGER.debug("Response got from server : " + responseString);
 		return new ResponseWrapper(responseString, response.getStatus());
 	}
 

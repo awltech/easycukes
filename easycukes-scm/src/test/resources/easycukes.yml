@@ -1,0 +1,10 @@
+proxy:
+  host: proxy
+  port: 3128
+  enabled: false
+credentials:
+  login: easycukes-test
+  password: EpeuwW3gAKdT3tPv
+variables:
+  baseurl: https://github.com
+  email: null

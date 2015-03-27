@@ -17,18 +17,14 @@
  */
 package com.worldline.easycukes.commons.helpers;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 
 /**
  * {@link FileHelper} allows to perform certain operations in relation to the
@@ -42,8 +38,7 @@ public class FileHelper {
 	/**
 	 * {@link Logger} to be used in order to get information during execution
 	 */
-	private final static Logger LOGGER = Logger
-			.getLogger(Constants.CUKES_TESTS_LOGGER);
+	private final static Logger LOG = LoggerFactory.getLogger(FileHelper.class);
 
 	/**
 	 * Size of the buffer to read/write data
@@ -64,8 +59,8 @@ public class FileHelper {
 	 */
 	public static void download(String from, String to) throws IOException {
 		final URL url = new URL(from);
-		LOGGER.debug("Downloading from: " + url.toString() + " to: "
-				+ to.toString());
+		LOG.debug("Downloading from: " + url.toString() + " to: "
+                + to.toString());
 		final String zipFilePath = to
 				+ url.getFile().substring(url.getFile().lastIndexOf('/'));
 		FileUtils.copyURLToFile(url, new File(zipFilePath), 30000, 300000);
@@ -90,7 +85,7 @@ public class FileHelper {
 			zip = new ZipInputStream(new FileInputStream(from));
 		else
 			zip = new ZipInputStream(FileHelper.class.getResourceAsStream(from));
-		LOGGER.debug("Extracting zip from: " + from + " to: " + to);
+		LOG.debug("Extracting zip from: " + from + " to: " + to);
 		// Extract without a container directory if exists
 		ZipEntry entry = zip.getNextEntry();
 		String rootDir = "/";
@@ -103,7 +98,7 @@ public class FileHelper {
 				try {
 					extractFile(zip, filePath);
 				} catch (final FileNotFoundException fnfe) {
-					LOGGER.warn(fnfe.getMessage(), fnfe);
+					LOG.warn(fnfe.getMessage(), fnfe);
 				}
 			}
 		zip.closeEntry();
@@ -119,7 +114,7 @@ public class FileHelper {
 				try {
 					extractFile(zip, filePath);
 				} catch (final FileNotFoundException fnfe) {
-					LOGGER.warn(fnfe.getMessage(), fnfe);
+					LOG.warn(fnfe.getMessage(), fnfe);
 				}
 			else {
 				// if the entry is a directory, make the directory

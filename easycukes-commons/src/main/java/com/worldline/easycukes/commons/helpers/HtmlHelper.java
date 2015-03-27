@@ -17,11 +17,12 @@
  */
 package com.worldline.easycukes.commons.helpers;
 
-import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@link HtmlHelper} allows to perform some operations in relation to the
@@ -35,8 +36,8 @@ public class HtmlHelper {
 	/**
 	 * {@link Logger} to be used in order to get information during execution
 	 */
-	private final static Logger LOGGER = Logger
-			.getLogger(Constants.CUKES_TESTS_LOGGER);
+	private final static Logger LOG = LoggerFactory
+			.getLogger(HtmlHelper.class);
 
 	/**
 	 * Extract the input value from an html content.
@@ -55,7 +56,7 @@ public class HtmlHelper {
 		Elements elements = document.select("input[name=" + input + "]");
 
 		if (elements == null || elements.isEmpty()) {
-			LOGGER.warn(input + " input not found in response.");
+			LOG.warn(input + " input not found in response.");
 			return null;
 		}
 		Element element = elements.iterator().next();
