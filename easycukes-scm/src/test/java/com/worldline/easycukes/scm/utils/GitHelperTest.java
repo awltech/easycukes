@@ -9,10 +9,7 @@ import com.worldline.easycukes.commons.Constants;
 import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
 import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
 import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import com.worldline.easycukes.commons.helpers.FileHelper;
 
@@ -33,7 +30,8 @@ public class GitHelperTest {
      *
      * @throws Exception
      */
-    @Test
+    // Not a valid unit test
+    @Test @Ignore
     public void cloneTest() throws Exception {
         final String fullpath = baseurl + "/easycukes-test/cukes-test";
         final String directory = "/tmp/githelpertest/testclone";
@@ -49,7 +47,8 @@ public class GitHelperTest {
      *
      * @throws Exception
      */
-    @Test
+    // Not a valid unit test
+    @Test @Ignore
     public void commitAndPushTest() throws Exception {
         final String cloneDirectory = "/tmp/githelpertest/testclone";
         File fileToCommit = new File(cloneDirectory + "/test.txt");
