@@ -17,7 +17,7 @@
  */
 package com.worldline.easycukes.cucumber.selenium;
 
-import org.apache.log4j.MDC;
+import org.slf4j.MDC;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 
