@@ -17,23 +17,18 @@
  */
 package com.worldline.easycukes.scm.utils;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.tmatesoft.hg.core.HgAddRemoveCommand;
-import org.tmatesoft.hg.core.HgCloneCommand;
-import org.tmatesoft.hg.core.HgCommitCommand;
-import org.tmatesoft.hg.core.HgException;
-import org.tmatesoft.hg.core.HgPushCommand;
-import org.tmatesoft.hg.core.HgRepoFacade;
-import org.tmatesoft.hg.core.HgRepositoryNotFoundException;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.tmatesoft.hg.core.*;
 import org.tmatesoft.hg.repo.HgLookup;
 import org.tmatesoft.hg.repo.HgRemoteRepository;
 import org.tmatesoft.hg.util.CancelledException;
 import org.tmatesoft.hg.util.Outcome;
 import org.tmatesoft.hg.util.Path;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * {@link MercurialHelper} allows to ease manipulation of Hg repositories. It
@@ -43,13 +38,9 @@ import org.tmatesoft.hg.util.Path;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
+@UtilityClass
 public class MercurialHelper {
-
-    /**
-     * Logger to be used in order to keep track of the execution
-     */
-    private final static Logger LOG = LoggerFactory
-            .getLogger(MercurialHelper.class);
 
     /**
      * Clones a remote repository in local directory. The attempt will be
@@ -66,18 +57,18 @@ public class MercurialHelper {
      *                            reason (and that reason will be explained in the exception
      *                            message)
      */
-    public static void clone(String url, String username, String password,
+    public static void clone(@NonNull String url, String username, String password,
                              String directory) throws HgException, CancelledException {
-        LOG.info("Cloning from " + url + " to " + directory);
+        log.info("Cloning from " + url + " to " + directory);
         // lookup a remote repository
-        HgRemoteRepository hgRemote = null;
+        HgRemoteRepository hgRemote;
         try {
             hgRemote = new HgLookup().detectRemote(
                     buildRepoUrl(url, username, password), null);
-            LOG.info("Hg repository cloned from: " + url + " to: "
+            log.info("Hg repository cloned from: " + url + " to: "
                     + directory);
         } catch (final HgException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         }
         // clone a remote repository
@@ -93,13 +84,13 @@ public class MercurialHelper {
             } catch (final HgException | CancelledException e) {
                 maxAttemps--;
                 if (maxAttemps > 0) {
-                    LOG.warn(e.getMessage() + " | Waiting 5 seconds ...");
+                    log.warn(e.getMessage() + " | Waiting 5 seconds ...");
                     try {
                         Thread.sleep(5000);
                     } catch (final InterruptedException e1) {
                     }
                 } else {
-                    LOG.error(e.getMessage());
+                    log.error(e.getMessage());
                     throw e;
                 }
             }
@@ -120,9 +111,9 @@ public class MercurialHelper {
      *                   {@link HgException}, {@link HgRepositoryNotFoundException},
      *                   {@link IOException}...
      */
-    public static void commitAndPush(String url, String username,
+    public static void commitAndPush(@NonNull String url, String username,
                                      String password, File directory, String message) throws Exception {
-        LOG.info("Commiting changes in Hg repository located in "
+        log.info("Commiting changes in Hg repository located in "
                 + directory.toString());
         final HgRepoFacade hgRepo = new HgRepoFacade();
         HgRemoteRepository hgRemote = null;
@@ -135,7 +126,7 @@ public class MercurialHelper {
                     buildRepoUrl(url, username, password),
                     hgRepo.getRepository());
         } catch (final HgException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         }
         // add files
@@ -147,7 +138,7 @@ public class MercurialHelper {
         commitCmd.message(message);
         final Outcome outcome = commitCmd.execute();
         if (!outcome.isOk()) {
-            LOG.error(outcome.getMessage());
+            log.error(outcome.getMessage());
             throw outcome.getException();
         }
         // Push
@@ -162,17 +153,17 @@ public class MercurialHelper {
             } catch (final HgException e) {
                 maxAttemps--;
                 if (maxAttemps > 0) {
-                    LOG.warn(e.getMessage() + " | Waiting 5 seconds ...");
+                    log.warn(e.getMessage() + " | Waiting 5 seconds ...");
                     try {
                         Thread.sleep(5000);
                     } catch (final InterruptedException e1) {
                     }
                 } else {
-                    LOG.error(e.getMessage());
+                    log.error(e.getMessage());
                     throw e;
                 }
             }
-        LOG.info("Changes commited and pushed on Hg repository...");
+        log.info("Changes commited and pushed on Hg repository...");
     }
 
     /**

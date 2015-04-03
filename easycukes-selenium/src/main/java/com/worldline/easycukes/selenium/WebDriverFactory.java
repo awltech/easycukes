@@ -17,11 +17,11 @@
  */
 package com.worldline.easycukes.selenium;
 
-import java.io.File;
-import java.net.URL;
-
 import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
 import com.worldline.easycukes.selenium.config.beans.SeleniumConfigurationBean;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -31,19 +31,20 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import com.worldline.easycukes.selenium.utils.SeleniumConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.File;
+import java.net.URL;
 
+/**
+ *
+ */
+@Slf4j
+@UtilityClass
 public class WebDriverFactory {
 
     /**
-     * Just a {@link Logger}...
+     * EasyCukes config
      */
-    private static final Logger LOG = LoggerFactory
-            .getLogger(WebDriverFactory.class);
-
-    static EasyCukesConfiguration<SeleniumConfigurationBean> configuration = new EasyCukesConfiguration<>(SeleniumConfigurationBean.class);
+    protected static EasyCukesConfiguration<SeleniumConfigurationBean> configuration = new EasyCukesConfiguration<>(SeleniumConfigurationBean.class);
 
     /**
      * Creates a new local driver instance. supported browsers : chrome and
@@ -52,9 +53,9 @@ public class WebDriverFactory {
      * @return a local WebDriver instance
      * @throws Exception
      */
-    public static WebDriver newLocalWebDriver(String browserName)
+    public static WebDriver newLocalWebDriver(@NonNull String browserName)
             throws Exception {
-        LOG.info("Starting a local Driver");
+        log.info("Starting a local Driver");
         if ("firefox".equals(browserName))
             return newLocalFirefoxDriver();
         else if ("chrome".equals(browserName))
@@ -73,9 +74,9 @@ public class WebDriverFactory {
      * @return a remote WebDriver instance
      * @throws Exception
      */
-    public static WebDriver newRemoteWebDriver(String browserName)
+    public static WebDriver newRemoteWebDriver(@NonNull String browserName)
             throws Exception {
-        LOG.info("Starting a remote Driver");
+        log.info("Starting a remote Driver");
         final String remoteAddress = configuration.getValues().selenium != null ? configuration.getValues().selenium.getSelenium_remote_address()
                 : "";
         if ("firefox".equals(browserName))

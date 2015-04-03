@@ -17,14 +17,20 @@
  */
 package com.worldline.easycukes.rest.client;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
-
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.ClientRequest;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.filter.ClientFilter;
+import com.sun.jersey.api.client.filter.LoggingFilter;
+import com.worldline.easycukes.commons.ExecutionContext;
 import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
 import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
+import com.worldline.easycukes.commons.helpers.HtmlHelper;
+import com.worldline.easycukes.commons.helpers.JSONHelper;
+import com.worldline.easycukes.rest.utils.RestConstants;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
@@ -34,18 +40,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientRequest;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.filter.ClientFilter;
-import com.sun.jersey.api.client.filter.LoggingFilter;
-import com.worldline.easycukes.commons.ExecutionContext;
-import com.worldline.easycukes.commons.helpers.HtmlHelper;
-import com.worldline.easycukes.commons.helpers.JSONHelper;
-import com.worldline.easycukes.rest.utils.RestConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * {@link RestService} is actually the main entry point to be used in order to
@@ -55,12 +54,8 @@ import org.slf4j.LoggerFactory;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
 public class RestService {
-
-    /**
-     * Just a {@link Logger}...
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(RestService.class);
 
     /**
      * Base URL to be used for rest requests
@@ -89,20 +84,19 @@ public class RestService {
     private ResponseWrapper response;
 
     /**
-     * Singleton instance
+     * Internal class for Singleton holder
      */
-    private static RestService _instance;
+    private static class RestServiceSingeltonHolder {
+        private static final RestService INSTANCE = new RestService();
+    }
 
     /**
      * Allows to get the singleton instance of {@link RestService}
      *
-     * @return the singleton instance ({@link #_instance}) of
-     * {@link RestService}
+     * @return the singleton instance
      */
     public static final RestService getInstance() {
-        if (_instance == null)
-            _instance = new RestService();
-        return _instance;
+        return RestServiceSingeltonHolder.INSTANCE;
     }
 
     /**
@@ -129,14 +123,13 @@ public class RestService {
      */
     public void destroy() {
         jerseyClient.destroy();
-        _instance = null;
     }
 
     /**
      * Allows to initialize the instance of {@link #httpClient} by setting the
      * configuration of proxy
      */
-    public void initialize(String baseUrl) {
+    public void initialize(@NonNull String baseUrl) {
         EasyCukesConfiguration<CommonConfigurationBean> configuration = new EasyCukesConfiguration<>(CommonConfigurationBean.class);
         if (configuration.isProxyNeeded())
             httpClient.setHostConfiguration(configuration.configureProxy());
@@ -153,9 +146,9 @@ public class RestService {
      * @param parameters the parameters to be used for the request (in JSON formatted
      *                   as a String)
      */
-    public void sendRequestWithParameters(final String method,
-                                          final String path, final String parameters) {
-        LOG.info("Sending " + method + " to " + path + " with: "
+    public void sendRequestWithParameters(@NonNull final String method,
+                                          @NonNull final String path, final String parameters) {
+        log.info("Sending " + method + " to " + path + " with: "
                 + parameters);
 
         response = null;
@@ -167,7 +160,7 @@ public class RestService {
             if (parameters == null || parameters.length() == 0)
                 response = JerseyClientHelper.get(jerseyClient, fullpath);
             else
-                LOG.error("Sorry, parameters cannot be given this way for GET requests...");
+                log.error("Sorry, parameters cannot be given this way for GET requests...");
         } else if (method.equalsIgnoreCase("POST")) {
             if (parameters == null || parameters.length() == 0)
                 response = JerseyClientHelper.post(jerseyClient, fullpath);
@@ -176,7 +169,7 @@ public class RestService {
                     response = JerseyClientHelper.post(jerseyClient, fullpath,
                             JSONHelper.toProperJSON(parameters));
                 } catch (final ParseException e) {
-                    LOG.error("Sorry, parameters are not proper JSON...", e);
+                    log.error("Sorry, parameters are not proper JSON...", e);
                 }
         } else if (method.equalsIgnoreCase("PUT")) {
             if (parameters == null || parameters.length() == 0)
@@ -186,7 +179,7 @@ public class RestService {
                     response = JerseyClientHelper.put(jerseyClient, fullpath,
                             JSONHelper.toProperJSON(parameters));
                 } catch (final ParseException e) {
-                    LOG.error("Sorry, parameters are not proper JSON...", e);
+                    log.error("Sorry, parameters are not proper JSON...", e);
                 }
         } else if (method.equalsIgnoreCase("DELETE")) {
             if (parameters == null || parameters.length() == 0)
@@ -196,10 +189,10 @@ public class RestService {
                     response = JerseyClientHelper.delete(jerseyClient,
                             fullpath, JSONHelper.toProperJSON(parameters));
                 } catch (final ParseException e) {
-                    LOG.error("Sorry, parameters are not proper JSON...", e);
+                    log.error("Sorry, parameters are not proper JSON...", e);
                 }
         } else
-            LOG.error("Unknown m: " + method);
+            log.error("Unknown m: " + method);
 
     }
 
@@ -217,7 +210,7 @@ public class RestService {
      * @param property
      * @return the value if it's found (else it'll be null)
      */
-    public String getPropertyFromResponseHeader(String property) {
+    public String getPropertyFromResponseHeader(@NonNull String property) {
         final int index = property.indexOf(".");
         String headerName = property;
         if (index > 0)
@@ -237,7 +230,7 @@ public class RestService {
      * @param input the name of the input in the html form
      * @return The value, if it could be extracted, null otherwise.
      */
-    public String extractInputValueFromHtmlResponse(final String input) {
+    public String extractInputValueFromHtmlResponse(@NonNull final String input) {
         return HtmlHelper.extractInputValueFromHtmlContent(input,
                 response.getResponseString());
     }
@@ -249,8 +242,8 @@ public class RestService {
      * @param param       the attribute whose value will be extracted
      * @return the value if it's found (else it'll be null)
      */
-    protected String extractHeaderParam(final String headerValue,
-                                        final String param) {
+    protected String extractHeaderParam(@NonNull final String headerValue,
+                                        @NonNull final String param) {
         final String PARAM_BEGIN = param + "=";
         int start = headerValue.indexOf(PARAM_BEGIN);
         if (start >= 0) {
@@ -263,7 +256,7 @@ public class RestService {
                 return headerValue.substring(start, end);
             return headerValue.substring(start);
         } else
-            LOG.warn("Could not extract " + param
+            log.warn("Could not extract " + param
                     + " from response header. Raw data is:\n'" + headerValue
                     + "'");
         return null;
@@ -275,7 +268,7 @@ public class RestService {
      *
      * @throws ParseException if there's something wrong while parsing the JSON content
      */
-    public String getResponseProperty(String property) throws ParseException {
+    public String getResponseProperty(@NonNull String property) throws ParseException {
         return JSONHelper.getPropertyValue(response.getResponseString(),
                 property);
     }
@@ -288,7 +281,7 @@ public class RestService {
      * @return the value if it's found (else it'll be null)
      * @throws ParseException
      */
-    public String getRandomlyPropertyFromResponseArray(String property)
+    public String getRandomlyPropertyFromResponseArray(@NonNull String property)
             throws ParseException {
         final JSONArray jsonArray = JSONHelper.toJSONArray(response
                 .getResponseString());
@@ -330,12 +323,12 @@ public class RestService {
      *                   allows to know if that request is completely processed or not
      * @throws Exception if something's going wrong...
      */
-    public void retryGetRequestUntilObtainExpectedResponse(String path,
-                                                           String expression) throws Exception {
+    public void retryGetRequestUntilObtainExpectedResponse(@NonNull String path,
+                                                           @NonNull String expression) throws Exception {
         String fullpath = path;
         if (path.startsWith("/"))
             fullpath = baseUrl + path;
-        LOG.debug("Sending GET request to " + fullpath
+        log.debug("Sending GET request to " + fullpath
                 + " with several attemps");
 
         final int maxAttempts = Integer.parseInt(ExecutionContext
@@ -374,18 +367,18 @@ public class RestService {
                                 prop);
                     if (toCheck.contains(expected)) {
                         success = true;
-                        LOG.debug("The result is available! ");
+                        log.debug("The result is available! ");
                     } else
-                        LOG.warn("The result is not yet available! | Waiting "
+                        log.warn("The result is not yet available! | Waiting "
                                 + timeToWait + " seconds ...");
                 } else
-                    LOG.warn("unsuccessful GET request : "
+                    log.warn("unsuccessful GET request : "
                             + method.getStatusLine() + " | Waiting "
                             + timeToWait + " seconds ...");
             } while (!success && maxAttempts > attempts);
             response = new ResponseWrapper(responseAsString, statusCode);
         } catch (final Exception e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         } finally {
             method.releaseConnection();
@@ -399,12 +392,12 @@ public class RestService {
      * @param path the path on which the request should be sent
      * @throws Exception if something's going wrong...
      */
-    public void retryGetRequestUntilSucceed(String path) throws Exception {
+    public void retryGetRequestUntilSucceed(@NonNull String path) throws Exception {
         String fullpath = path;
         if (path.startsWith("/"))
             fullpath = baseUrl + path;
 
-        LOG.debug("Sending GET request to " + fullpath
+        log.debug("Sending GET request to " + fullpath
                 + " with several attemps");
 
         final int maxAttempts = Integer.parseInt(ExecutionContext
@@ -431,15 +424,15 @@ public class RestService {
                 if (statusCode == HttpStatus.SC_OK) {
                     responseAsString = method.getResponseBodyAsString();
                     success = true;
-                    LOG.info("The result is available! ");
+                    log.info("The result is available! ");
                 } else
-                    LOG.warn("unsuccessful GET request : "
+                    log.warn("unsuccessful GET request : "
                             + method.getStatusLine() + " | Waiting "
                             + timeToWait + " seconds ...");
             } while (!success && maxAttempts > attempts);
             response = new ResponseWrapper(responseAsString, statusCode);
         } catch (final Exception e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         } finally {
             method.releaseConnection();
@@ -458,7 +451,7 @@ public class RestService {
         if (path.startsWith("/"))
             fullpath = baseUrl + path;
 
-        LOG.info("Sending POST request to " + fullpath);
+        log.info("Sending POST request to " + fullpath);
         final PostMethod method = new PostMethod(fullpath);
         for (final Map.Entry<String, String> header : requestHeaders.entrySet())
             method.setRequestHeader(header.getKey(), header.getValue());
@@ -475,7 +468,7 @@ public class RestService {
                                     param).toString() : null);
                 }
             } catch (final ParseException e) {
-                LOG.error("Sorry, parameters are not proper JSON...", e);
+                log.error("Sorry, parameters are not proper JSON...", e);
                 throw new IOException(e.getMessage(), e);
             }
 
@@ -485,7 +478,7 @@ public class RestService {
             response = new ResponseWrapper(method.getResponseBodyAsString(),
                     method.getResponseHeaders(), statusCode);
         } catch (final IOException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new IOException(e.getMessage(), e);
         } finally {
             method.releaseConnection();
@@ -501,7 +494,7 @@ public class RestService {
         String fullpath = path;
         if (path.startsWith("/"))
             fullpath = baseUrl + path;
-        LOG.info("Sending GET request to " + fullpath);
+        log.info("Sending GET request to " + fullpath);
 
         final HttpMethod method = new GetMethod(fullpath);
         try {
@@ -512,7 +505,7 @@ public class RestService {
             response = new ResponseWrapper(method.getResponseBodyAsString(),
                     method.getResponseHeaders(), statusCode);
         } catch (final IOException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         } finally {
             method.releaseConnection();
@@ -526,7 +519,7 @@ public class RestService {
      * @param header the header name to add
      * @param value  the header value
      */
-    public void addRequestHeader(String header, String value) {
+    public void addRequestHeader(@NonNull String header, @NonNull String value) {
         if (requestHeaders.isEmpty())
             jerseyClient.addFilter(new ClientFilter() {
                 @Override

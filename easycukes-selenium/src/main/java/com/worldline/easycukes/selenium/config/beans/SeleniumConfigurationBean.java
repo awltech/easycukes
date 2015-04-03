@@ -1,6 +1,8 @@
 package com.worldline.easycukes.selenium.config.beans;
 
 import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Extension of CommonConfigurationBean allowing to deal with some Selenium configuration
@@ -8,6 +10,8 @@ import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
  * @author aneveux
  * @version 1.0
  */
+@Data
+@NoArgsConstructor
 public class SeleniumConfigurationBean extends CommonConfigurationBean {
 
     /**
@@ -15,11 +19,4 @@ public class SeleniumConfigurationBean extends CommonConfigurationBean {
      */
     public SeleniumBean selenium;
 
-    public SeleniumBean getSelenium() {
-        return selenium;
-    }
-
-    public void setSelenium(SeleniumBean selenium) {
-        this.selenium = selenium;
-    }
 }

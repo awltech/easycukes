@@ -19,6 +19,7 @@ package com.worldline.easycukes.commons;
 
 import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
 import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
+import lombok.NonNull;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.regex.Matcher;
@@ -67,7 +68,7 @@ public class DataInjector {
      * @return the same {@link String} as provided, except that variables will
      * be replaced by the value present in the execution context
      */
-    public static String injectData(final String s) {
+    public static String injectData(@NonNull final String s) {
         EasyCukesConfiguration<CommonConfigurationBean> configuration = new EasyCukesConfiguration<>(CommonConfigurationBean.class);
         // 0. We store the initial string in order to use it for injecting
         // tokens

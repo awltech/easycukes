@@ -17,16 +17,16 @@
  */
 package com.worldline.easycukes.rest.utils;
 
+import com.worldline.easycukes.commons.ExecutionContext;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.worldline.easycukes.commons.ExecutionContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This {@link DateHelper} class provides various methods allowing to manipulate
@@ -35,12 +35,9 @@ import org.slf4j.LoggerFactory;
  * @author szamd
  * @version 1.0
  */
+@Slf4j
+@UtilityClass
 public class DateHelper {
-
-    /**
-     * {@link Logger} to be used in order to log a few things about execution
-     */
-    private final static Logger LOG = LoggerFactory.getLogger(DateHelper.class);
 
     /**
      * Used to convert date value in json date format
@@ -48,8 +45,8 @@ public class DateHelper {
      * @param value
      * @return
      */
-    public static String convertDateToJsonFormat(final Date value) {
-        LOG.info("setting the date value " + value + " to format json");
+    public static String convertDateToJsonFormat(@NonNull final Date value) {
+        log.info("setting the date value " + value + " to format json");
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(value);
         return calendar.get(Calendar.YEAR) + "-"
@@ -67,7 +64,7 @@ public class DateHelper {
      * @param expression
      * @return true if the specified string matching a date expression
      */
-    public static boolean isDateExpression(String expression) {
+    public static boolean isDateExpression(@NonNull String expression) {
         if (expression.startsWith(RestConstants.TODAY)
                 || expression.startsWith(RestConstants.YESTERDAY)
                 || expression.startsWith(RestConstants.TOMORROW))
@@ -89,9 +86,9 @@ public class DateHelper {
      * @return the date value in json format for the specified expression
      * @throws ParseException
      */
-    public static String getDateValue(final String expression)
+    public static String getDateValue(@NonNull final String expression)
             throws ParseException {
-        LOG.info("Getting the date value from " + expression);
+        log.info("Getting the date value from " + expression);
         final Calendar calendar = Calendar.getInstance();
         if (!expression.contains(RestConstants.YESTERDAY)
                 && !expression.contains(RestConstants.TODAY)
@@ -147,9 +144,9 @@ public class DateHelper {
      * @return
      * @throws ParseException
      */
-    public static String parseDateToJson(final String sDate)
+    public static String parseDateToJson(@NonNull final String sDate)
             throws ParseException {
-        LOG.info("Parsing date " + sDate);
+        log.info("Parsing date " + sDate);
         if (sDate == null)
             return null;
         final Calendar calendar = Calendar.getInstance();
@@ -159,7 +156,7 @@ public class DateHelper {
             calendar.setTime(simpleDateFormat.parse(sDate));
             return convertDateToJsonFormat(calendar.getTime());
         } catch (final ParseException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         }
     }

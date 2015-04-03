@@ -17,9 +17,9 @@
  */
 package com.worldline.easycukes.scm.utils;
 
-import java.io.File;
-import java.io.IOException;
-
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -27,8 +27,9 @@ import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * {@link GitHelper} allows to ease the manipulation of git repositories. It
@@ -38,13 +39,9 @@ import org.slf4j.LoggerFactory;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
+@UtilityClass
 public class GitHelper {
-
-    /**
-     * Logger to be used in order to keep track of the execution
-     */
-    private final static Logger LOG = LoggerFactory
-            .getLogger(GitHelper.class);
 
     /**
      * Clones the specified repository in the specified directory using the
@@ -57,24 +54,23 @@ public class GitHelper {
      * @param directory the path in which the git repository should be cloned
      * @throws GitAPIException if anything's going wrong while cloning the repository
      */
-    public static void clone(String url, String username, String password,
+    public static void clone(@NonNull String url, String username, String password,
                              String directory) throws GitAPIException {
-
-        LOG.info("Cloning from " + url + " to " + directory);
+        log.info("Cloning from " + url + " to " + directory);
         try {
             final UsernamePasswordCredentialsProvider userCredential = new UsernamePasswordCredentialsProvider(
                     username, password);
             Git.cloneRepository().setCredentialsProvider(userCredential)
                     .setURI(url).setDirectory(new File(directory)).call();
-            LOG.info("Repository sucessfully cloned");
+            log.info("Repository sucessfully cloned");
         } catch (final InvalidRemoteException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         } catch (final TransportException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         } catch (final GitAPIException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         }
     }
@@ -93,7 +89,7 @@ public class GitHelper {
      * @throws IOException     if something's going wrong while manipulating the local
      *                         repository
      */
-    public static void commitAndPush(File directory, String username,
+    public static void commitAndPush(@NonNull File directory, String username,
                                      String password, String message) throws GitAPIException,
             IOException {
         try {
@@ -104,21 +100,21 @@ public class GitHelper {
                 if (!filePath.equals(".git"))
                     addCommand.addFilepattern(filePath);
             addCommand.call();
-            LOG.info("Added content of the directory" + directory
+            log.info("Added content of the directory" + directory
                     + " in the Git repository located in "
                     + directory.toString());
             // and then commit
             final PersonIdent author = new PersonIdent(username, "");
             git.commit().setCommitter(author).setMessage(message)
                     .setAuthor(author).call();
-            LOG.info("Commited the changes in the Git repository...");
+            log.info("Commited the changes in the Git repository...");
             // and finally push
             final UsernamePasswordCredentialsProvider userCredential = new UsernamePasswordCredentialsProvider(
                     username, password);
             git.push().setCredentialsProvider(userCredential).call();
-            LOG.info("Pushed the changes in remote Git repository...");
+            log.info("Pushed the changes in remote Git repository...");
         } catch (final GitAPIException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw e;
         }
     }

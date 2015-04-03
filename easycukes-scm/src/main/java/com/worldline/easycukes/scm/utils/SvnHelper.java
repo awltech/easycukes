@@ -17,23 +17,19 @@
  */
 package com.worldline.easycukes.scm.utils;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.tmatesoft.svn.core.SVNDepth;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.BasicAuthenticationManager;
-import org.tmatesoft.svn.core.wc.ISVNOptions;
-import org.tmatesoft.svn.core.wc.SVNClientManager;
-import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.tmatesoft.svn.core.wc.SVNUpdateClient;
-import org.tmatesoft.svn.core.wc.SVNWCClient;
-import org.tmatesoft.svn.core.wc.SVNWCUtil;
+import org.tmatesoft.svn.core.wc.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link SvnHelper} allows to ease manipulation of SVN repositories. It uses
@@ -43,13 +39,9 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
+@UtilityClass
 public class SvnHelper {
-
-    /**
-     * The Logger to be used in the to keep track of the execution
-     */
-    private final static Logger LOG = LoggerFactory
-            .getLogger(SvnHelper.class);
 
     /**
      * The internal {@link SVNClientManager} to be used for interacting with the
@@ -101,14 +93,14 @@ public class SvnHelper {
      *                  out
      * @throws SVNException if something's going wrong while checking out the repository
      */
-    public static void checkout(String url, String username, String password,
+    public static void checkout(@NonNull String url, String username, String password,
                                 String directory) throws SVNException {
         final SVNURL repositoryURL = SVNURL.parseURIEncoded(url);
         final SVNUpdateClient updateClient = getSVNClientManager(username,
                 password).getUpdateClient();
-        LOG.info("Checking out SVN repository located in " + url);
+        log.info("Checking out SVN repository located in " + url);
         /*
-		 * sets externals not to be ignored during the checkout
+         * sets externals not to be ignored during the checkout
 		 */
         updateClient.setIgnoreExternals(false);
         int maxAttemps = 5;
@@ -122,13 +114,13 @@ public class SvnHelper {
             } catch (final SVNException e) {
                 maxAttemps--;
                 if (maxAttemps > 0) {
-                    LOG.warn(e.getMessage() + " | Waiting 5 seconds ...");
+                    log.warn(e.getMessage() + " | Waiting 5 seconds ...");
                     try {
                         Thread.sleep(5000);
                     } catch (final InterruptedException e1) {
                     }
                 } else {
-                    LOG.error(e.getMessage());
+                    log.error(e.getMessage());
                     svnClientManager.dispose();
                     throw e;
                 }
@@ -147,9 +139,9 @@ public class SvnHelper {
      * @param message   the message to be used while committing the changes
      * @throws SVNException of something's going wrong while committing the changes
      */
-    public static void commit(File directory, String username, String password,
+    public static void commit(@NonNull File directory, String username, String password,
                               String message) throws SVNException {
-        LOG.info("Committing changes on the SVN repository located in "
+        log.info("Committing changes on the SVN repository located in "
                 + directory.toString());
         final boolean keepLocks = false;
         final boolean force = true;
@@ -175,7 +167,7 @@ public class SvnHelper {
                             includeIgnored, makeParents);
                 }
         } catch (final SVNException e) {
-            LOG.error(e.getMessage());
+            log.error(e.getMessage());
             throw e;
         }
         // commit
@@ -192,13 +184,13 @@ public class SvnHelper {
             } catch (final SVNException e) {
                 maxAttemps--;
                 if (maxAttemps > 0) {
-                    LOG.warn(e.getMessage() + " | Waiting 5 seconds ...");
+                    log.warn(e.getMessage() + " | Waiting 5 seconds ...");
                     try {
                         Thread.sleep(5000);
                     } catch (final InterruptedException e1) {
                     }
                 } else {
-                    LOG.error(e.getMessage());
+                    log.error(e.getMessage());
                     svnClientManager.dispose();
                     throw e;
                 }

@@ -17,11 +17,9 @@
  */
 package com.worldline.easycukes.selenium.stepdefs;
 
-import org.openqa.selenium.By;
-
 import com.worldline.easycukes.commons.DataInjector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 
 /**
  * TODO
@@ -29,13 +27,8 @@ import org.slf4j.LoggerFactory;
  * @author mechikhi
  * @version TODO
  */
+@Slf4j
 public abstract class SeleniumAbstractStepdefs {
-
-    /**
-     * Just a {@link Logger}...
-     */
-    protected static final Logger LOG = LoggerFactory
-            .getLogger(SeleniumAbstractStepdefs.class);
 
     /**
      * TODO
@@ -63,7 +56,7 @@ public abstract class SeleniumAbstractStepdefs {
         else if (selector.equalsIgnoreCase("xpath"))
             by = By.xpath(value);
         if (by == null) {
-            LOG.error("Unknown type of selector : " + selector);
+            log.error("Unknown type of selector : " + selector);
             throw new Exception("Unknown type of selector : " + selector);
         }
         return by;

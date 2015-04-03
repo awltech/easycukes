@@ -17,8 +17,9 @@
  */
 package com.worldline.easycukes.commons.helpers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -38,12 +39,9 @@ import java.io.File;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
+@RequiredArgsConstructor
 public class DomHelper {
-
-    /**
-     * {@link Logger} to be used in order to get information during execution
-     */
-    private final static Logger LOG = LoggerFactory.getLogger(DomHelper.class);
 
     private DocumentBuilderFactory dbFactory = DocumentBuilderFactory
             .newInstance();
@@ -51,17 +49,8 @@ public class DomHelper {
     /**
      * File you want to inspect
      */
+    @NonNull
     private File file;
-
-    /**
-     * Default constructor
-     *
-     * @param f the file you need to inspect
-     */
-    public DomHelper(File f) {
-        this.file = f;
-        LOG.debug("Creating DomHelper for: " + f.getName());
-    }
 
     /**
      * Allows to edit an element in xml file
@@ -70,15 +59,15 @@ public class DomHelper {
      * @param value the text to set in the element content
      * @throws Exception if anything's going wrong while editing the file
      */
-    public void setElementContent(String name,
-                                  String value) throws Exception {
-        LOG.debug("Editing XML file " + file.getName());
+    public void setElementContent(@NonNull String name,
+                                  @NonNull String value) throws Exception {
+        log.debug("Editing XML file " + file.getName());
         Document doc = parseDocument();
         Node node = getNode(doc, name);
         if (node != null) {
             node.setNodeValue(value);
             // write the DOM object to the file
-            LOG.debug("Injecting " + name + " > " + value + " in XML file");
+            log.debug("Injecting " + name + " > " + value + " in XML file");
             TransformerFactory transformerFactory = TransformerFactory
                     .newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -86,7 +75,7 @@ public class DomHelper {
             StreamResult streamResult = new StreamResult(file);
             transformer.transform(domSource, streamResult);
         } else {
-            LOG.warn("No XML element found with the given name " + name);
+            log.warn("No XML element found with the given name " + name);
         }
     }
 
@@ -97,7 +86,7 @@ public class DomHelper {
      * @return the content of the element with the given name
      * @throws Exception
      */
-    public String getElementContent(String name)
+    public String getElementContent(@NonNull String name)
             throws Exception {
         Document doc = parseDocument();
         Node node = getNode(doc, name);
@@ -115,7 +104,7 @@ public class DomHelper {
      * @return the node element
      * @throws Exception
      */
-    private static Node getNode(Document doc, String name) throws Exception {
+    private static Node getNode(@NonNull Document doc, @NonNull String name) throws Exception {
         NodeList list = doc.getDocumentElement().getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
             Node node = list.item(i);
@@ -137,7 +126,7 @@ public class DomHelper {
      * @return a DOM Document object representing the XML content
      */
     private Document parseDocument() throws Exception {
-        LOG.debug("Loading XML file " + file);
+        log.debug("Loading XML file " + file);
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         return dBuilder.parse(file);
     }

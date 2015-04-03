@@ -17,6 +17,7 @@
  */
 package com.worldline.easycukes.dbunit;
 
+import lombok.NonNull;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.IDatabaseConnection;
@@ -32,55 +33,50 @@ import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
  * DatabaseTester that uses JDBC's Driver Manager to create connections.<br>
  * This class defines a factory for creating {@link DataType} that will be used,
  * depending on the target database.
- * 
+ *
  * @author mechikhi
  * @version 1.0
  */
 
 public class DatabaseTester extends JdbcDatabaseTester {
 
-	private IDataTypeFactory dataTypeFactory;
+    private IDataTypeFactory dataTypeFactory;
 
-	/**
-	 * Creates a new DatabaseTester with the specified properties.
-	 * 
-	 * @param driverClass
-	 *            the classname of the JDBC driver to use
-	 * @param connectionUrl
-	 *            the connection url
-	 * @param username
-	 *            a username that can has access to the database
-	 * @param password
-	 *            the user's password
-	 * @throws ClassNotFoundException
-	 *             If the given driverClass was not found
-	 */
-	public DatabaseTester(String driverClass, String connectionUrl,
-			String username, String password) throws ClassNotFoundException {
-		super(driverClass, connectionUrl, username, password);
-		if (driverClass.contains("hsqldb"))
-			dataTypeFactory = new HsqldbDataTypeFactory();
-		else if (driverClass.contains("oracle"))
-			dataTypeFactory = new OracleDataTypeFactory();
-		else if (driverClass.contains("db2"))
-			dataTypeFactory = new Db2DataTypeFactory();
-		if (driverClass.contains("mysql"))
-			dataTypeFactory = new MySqlDataTypeFactory();
-		if (driverClass.contains("postgresql"))
-			dataTypeFactory = new PostgresqlDataTypeFactory();
-	}
+    /**
+     * Creates a new DatabaseTester with the specified properties.
+     *
+     * @param driverClass   the classname of the JDBC driver to use
+     * @param connectionUrl the connection url
+     * @param username      a username that can has access to the database
+     * @param password      the user's password
+     * @throws ClassNotFoundException If the given driverClass was not found
+     */
+    public DatabaseTester(@NonNull String driverClass, @NonNull String connectionUrl,
+                          String username, String password) throws ClassNotFoundException {
+        super(driverClass, connectionUrl, username, password);
+        if (driverClass.contains("hsqldb"))
+            dataTypeFactory = new HsqldbDataTypeFactory();
+        else if (driverClass.contains("oracle"))
+            dataTypeFactory = new OracleDataTypeFactory();
+        else if (driverClass.contains("db2"))
+            dataTypeFactory = new Db2DataTypeFactory();
+        if (driverClass.contains("mysql"))
+            dataTypeFactory = new MySqlDataTypeFactory();
+        if (driverClass.contains("postgresql"))
+            dataTypeFactory = new PostgresqlDataTypeFactory();
+    }
 
-	@Override
-	/**
-	 * Returns the test database connection.
-	 */
-	public IDatabaseConnection getConnection() throws Exception {
-		IDatabaseConnection databaseConnection = super.getConnection();
+    @Override
+    /**
+     * Returns the test database connection.
+     */
+    public IDatabaseConnection getConnection() throws Exception {
+        IDatabaseConnection databaseConnection = super.getConnection();
 
-		if (dataTypeFactory != null)
-			databaseConnection.getConfig().setProperty(
-					DatabaseConfig.PROPERTY_DATATYPE_FACTORY, dataTypeFactory);
-		return databaseConnection;
-	}
+        if (dataTypeFactory != null)
+            databaseConnection.getConfig().setProperty(
+                    DatabaseConfig.PROPERTY_DATATYPE_FACTORY, dataTypeFactory);
+        return databaseConnection;
+    }
 
 }

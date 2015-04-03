@@ -1,11 +1,16 @@
 package com.worldline.easycukes.commons.config.beans;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Simple POJO allowing to store the proxy definition in the configuration
  *
  * @author aneveux
  * @version 1.0
  */
+@NoArgsConstructor
+@Data
 public class ProxyBean {
 
     /**
@@ -23,27 +28,4 @@ public class ProxyBean {
      */
     public boolean enabled;
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
 }

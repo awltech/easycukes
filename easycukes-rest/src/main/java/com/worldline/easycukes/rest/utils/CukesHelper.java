@@ -17,9 +17,10 @@
  */
 package com.worldline.easycukes.rest.utils;
 
-import java.text.ParseException;
-
 import com.worldline.easycukes.commons.ExecutionContext;
+import lombok.experimental.UtilityClass;
+
+import java.text.ParseException;
 
 /**
  * This {@link CukesHelper} class provides various methods allowing to
@@ -28,6 +29,7 @@ import com.worldline.easycukes.commons.ExecutionContext;
  * @author mechikhi
  * @version 1.0
  */
+@UtilityClass
 public class CukesHelper {
 
     /**

@@ -1,6 +1,9 @@
 package com.worldline.easycukes.commons.config.beans;
 
 import com.worldline.easycukes.commons.config.InjectableConfiguration;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * * Simple POJO allowing to store the main credentials used in the application to be tested.
@@ -8,6 +11,8 @@ import com.worldline.easycukes.commons.config.InjectableConfiguration;
  * @author aneveux
  * @version 1.0
  */
+@NoArgsConstructor
+@Data
 public class CredentialsBean extends InjectableConfiguration {
 
     /**
@@ -20,24 +25,8 @@ public class CredentialsBean extends InjectableConfiguration {
      */
     public String password;
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
-    public String inject(String token) {
+    public String inject(@NonNull String token) {
         switch (token) {
             case "login":
                 return login;

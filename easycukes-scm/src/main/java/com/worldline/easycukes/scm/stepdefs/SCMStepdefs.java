@@ -17,24 +17,21 @@
  */
 package com.worldline.easycukes.scm.stepdefs;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.worldline.easycukes.commons.Constants;
-import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
-import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
-import org.eclipse.jgit.api.errors.GitAPIException;
-
 import com.worldline.easycukes.commons.DataInjector;
 import com.worldline.easycukes.commons.ExecutionContext;
+import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
+import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
 import com.worldline.easycukes.scm.utils.GitHelper;
 import com.worldline.easycukes.scm.utils.MercurialHelper;
 import com.worldline.easycukes.scm.utils.SvnHelper;
-
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jgit.api.errors.GitAPIException;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * SCMStepdefs are all the step definitions you can use in your cucumber
@@ -44,12 +41,8 @@ import org.slf4j.LoggerFactory;
  * @author aneveux
  * @version 1.0
  */
+@Slf4j
 public class SCMStepdefs {
-
-    /**
-     * A logger...
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(SCMStepdefs.class);
 
     protected static final EasyCukesConfiguration<CommonConfigurationBean> configuration = new EasyCukesConfiguration<>(CommonConfigurationBean.class);
 
@@ -111,7 +104,7 @@ public class SCMStepdefs {
     @Then("^I commit and push the Git repository located in \"([^\"]*)\" with the message \"([^\"]*)\"$")
     public void commitAndPushInAGitRepository(String repository, String message)
             throws GitAPIException, IOException {
-        LOG.info("Commiting the project to Git repository ");
+        log.info("Commiting the project to Git repository ");
         final File gitworkDir = new File(DataInjector.injectData(repository));
 
         String username = "";
@@ -122,7 +115,7 @@ public class SCMStepdefs {
         }
         GitHelper.commitAndPush(gitworkDir, username, password,
                 DataInjector.injectData(message));
-        LOG.info("Commit OK");
+        log.info("Commit OK");
     }
 
     /**
@@ -138,7 +131,7 @@ public class SCMStepdefs {
     @Then("^I commit and push the Mercurial repository located in \"([^\"]*)\" to \"([^\"]*)\" with the message \"([^\"]*)\"$")
     public void commitAndPushInAMercurialRepository(String localRepository,
                                                     String remoteRepository, String message) throws Throwable {
-        LOG.info("Commiting the project to Mercurial repository ");
+        log.info("Commiting the project to Mercurial repository ");
 
         final String baseUrl = ExecutionContext.get(Constants.BASEURL);
         String username = "";
@@ -155,7 +148,7 @@ public class SCMStepdefs {
         // add, commit and push
         MercurialHelper.commitAndPush(fullPath, username, password, repoLoc,
                 DataInjector.injectData(message));
-        LOG.info("Commit OK");
+        log.info("Commit OK");
     }
 
     /**
@@ -168,7 +161,7 @@ public class SCMStepdefs {
     @Given("^the svn repository located in \"([^\"]*)\" is checked out into \"([^\"]*)\"$")
     public void checkoutAnSVNRepository(String url, String target)
             throws Throwable {
-        LOG.info("Checkouting from " + url + " to " + target);
+        log.info("Checkouting from " + url + " to " + target);
 
         final String baseUrl = ExecutionContext.get(Constants.BASEURL);
         String username = "";
@@ -181,7 +174,7 @@ public class SCMStepdefs {
         // then checkout
         SvnHelper.checkout(fullPath, username, password,
                 DataInjector.injectData(target));
-        LOG.info("Checkout done!");
+        log.info("Checkout done!");
     }
 
     /**
@@ -195,7 +188,7 @@ public class SCMStepdefs {
     @Then("^I commit the SVN repository located in \"([^\"]*)\" with the message \"([^\"]*)\"$")
     public void commitInAnSVNRepository(String repository, String message)
             throws Throwable {
-        LOG.info("Commiting the project to Svn repository ");
+        log.info("Commiting the project to Svn repository ");
         final File svnWorkDir = new File(DataInjector.injectData(repository));
 
         // add and commit
@@ -207,7 +200,7 @@ public class SCMStepdefs {
         }
         SvnHelper.commit(svnWorkDir, username, password,
                 DataInjector.injectData(message));
-        LOG.info("Commit OK");
+        log.info("Commit OK");
     }
 
 }

@@ -17,19 +17,16 @@
  */
 package com.worldline.easycukes.commons.stepdefs;
 
-import java.io.File;
-import java.io.IOException;
-
-
 import com.worldline.easycukes.commons.DataInjector;
 import com.worldline.easycukes.commons.ExecutionContext;
 import com.worldline.easycukes.commons.helpers.DomHelper;
 import com.worldline.easycukes.commons.helpers.FileHelper;
-
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * ResourcesStepdefs are all the step definitions you can use in your Cucumber
@@ -42,13 +39,8 @@ import org.slf4j.LoggerFactory;
  * @author aneveux
  * @version 1.0
  */
+@Slf4j
 public class ResourcesStepdefs {
-
-    /**
-     * Looks like a logger...
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(ResourcesStepdefs.class);
 
     /**
      * Allows to download a ZIP file into a specified directory and unzip it in
@@ -64,9 +56,9 @@ public class ResourcesStepdefs {
     public void unzipADownloadedZipFileInADirectory(String target, String url)
             throws IOException {
         final String localPath = DataInjector.injectData(target);
-        LOGGER.info("Downloading from " + url + " to directory " + localPath);
+        log.info("Downloading from " + url + " to directory " + localPath);
         FileHelper.download(url, localPath);
-        LOGGER.info("Download OK");
+        log.info("Download OK");
         String zipFilePath = null;
 
         // Get a file zip in local repository
@@ -75,9 +67,9 @@ public class ResourcesStepdefs {
                 zipFilePath = localPath + "/" + filePath;
                 break;
             }
-        LOGGER.info("Unzipping file " + zipFilePath + " in local repository");
+        log.info("Unzipping file " + zipFilePath + " in local repository");
         FileHelper.unzip(zipFilePath, localPath, true);
-        LOGGER.info("Unzip Done! ");
+        log.info("Unzip Done! ");
     }
 
     /**
@@ -95,9 +87,9 @@ public class ResourcesStepdefs {
                                                           String name) throws IOException {
         final String localPath = DataInjector.injectData(target);
         final String url = "/" + name;
-        LOGGER.info("Unzipping file " + url + " in local repository");
+        log.info("Unzipping file " + url + " in local repository");
         FileHelper.unzip(url, localPath, false);
-        LOGGER.info("Unzip Done! ");
+        log.info("Unzip Done! ");
     }
 
     /**
@@ -109,13 +101,13 @@ public class ResourcesStepdefs {
      */
     @Then("^delete directory \"([^\"]*)\"$")
     public void deleteDirectory(String path) throws Throwable {
-        LOGGER.info("Deleting directory : " + path);
+        log.info("Deleting directory : " + path);
         final boolean result = FileHelper.deleteDirectory(new File(DataInjector
                 .injectData(path)));
         if (result)
-            LOGGER.info("Delete tmp directory OK ");
+            log.info("Delete tmp directory OK ");
         else
-            LOGGER.info("Delete tmp directory KO ");
+            log.info("Delete tmp directory KO ");
     }
 
     /**

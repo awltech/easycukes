@@ -17,20 +17,15 @@
  */
 package com.worldline.easycukes.selenium.pages;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.worldline.easycukes.selenium.utils.SeleniumHelper;
+import lombok.NonNull;
+import lombok.Setter;
+import org.openqa.selenium.*;
 import org.openqa.selenium.browserlaunchers.Sleeper;
 import org.openqa.selenium.interactions.Actions;
 
-import com.worldline.easycukes.selenium.utils.SeleniumHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Page Object base class. It provides the base structure and properties for a
@@ -41,6 +36,7 @@ import com.worldline.easycukes.selenium.utils.SeleniumHelper;
  */
 public class Page {
 
+    @Setter
     private String baseUrl = null;
 
     /**
@@ -66,19 +62,12 @@ public class Page {
     }
 
     /**
-     * @param baseUrl the base URL
-     */
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-
-    /**
      * Send text keys to the element that finds by selector.
      *
      * @param by   selector to find the element
      * @param text
      */
-    public void sendText(By by, String text) {
+    public void sendText(By by, @NonNull String text) {
         final WebElement element = getWebElement(by);
         if ("text".equalsIgnoreCase(element.getAttribute("type")))
             element.clear();

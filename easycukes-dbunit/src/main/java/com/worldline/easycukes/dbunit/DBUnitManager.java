@@ -17,14 +17,10 @@
  */
 package com.worldline.easycukes.dbunit;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
 import com.worldline.easycukes.dbunit.config.beans.DBUnitConfigurationBean;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.database.IDatabaseConnection;
@@ -32,8 +28,11 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class aims at containing the DBUnit operations can be used in the tests
@@ -42,13 +41,8 @@ import org.slf4j.LoggerFactory;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
 public class DBUnitManager {
-
-    /**
-     * Logger for this class
-     */
-    private static final Logger LOG = LoggerFactory
-            .getLogger(DBUnitManager.class);
 
     private IDatabaseTester databaseTester;
 
@@ -57,20 +51,19 @@ public class DBUnitManager {
     private List<IDataSet> dataSets = new ArrayList<IDataSet>();
 
     /**
-     * Singleton instance
+     * Internal class for Singleton holder
      */
-    private static DBUnitManager _instance;
+    private static class DBUnitManagerSingeltonHolder {
+        private static final DBUnitManager INSTANCE = new DBUnitManager();
+    }
 
     /**
      * Allows to get the singleton instance of {@link DBUnitManager}
      *
-     * @return the singleton instance ({@link #_instance}) of
-     * {@link DBUnitManager}
+     * @return the singleton instance
      */
     public static final DBUnitManager getInstance() {
-        if (_instance == null)
-            _instance = new DBUnitManager();
-        return _instance;
+        return DBUnitManagerSingeltonHolder.INSTANCE;
     }
 
     /**
@@ -96,12 +89,11 @@ public class DBUnitManager {
      * @throws ClassNotFoundException when the driverClass was not found
      */
     private IDatabaseTester newDatabaseTester() throws Exception {
-        LOG.debug("newDatabaseTester() - start");
+        log.debug("newDatabaseTester() - start");
         EasyCukesConfiguration<DBUnitConfigurationBean> configuration = new EasyCukesConfiguration<>(DBUnitConfigurationBean.class);
         return new DatabaseTester(configuration.getValues().dbunit.driver_class,
                 configuration.getValues().dbunit.connection_url, configuration.getValues().dbunit.username,
                 configuration.getValues().dbunit.password != null ? configuration.getValues().dbunit.password : "");
-
     }
 
     /**
@@ -109,7 +101,7 @@ public class DBUnitManager {
      *
      * @param data
      */
-    public void addToDataSet(String data) {
+    public void addToDataSet(@NonNull String data) {
         dataSetString = (dataSetString != null ? dataSetString + data : data);
     }
 
@@ -117,7 +109,7 @@ public class DBUnitManager {
      * @param fileName
      * @throws Exception
      */
-    public void addFileToDataSet(String fileName) throws Exception {
+    public void addFileToDataSet(@NonNull String fileName) throws Exception {
         this.dataSets.add(new FlatXmlDataSetBuilder()
                 .build(new FileInputStream(fileName)));
     }
@@ -128,7 +120,7 @@ public class DBUnitManager {
      * @param operation
      * @throws Exception
      */
-    public void setSetUpOperation(String operation) throws Exception {
+    public void setSetUpOperation(@NonNull String operation) throws Exception {
         getDatabaseTester().setSetUpOperation(getDBOperation(operation));
     }
 
@@ -138,7 +130,7 @@ public class DBUnitManager {
      * @param operation
      * @throws Exception
      */
-    public void setTearDownOperation(String operation) throws Exception {
+    public void setTearDownOperation(@NonNull String operation) throws Exception {
         getDatabaseTester().setTearDownOperation(getDBOperation(operation));
     }
 
@@ -148,7 +140,7 @@ public class DBUnitManager {
      * @throws Exception
      */
     public void tearDown() throws Exception {
-        LOG.debug("tearDown() - start");
+        log.debug("tearDown() - start");
 
         try {
             final IDatabaseTester databaseTester = getDatabaseTester();
@@ -162,7 +154,6 @@ public class DBUnitManager {
             dataSetString = null;
             dataSets = new ArrayList<IDataSet>();
         }
-
     }
 
     /**
@@ -171,7 +162,7 @@ public class DBUnitManager {
      * @throws Exception
      */
     public void setUp() throws Exception {
-        LOG.debug("setUp() - start");
+        log.debug("setUp() - start");
         final IDatabaseTester databaseTester = getDatabaseTester();
         Assert.assertNotNull("DatabaseTester is not set", databaseTester);
         if (dataSetString != null)
@@ -189,7 +180,7 @@ public class DBUnitManager {
      * @throws Exception
      */
     public final IDatabaseConnection getConnection() throws Exception {
-        LOG.debug("getConnection() - start");
+        log.debug("getConnection() - start");
 
         final IDatabaseTester databaseTester = getDatabaseTester();
         Assert.assertNotNull("DatabaseTester is not set", databaseTester);
@@ -204,7 +195,7 @@ public class DBUnitManager {
      * @return
      * @throws Exception
      */
-    private static DatabaseOperation getDBOperation(String operation)
+    private static DatabaseOperation getDBOperation(@NonNull String operation)
             throws Exception {
 
         switch (operation) {
@@ -225,7 +216,7 @@ public class DBUnitManager {
             case "NONE":
                 return DatabaseOperation.NONE;
             default:
-                LOG.error("Unknown DB operation : " + operation);
+                log.error("Unknown DB operation : " + operation);
                 throw new Exception("Unknown DB operation : " + operation);
         }
     }

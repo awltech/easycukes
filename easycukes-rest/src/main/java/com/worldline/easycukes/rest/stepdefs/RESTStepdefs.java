@@ -17,6 +17,7 @@
  */
 package com.worldline.easycukes.rest.stepdefs;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 
@@ -42,12 +43,8 @@ import org.slf4j.LoggerFactory;
  * @author aneveux
  * @version 1.0
  */
+@Slf4j
 public class RESTStepdefs {
-
-    /**
-     * A logger...
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(RESTStepdefs.class);
 
     /**
      * Allows to send a GET request
@@ -72,7 +69,7 @@ public class RESTStepdefs {
     @Then("^the response property \"(.*)\" is (\"?.*\"?)$")
     public void checkAResponseProperty(final String property,
                                        final String result) throws Throwable {
-        LOG.info("Asserts that the response property is " + result);
+        log.info("Asserts that the response property is " + result);
         String expectedResult = result;
         if (CukesHelper.isExpression(result))
             expectedResult = CukesHelper.evalExpression(expectedResult);
@@ -89,7 +86,7 @@ public class RESTStepdefs {
     @Then("^the response property \"(.*)\" has a value$")
     public void checkIfResponsePropertyIsEmpty(final String property)
             throws Throwable {
-        LOG.debug("Asserts that the response property " + property
+        log.debug("Asserts that the response property " + property
                 + " has a value ");
         Assert.assertTrue(StringUtils.isNotEmpty(RestService.getInstance()
                 .getResponseProperty(DataInjector.injectData(property))));
@@ -106,7 +103,7 @@ public class RESTStepdefs {
     @Then("^the response property \"(.*)\" equals \"(.*)\"$")
     public void validateAResponsePropertyEqualsTo(final String property,
                                                   final String result) throws Throwable {
-        LOG.info("Asserts that the response property equals " + result);
+        log.info("Asserts that the response property equals " + result);
         Assert.assertTrue(DataInjector.injectData(result).equals(
                 RestService.getInstance().getResponseProperty(
                         DataInjector.injectData(property))));
@@ -123,7 +120,7 @@ public class RESTStepdefs {
     @Then("^the response property \"(.*)\" not contains \"([^\"]*)\"$")
     public void validateAResponsePropertyDoesntContain(final String property,
                                                        final String result) throws Throwable {
-        LOG.info("Asserts that the response property not contains " + result);
+        log.info("Asserts that the response property not contains " + result);
         Assert.assertFalse(RestService.getInstance()
                 .getResponseProperty(DataInjector.injectData(property))
                 .contains(DataInjector.injectData(result)));
@@ -144,7 +141,7 @@ public class RESTStepdefs {
         if (CukesHelper.isExpression(result))
             expectedResult = CukesHelper.evalExpression(expectedResult);
 
-        LOG.info("Asserts that the response property contains " + result);
+        log.info("Asserts that the response property contains " + result);
         Assert.assertTrue(RestService.getInstance()
                 .getResponseProperty(DataInjector.injectData(property))
                 .contains(expectedResult));
@@ -160,7 +157,7 @@ public class RESTStepdefs {
      */
     @Then("^the http response code is (\"?[0-9]*\"?)$")
     public void validateHTTPResponseCodeIs(final String status) {
-        LOG.info("Asserts that the response status is " + status);
+        log.info("Asserts that the response status is " + status);
         Assert.assertTrue(RestService.getInstance().getResponseStatus() == Integer
                 .parseInt(status));
     }
@@ -174,7 +171,7 @@ public class RESTStepdefs {
      */
     @Then("^the response contains \"(.*)\"$")
     public void validateResponseIs(final String result) {
-        LOG.debug("Asserts that the response contains " + result);
+        log.debug("Asserts that the response contains " + result);
 
         Assert.assertTrue(RestService.getInstance().getResponseContent()
                 .contains(DataInjector.injectData(result)));
@@ -189,7 +186,7 @@ public class RESTStepdefs {
      */
     @Then("^the response not contains \"(.*)\"$")
     public void validateResponseDoesntContain(final String result) {
-        LOG.debug("Asserts that the response not contains " + result);
+        log.debug("Asserts that the response not contains " + result);
 
         Assert.assertFalse(RestService.getInstance().getResponseContent()
                 .contains(DataInjector.injectData(result)));
@@ -197,7 +194,7 @@ public class RESTStepdefs {
 
     @Then("^the response content is:$")
     public void validateJSONResponseIs(final String result) {
-        LOG.debug("Asserts that response content is equivalent " + result);
+        log.debug("Asserts that response content is equivalent " + result);
         Assert.assertTrue(JSONHelper.equals(RestService.getInstance()
                 .getResponseContent(), result));
     }
@@ -207,7 +204,7 @@ public class RESTStepdefs {
      */
     @Then("^the response header \"(.*)\" has a value$")
     public void checkIfResponseHeaderIsNotEmpty(String prop) {
-        LOG.debug("Asserts that the response header " + prop
+        log.debug("Asserts that the response header " + prop
                 + " has a value ");
         final String headerValue = RestService.getInstance()
                 .getPropertyFromResponseHeader(prop);
@@ -220,7 +217,7 @@ public class RESTStepdefs {
      */
     @Then("^the response header \"(.*)\" is \"(.*)\"$")
     public void checkIfResponseHeaderIs(String prop, String result) {
-        LOG.debug("Asserts that the response header is " + result);
+        log.debug("Asserts that the response header is " + result);
         final String headerValue = RestService.getInstance()
                 .getPropertyFromResponseHeader(prop);
         Assert.assertTrue(headerValue.equals(result));
@@ -232,7 +229,7 @@ public class RESTStepdefs {
      */
     @Then("^the response header \"(.*)\" matches \"(.*)\"$")
     public void checkIfResponseHeaderMatches(String prop, String result) {
-        LOG.debug("Asserts that the response header matches " + result);
+        log.debug("Asserts that the response header matches " + result);
         final String headerValue = RestService.getInstance()
                 .getPropertyFromResponseHeader(prop);
         Assert.assertTrue(headerValue.contains(result));
@@ -276,7 +273,7 @@ public class RESTStepdefs {
     @Then("^I set the parameter \"(.*?)\" to response property \"(.*?)\"$")
     public void setAParameterToAResponseProperty(final String param,
                                                  final String property) throws Throwable {
-        LOG.info("Setting the parameter " + param + " to " + property);
+        log.info("Setting the parameter " + param + " to " + property);
         CukesHelper.setParameter(param, RestService.getInstance()
                 .getResponseProperty(DataInjector.injectData(property)));
     }
@@ -288,7 +285,7 @@ public class RESTStepdefs {
     @Then("^I set the parameter \"(.*?)\" to response content$")
     public void setAParameterToAResponseContent(final String param)
             throws Throwable {
-        LOG.info("Setting the parameter " + param + " to response content");
+        log.info("Setting the parameter " + param + " to response content");
         CukesHelper.setParameter(param, RestService.getInstance()
                 .getResponseContent());
     }
@@ -343,7 +340,7 @@ public class RESTStepdefs {
     @When("^I retry get to \"(.*?)\" until response property \"(.*?)\" is (\"?.*\"?)$")
     public void sendGetRequestAndRetryTillResponsePropertyIs(String path,
                                                              String property, String result) throws Throwable {
-        LOG.info("Sending GET request to " + path
+        log.info("Sending GET request to " + path
                 + " and retry until response property " + property + " is "
                 + result);
 
@@ -358,7 +355,7 @@ public class RESTStepdefs {
     @When("^I retry get to \"(.*?)\" until response contains \"(.*?)\"$")
     public void sendGetRequestAndRetryTillResponseContains(String path,
                                                            String result) throws Throwable {
-        LOG.info("Sending GET request to " + path
+        log.info("Sending GET request to " + path
                 + " and retry until response contains " + result);
 
         String expectedResult = DataInjector.injectData(result);
@@ -372,7 +369,7 @@ public class RESTStepdefs {
     @When("^I retry get to \"(.*?)\" until succeed$")
     public void sendGetRequestAndRetryTillSuccess(String path)
             throws Throwable {
-        LOG.info("Sending GET request to " + path
+        log.info("Sending GET request to " + path
                 + " and retry until succeed");
 
         RestService.getInstance().retryGetRequestUntilSucceed(
@@ -381,7 +378,7 @@ public class RESTStepdefs {
 
     @When("^I send get to \"(.*?)\"$")
     public void sendGetRequest(String path) throws Throwable {
-        LOG.info("Sending GET request to " + path);
+        log.info("Sending GET request to " + path);
 
         RestService.getInstance().sendGetRequest(DataInjector.injectData(path));
     }

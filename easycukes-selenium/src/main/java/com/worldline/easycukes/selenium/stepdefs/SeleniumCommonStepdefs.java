@@ -17,16 +17,15 @@
  */
 package com.worldline.easycukes.selenium.stepdefs;
 
-import org.junit.Assert;
-import org.openqa.selenium.browserlaunchers.Sleeper;
-
 import com.worldline.easycukes.commons.DataInjector;
 import com.worldline.easycukes.commons.ExecutionContext;
 import com.worldline.easycukes.selenium.pages.PageManager;
-
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
+import org.openqa.selenium.browserlaunchers.Sleeper;
 
 /**
  * This class aims at containing all the common operations you may use in the
@@ -36,6 +35,7 @@ import cucumber.api.java.en.When;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
 public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
 
     /**
@@ -45,7 +45,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^navigate to path \"([^\"]*)\"$")
     public void navigateToPath(final String path) {
-        LOG.info("Navigate to path : " + path);
+        log.info("Navigate to path : " + path);
         PageManager.getPage().navigateTo(DataInjector.injectData(path));
     }
 
@@ -54,7 +54,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^refresh the page$")
     public void refreshPage() {
-        LOG.info("refreshing the page");
+        log.info("refreshing the page");
         PageManager.getPage().refresh();
     }
 
@@ -69,7 +69,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Given("^move to and click element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
     public void moveAndClickOnAnElement(String selector, String value)
             throws Exception {
-        LOG.info("move to and click element identified by [" + selector
+        log.info("move to and click element identified by [" + selector
                 + " = " + value + "]");
         PageManager.getPage().moveToAndClick(getSelector(selector, value));
     }
@@ -85,7 +85,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Given("^select element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" by text \"([^\"]*)\"$")
     public void selectAnElement(String selector, String value, String text)
             throws Exception {
-        LOG.info("select element identified by [" + selector + " = " + value
+        log.info("select element identified by [" + selector + " = " + value
                 + "]");
         PageManager.getPage().selectByText(getSelector(selector, value),
                 DataInjector.injectData(text));
@@ -102,7 +102,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Given("^select element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" by value \"([^\"]*)\"$")
     public void selectAnElementByValue(String selector, String value,
                                        String text) throws Exception {
-        LOG.info("select element identified by [" + selector + " = " + value
+        log.info("select element identified by [" + selector + " = " + value
                 + "]");
         PageManager.getPage().selectByValue(getSelector(selector, value),
                 DataInjector.injectData(text));
@@ -118,7 +118,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Given("^click element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
     public void clickOnAnElement(String selector, String value)
             throws Exception {
-        LOG.info("Click on element identified by [" + selector + " = "
+        log.info("Click on element identified by [" + selector + " = "
                 + value + "]");
 
         PageManager.getPage().click(getSelector(selector, value));
@@ -133,7 +133,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^submit element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
     public void submitAnElement(String selector, String value) throws Exception {
-        LOG.info("Submit on element identified by [" + selector + " = "
+        log.info("Submit on element identified by [" + selector + " = "
                 + value + "]");
 
         PageManager.getPage().submit(getSelector(selector, value));
@@ -150,7 +150,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Given("^send a text \"([^\"]*)\" to element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
     public void addTextToAnElement(String text, String selector, String value)
             throws Exception {
-        LOG.info("Send text to element identified by [" + selector + " = "
+        log.info("Send text to element identified by [" + selector + " = "
                 + value + "]");
 
         PageManager.getPage().sendText(getSelector(selector, value),
@@ -165,7 +165,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^send a text \"([^\"]*)\" to alert and accept$")
     public void addTextToAnAlertAndAccept(String text) throws Exception {
-        LOG.info("send a text " + text + " to alert and accept");
+        log.info("send a text " + text + " to alert and accept");
         PageManager.getPage().sendTextToAlertAndAccept(
                 DataInjector.injectData(text));
     }
@@ -180,7 +180,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Then("^the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should be present$")
     public void checkPresenceOfAnElement(String selector, String value)
             throws Throwable {
-        LOG.info("Check the presence of element identified by [" + selector
+        log.info("Check the presence of element identified by [" + selector
                 + " = " + value + "]");
         Assert.assertTrue(PageManager.getPage().isElementPresent(
                 getSelector(selector, value)));
@@ -197,7 +197,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Then("^the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should not be present$")
     public void checkAbsenceOfAnElement(String selector, String value)
             throws Throwable {
-        LOG.info("Check the presence of element identified by [" + selector
+        log.info("Check the presence of element identified by [" + selector
                 + " = " + value + "]");
         Assert.assertFalse(PageManager.getPage().isElementPresent(
                 getSelector(selector, value)));
@@ -214,7 +214,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Then("^the element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should contain \"([^\"]*)\"$")
     public void checkIfAnElementContains(String selector, String value,
                                          String text) throws Throwable {
-        LOG.info("Check if the element identified by [" + selector + " = "
+        log.info("Check if the element identified by [" + selector + " = "
                 + value + "] contains " + text);
 
         Assert.assertTrue(PageManager.getPage()
@@ -230,7 +230,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Then("^the notification message should be \"([^\"]*)\"$")
     public void checkTheNotificationMessage(String text) throws Throwable {
-        LOG.info("the notification message should be : " + text);
+        log.info("the notification message should be : " + text);
 
         Assert.assertTrue(PageManager.getPage().waitNotification()
                 .contains(DataInjector.injectData(text)));
@@ -248,7 +248,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     public void waitUntilLoadingTheAttributeOfAnElement(String attribute,
                                                         String selector, String value) throws Throwable {
 
-        LOG.info("wait until loading the attribute " + attribute
+        log.info("wait until loading the attribute " + attribute
                 + " of element having [" + selector + " = " + value + "]");
 
         PageManager.getPage().waitUntilElementContainsAttribute(
@@ -268,7 +268,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Then("^the attribute \"([^\"]*)\" of element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" should contain \"([^\"]*)\"$")
     public void checkIfTheAttributeOfAnElementContains(String attribute,
                                                        String selector, String value, String text) throws Throwable {
-        LOG.info("Check if the element identified by [" + selector + " = "
+        log.info("Check if the element identified by [" + selector + " = "
                 + value + "] contains " + text);
 
         Assert.assertTrue(PageManager.getPage()
@@ -290,7 +290,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @Then("^save with \"([^\"]*)\" key the attribute \"([^\"]*)\" of element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
     public void saveTheAttributeOfAnElement(String key, String attribute,
                                             String selector, String value) throws Throwable {
-        LOG.info("save with " + key + " key the attribute " + attribute
+        log.info("save with " + key + " key the attribute " + attribute
                 + " of element identified by [" + selector + " = " + value
                 + "]");
         ExecutionContext.put(
@@ -308,7 +308,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Then("^the text of the page source should contain \"([^\"]*)\"$")
     public void checkIfThePageSourceContains(String text) throws Throwable {
-        LOG.info("Check if the text of the page source contains " + text);
+        log.info("Check if the text of the page source contains " + text);
         Assert.assertTrue(PageManager.getPage().isTextPresent(
                 DataInjector.injectData(text)));
     }
@@ -318,7 +318,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Then("^accept the alert$")
     public void acceptAnAlert() {
-        LOG.info("accept the alert");
+        log.info("accept the alert");
         PageManager.getPage().acceptAlert();
     }
 
@@ -331,7 +331,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @When("^move to element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
     public void moveToAnElement(String selector, String value) throws Throwable {
-        LOG.info("move to [" + selector + "=" + value + "]");
+        log.info("move to [" + selector + "=" + value + "]");
         PageManager.getPage().moveToElement(getSelector(selector, value));
     }
 
@@ -348,7 +348,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @When("^wait (\\d+) seconds for element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" contains \"([^\"]*)\"$")
     public void waitForAnElementToContain(int timeout, String selector,
                                           String value, String text) throws Throwable {
-        LOG.info("wait " + timeout + " seconds for element having ["
+        log.info("wait " + timeout + " seconds for element having ["
                 + selector + " = " + value + "]");
 
         PageManager.getPage().waitUntilElementContainsText(
@@ -364,7 +364,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @When("^wait for (\\d+) seconds$")
     public void waitForSomeSeconds(int seconds) throws Throwable {
-        LOG.info("waiting " + seconds + " seconds");
+        log.info("waiting " + seconds + " seconds");
         Sleeper.sleepTightInSeconds(seconds);
     }
 
@@ -380,7 +380,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @When("^wait until element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" contains \"([^\"]*)\"$")
     public void waitUntilAnElementContains(String selector, String value,
                                            String text) throws Throwable {
-        LOG.info("wait until element having [" + selector + " = " + value
+        log.info("wait until element having [" + selector + " = " + value
                 + "] contains " + text);
         PageManager.getPage().waitUntilElementContainsText(
                 getSelector(selector, value), DataInjector.injectData(text));
@@ -396,7 +396,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
     @When("^wait until element having (id|name|class|css|link|tag|xpath) \"([^\"]*)\" is present$")
     public void waitUntilAnElementIsPresent(String selector, String value)
             throws Throwable {
-        LOG.info("wait until element having [" + selector + " = " + value
+        log.info("wait until element having [" + selector + " = " + value
                 + "] contains is present");
         PageManager.getPage().isElementPresent(getSelector(selector, value));
     }
@@ -410,7 +410,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^switch to frame having (id|name|class|css|link|tag|xpath) \"([^\"]*)\"$")
     public void switchToAFrame(String selector, String value) throws Throwable {
-        LOG.info("Switching to frame identified by [" + selector + " = "
+        log.info("Switching to frame identified by [" + selector + " = "
                 + value + "]");
         PageManager.getPage().switchToFrame(getSelector(selector, value));
     }
@@ -422,7 +422,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^switch to previous window$")
     public void switchToPreviousWindow() throws Throwable {
-        LOG.info("Switching to previous window");
+        log.info("Switching to previous window");
         PageManager.getPage().switchToPreviousWindow();
     }
 
@@ -433,7 +433,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^switch to main content in page$")
     public void switchToMainContentInPage() throws Throwable {
-        LOG.info("Switching to main page");
+        log.info("Switching to main page");
         PageManager.getPage().switchToDefaultContent();
     }
 
@@ -444,7 +444,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^switch to new window$")
     public void switchToNewWindow() throws Throwable {
-        LOG.info("Switching to new window");
+        log.info("Switching to new window");
         PageManager.getPage().switchToNewWindow();
     }
 
@@ -455,7 +455,7 @@ public class SeleniumCommonStepdefs extends SeleniumAbstractStepdefs {
      */
     @Given("^close the browser$")
     public void closeTheBrowser() throws Throwable {
-        LOG.info("Close the browser");
+        log.info("Close the browser");
         PageManager.getPage().quit();
     }
 

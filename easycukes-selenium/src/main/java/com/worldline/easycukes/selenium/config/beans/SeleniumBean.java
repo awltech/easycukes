@@ -1,11 +1,16 @@
 package com.worldline.easycukes.selenium.config.beans;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Simple POJO containing some selenium configuration
  *
  * @author aneveux
  * @version 1.0
  */
+@Data
+@NoArgsConstructor
 public class SeleniumBean {
     /**
      * Target browser to use for the selenium tests
@@ -37,51 +42,4 @@ public class SeleniumBean {
      */
     public int default_timeout;
 
-    public String getTarget_browser() {
-        return target_browser;
-    }
-
-    public void setTarget_browser(String target_browser) {
-        this.target_browser = target_browser;
-    }
-
-    public boolean isUse_remote() {
-        return use_remote;
-    }
-
-    public void setUse_remote(boolean use_remote) {
-        this.use_remote = use_remote;
-    }
-
-    public String getSelenium_remote_address() {
-        return selenium_remote_address;
-    }
-
-    public void setSelenium_remote_address(String selenium_remote_address) {
-        this.selenium_remote_address = selenium_remote_address;
-    }
-
-    public String getChrome_driver_path() {
-        return chrome_driver_path;
-    }
-
-    public void setChrome_driver_path(String chrome_driver_path) {
-        this.chrome_driver_path = chrome_driver_path;
-    }
-
-    public String getIe_driver_path() {
-        return ie_driver_path;
-    }
-
-    public void setIe_driver_path(String ie_driver_path) {
-        this.ie_driver_path = ie_driver_path;
-    }
-
-    public int getDefault_timeout() {
-        return default_timeout;
-    }
-
-    public void setDefault_timeout(int default_timeout) {
-        this.default_timeout = default_timeout;
-    }
 }

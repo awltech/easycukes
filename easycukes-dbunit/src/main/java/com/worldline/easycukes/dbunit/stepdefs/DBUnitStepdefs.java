@@ -22,8 +22,7 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -37,13 +36,8 @@ import java.util.Map;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
 public class DBUnitStepdefs {
-
-    /**
-     * Logger for this class
-     */
-    protected static final Logger LOG = LoggerFactory
-            .getLogger(DBUnitStepdefs.class);
 
     @Before
     public void before(Scenario scenario) throws Exception {

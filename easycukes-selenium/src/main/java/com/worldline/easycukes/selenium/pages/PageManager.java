@@ -17,14 +17,13 @@
  */
 package com.worldline.easycukes.selenium.pages;
 
-import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
-import com.worldline.easycukes.selenium.config.beans.SeleniumConfigurationBean;
-import org.openqa.selenium.WebDriver;
-
 import com.worldline.easycukes.commons.ExecutionContext;
+import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
 import com.worldline.easycukes.selenium.WebDriverFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.worldline.easycukes.selenium.config.beans.SeleniumConfigurationBean;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.WebDriver;
 
 /**
  * TODO
@@ -32,13 +31,9 @@ import org.slf4j.LoggerFactory;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
+@UtilityClass
 public class PageManager {
-
-    /**
-     * Just a {@link Logger}...
-     */
-    private static final Logger LOG = LoggerFactory
-            .getLogger(PageManager.class);
 
     /**
      * This simple line does all the mutlithread magic. For more details please
@@ -69,7 +64,7 @@ public class PageManager {
                 try {
                     driver = WebDriverFactory.newRemoteWebDriver(browserName);
                 } catch (final Exception e) {
-                    LOG.warn("Setup : " + e.getMessage());
+                    log.warn("Setup : " + e.getMessage());
                     driver = WebDriverFactory.newLocalWebDriver(browserName);
                 }
             driver.manage().window().maximize();
