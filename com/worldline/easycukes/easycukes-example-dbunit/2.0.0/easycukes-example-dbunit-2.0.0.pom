@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.worldline.easycukes</groupId>
+		<artifactId>easycukes-examples</artifactId>
+		<version>2.0.0</version>
+	</parent>
+
+	<artifactId>easycukes-example-dbunit</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Easycukes examples - DBUnit </name>
+	<description>EasyCukes Examples - DBUnit</description>
+	<inceptionYear>2014</inceptionYear>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>1.1.5.Final</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>com.worldline.easycukes</groupId>
+			<artifactId>easycukes-rest</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.worldline.easycukes</groupId>
+			<artifactId>easycukes-dbunit</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>bsh</artifactId>
+					<groupId>org.beanshell</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-testng</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>1.18.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-servlet</artifactId>
+			<version>1.18.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.cukespace</groupId>
+			<artifactId>cukespace-core</artifactId>
+			<version>1.5.10</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+	      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+	      <artifactId>shrinkwrap-resolver-depchain</artifactId>
+	      <scope>test</scope>
+	      <type>pom</type>
+	    </dependency>
+	    <dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>${exec-maven-plugin.version}</version>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+		    <id>glassfish-embedded-3.1</id>
+		    <activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		    <dependencies>
+		        <dependency>
+		            <groupId>org.jboss.arquillian.container</groupId>
+		            <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
+		            <version>1.0.0.CR4</version>
+		            <scope>test</scope>
+		        </dependency>
+		        <dependency>
+		            <groupId>org.glassfish.main.extras</groupId>
+		            <artifactId>glassfish-embedded-all</artifactId>
+		            <version>3.1.2.2</version>
+		        </dependency>
+		    </dependencies>
+		</profile>
+	</profiles>
+</project>
