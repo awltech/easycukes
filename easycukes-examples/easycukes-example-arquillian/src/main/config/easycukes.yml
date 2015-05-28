@@ -1,0 +1,13 @@
+proxy:
+  host: proxy
+  port: 3128
+  enabled: false
+selenium:
+  target_browser: firefox
+  use_remote: false
+  selenium_remote_address: http://127.0.0.1:4444/wd/hub
+  chrome_driver_path: null
+  ie_driver_path: null
+  default_timeout: 10
+variables:
+  baseurl: http://localhost:8080/belly

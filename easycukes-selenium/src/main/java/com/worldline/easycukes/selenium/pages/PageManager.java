@@ -17,14 +17,13 @@
  */
 package com.worldline.easycukes.selenium.pages;
 
-import org.apache.log4j.Logger;
-import org.openqa.selenium.WebDriver;
-
-import com.worldline.easycukes.commons.Configuration;
 import com.worldline.easycukes.commons.ExecutionContext;
-import com.worldline.easycukes.commons.helpers.Constants;
+import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
 import com.worldline.easycukes.selenium.WebDriverFactory;
-import com.worldline.easycukes.selenium.utils.SeleniumConstants;
+import com.worldline.easycukes.selenium.config.beans.SeleniumConfigurationBean;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.WebDriver;
 
 /**
  * TODO
@@ -32,63 +31,54 @@ import com.worldline.easycukes.selenium.utils.SeleniumConstants;
  * @author mechikhi
  * @version 1.0
  */
+@Slf4j
+@UtilityClass
 public class PageManager {
 
-	/**
-	 * Just a {@link Logger}...
-	 */
-	private static final Logger LOGGER = Logger
-			.getLogger(Constants.CUKES_TESTS_LOGGER);
+    /**
+     * This simple line does all the mutlithread magic. For more details please
+     * refer to the src link above :)
+     */
+    private static ThreadLocal<Page> page = new ThreadLocal<Page>();
 
-	/*
-	 * This simple line does all the mutlithread magic. For more details please
-	 * refer to the src link above :)
-	 */
-	private static ThreadLocal<Page> page = new ThreadLocal<Page>();
+    /**
+     * Allows to initialize this instance of {@link PageManager} by creating the
+     * {@link WebDriver}
+     *
+     * @throws Exception
+     */
+    public static void initialize() throws Exception {
+        EasyCukesConfiguration<SeleniumConfigurationBean> configuration = new EasyCukesConfiguration<>(SeleniumConfigurationBean.class);
+        if (configuration.isProxyNeeded())
+            configuration.configureProxy();
+        if (page.get() == null) {
+            String browserName = ExecutionContext.get("browserName");
+            if (browserName == null)
+                browserName = configuration.getValues().selenium != null ? configuration.getValues().selenium.getTarget_browser()
+                        : "firefox";
+            WebDriver driver = null;
+            if (configuration.getValues().selenium != null
+                    && !configuration.getValues().selenium.isUse_remote())
+                driver = WebDriverFactory.newLocalWebDriver(browserName);
+            else
+                try {
+                    driver = WebDriverFactory.newRemoteWebDriver(browserName);
+                } catch (final Exception e) {
+                    log.warn("Setup : " + e.getMessage());
+                    driver = WebDriverFactory.newLocalWebDriver(browserName);
+                }
+            driver.manage().window().maximize();
+            page.set(new Page(driver));
+        }
+    }
 
-	/**
-	 * Allows to initialize this instance of {@link PageManager} by creating the
-	 * {@link WebDriver}
-	 *
-	 * @throws Exception
-	 */
-	public static void initialize() throws Exception {
-
-		if (Configuration.isProxyNeeded())
-			Configuration.configureProxy();
-		if (page.get() == null) {
-			String browserName = ExecutionContext.get("browserName");
-			if (browserName == null)
-				browserName = Configuration.getEnvironmentSelenium() != null ? Configuration
-						.getEnvironmentSelenium()
-						.get(SeleniumConstants.BROWSER_KEY).toString()
-						: "firefox";
-			WebDriver driver = null;
-			if (Configuration.getEnvironmentSelenium() != null
-								&& Configuration.getEnvironmentSelenium().containsKey(
-										SeleniumConstants.USE_REMOTE_KEY)
-										&& !Boolean.valueOf(Configuration.getEnvironmentSelenium()
-												.get(SeleniumConstants.USE_REMOTE_KEY).toString()))
-				driver = WebDriverFactory.newLocalWebDriver(browserName);
-			else
-				try {
-					driver = WebDriverFactory.newRemoteWebDriver(browserName);
-				} catch (final Exception e) {
-					LOGGER.warn("Setup : " + e.getMessage());
-					driver = WebDriverFactory.newLocalWebDriver(browserName);
-				}
-			driver.manage().window().maximize();
-			page.set(new Page(driver));
-		}
-	}
-
-	/**
-	 * TODO
-	 *
-	 * @return
-	 */
-	public static Page getPage() {
-		return page.get();
-	}
+    /**
+     * TODO
+     *
+     * @return
+     */
+    public static Page getPage() {
+        return page.get();
+    }
 
 }

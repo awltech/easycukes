@@ -17,9 +17,9 @@
  */
 package com.worldline.easycukes.rest.stepdefs;
 
+import com.worldline.easycukes.commons.Constants;
 import com.worldline.easycukes.commons.DataInjector;
 import com.worldline.easycukes.commons.ExecutionContext;
-import com.worldline.easycukes.commons.helpers.Constants;
 import com.worldline.easycukes.rest.client.RestService;
 
 import cucumber.api.java.en.Given;
@@ -42,10 +42,10 @@ public class RestConfigurationStepdefs {
 	 */
 	@Given("^the base url is \"(.*?)\"$")
 	public void setBaseURL(String url) {
-		ExecutionContext.put(Constants.BASE_URL_KEY,
+		ExecutionContext.put(Constants.BASEURL,
 				DataInjector.injectData(url));
 		RestService.getInstance().initialize(
-				ExecutionContext.get(Constants.BASE_URL_KEY));
+				ExecutionContext.get(Constants.BASEURL));
 	}
 
 }

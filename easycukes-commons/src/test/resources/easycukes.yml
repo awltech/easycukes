@@ -1,0 +1,16 @@
+proxy:
+  host: proxy
+  port: 3128
+  enabled: false
+ssl:
+  keystore: testKeyStore
+  keystore_password: testKeyStorePassword
+  truststore: testTrustStore
+  truststore_password: testTrustStorePassword
+credentials:
+  login: testLogin
+  password: testPassword
+variables:
+  something: testSomething
+  baseurl: something
+  email: test@test.test

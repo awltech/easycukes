@@ -17,179 +17,160 @@
  */
 package com.worldline.easycukes.rest.client;
 
-import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.httpclient.HttpStatus;
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
+import org.apache.commons.httpclient.HttpStatus;
+
+import javax.ws.rs.core.MediaType;
 
 /**
  * {@link JerseyClientHelper} allows to deal with REST requests. It proposes
  * some functions allowing to invoke HTTP methods (GET, POST, PUT, etc.) on the
  * Web resource
- * 
- * 
+ *
  * @author aneveux
  * @version 1.0
- * 
  */
+@UtilityClass
 public class JerseyClientHelper {
 
-	/**
-	 * Generic GET request to a service
-	 * 
-	 * @param jerseyClient
-	 *            instance of Jersey client to be used for REST requests
-	 * @param path
-	 *            path to be used for the GET request
-	 * @return a {@link ResponseWrapper} that you can use. Common usage is for
-	 *         example: <code></code>
-	 */
-	public static ResponseWrapper get(final Client jerseyClient,
-			final String path) {
-		final WebResource webResource = jerseyClient.resource(path);
-		final ClientResponse response = webResource.accept(
-				MediaType.APPLICATION_JSON).get(ClientResponse.class);
+    /**
+     * Generic GET request to a service
+     *
+     * @param jerseyClient instance of Jersey client to be used for REST requests
+     * @param path         path to be used for the GET request
+     * @return a {@link ResponseWrapper} that you can use. Common usage is for
+     * example: <code></code>
+     */
+    public static ResponseWrapper get(@NonNull final Client jerseyClient,
+                                      @NonNull final String path) {
+        final WebResource webResource = jerseyClient.resource(path);
+        final ClientResponse response = webResource.accept(
+                MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
-		return toResponseWrapper(response);
-	}
+        return toResponseWrapper(response);
+    }
 
-	/**
-	 * Generic POST request to a service
-	 * 
-	 * @param jerseyClient
-	 *            instance of Jersey client to be used for REST requests
-	 * @param path
-	 *            path to be used for the POST request
-	 * @return a {@link ClientResponse} containing the results of the REST call
-	 */
-	public static ResponseWrapper post(final Client jerseyClient,
-			final String path) {
-		final WebResource webResource = jerseyClient.resource(path);
-		final ClientResponse response = webResource
-				.type(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class);
-		return toResponseWrapper(response);
-	}
+    /**
+     * Generic POST request to a service
+     *
+     * @param jerseyClient instance of Jersey client to be used for REST requests
+     * @param path         path to be used for the POST request
+     * @return a {@link ClientResponse} containing the results of the REST call
+     */
+    public static ResponseWrapper post(@NonNull final Client jerseyClient,
+                                       @NonNull final String path) {
+        final WebResource webResource = jerseyClient.resource(path);
+        final ClientResponse response = webResource
+                .type(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).post(ClientResponse.class);
+        return toResponseWrapper(response);
+    }
 
-	/**
-	 * Generic POST request to a service
-	 * 
-	 * @param jerseyClient
-	 *            instance of Jersey client to be used for REST requests
-	 * @param path
-	 *            path to be used for the POST request
-	 * @param data
-	 *            paremeters to be used (JSON format) as a string
-	 * @return a {@link ClientResponse} containing the results of the REST call
-	 */
-	public static ResponseWrapper post(final Client jerseyClient,
-			final String path, final String data) {
-		final WebResource webResource = jerseyClient.resource(path);
-		final ClientResponse response = webResource
-				.type(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.post(ClientResponse.class, data);
-		return toResponseWrapper(response);
-	}
+    /**
+     * Generic POST request to a service
+     *
+     * @param jerseyClient instance of Jersey client to be used for REST requests
+     * @param path         path to be used for the POST request
+     * @param data         paremeters to be used (JSON format) as a string
+     * @return a {@link ClientResponse} containing the results of the REST call
+     */
+    public static ResponseWrapper post(@NonNull final Client jerseyClient,
+                                       @NonNull final String path, @NonNull final String data) {
+        final WebResource webResource = jerseyClient.resource(path);
+        final ClientResponse response = webResource
+                .type(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, data);
+        return toResponseWrapper(response);
+    }
 
-	/**
-	 * Generic DELETE request to a service
-	 * 
-	 * @param jerseyClient
-	 *            instance of Jersey client to be used for REST requests
-	 * @param path
-	 *            path to be used for the DELETE request
-	 * @return a {@link ClientResponse} containing the results of the REST call
-	 */
-	public static ResponseWrapper delete(final Client jerseyClient,
-			final String path) {
-		final WebResource webResource = jerseyClient.resource(path);
-		final ClientResponse response = webResource
-				.type(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.delete(ClientResponse.class);
-		return toResponseWrapper(response);
-	}
+    /**
+     * Generic DELETE request to a service
+     *
+     * @param jerseyClient instance of Jersey client to be used for REST requests
+     * @param path         path to be used for the DELETE request
+     * @return a {@link ClientResponse} containing the results of the REST call
+     */
+    public static ResponseWrapper delete(@NonNull final Client jerseyClient,
+                                         @NonNull final String path) {
+        final WebResource webResource = jerseyClient.resource(path);
+        final ClientResponse response = webResource
+                .type(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .delete(ClientResponse.class);
+        return toResponseWrapper(response);
+    }
 
-	/**
-	 * Generic DELETE request to a service
-	 * 
-	 * @param jerseyClient
-	 *            instance of Jersey client to be used for REST requests
-	 * @param path
-	 *            path to be used for the DELETE request
-	 * @param data
-	 *            paremeters to be used (JSON format) as a string
-	 * @return a {@link ClientResponse} containing the results of the REST call
-	 */
-	public static ResponseWrapper delete(final Client jerseyClient,
-			final String path, final String data) {
-		final WebResource webResource = jerseyClient.resource(path);
-		final ClientResponse response = webResource
-				.type(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.delete(ClientResponse.class, data);
-		return toResponseWrapper(response);
-	}
+    /**
+     * Generic DELETE request to a service
+     *
+     * @param jerseyClient instance of Jersey client to be used for REST requests
+     * @param path         path to be used for the DELETE request
+     * @param data         paremeters to be used (JSON format) as a string
+     * @return a {@link ClientResponse} containing the results of the REST call
+     */
+    public static ResponseWrapper delete(@NonNull final Client jerseyClient,
+                                         @NonNull final String path, @NonNull final String data) {
+        final WebResource webResource = jerseyClient.resource(path);
+        final ClientResponse response = webResource
+                .type(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .delete(ClientResponse.class, data);
+        return toResponseWrapper(response);
+    }
 
-	/**
-	 * Generic PUT request to a service
-	 * 
-	 * @param jerseyClient
-	 *            instance of Jersey client to be used for REST requests
-	 * @param path
-	 *            path to be used for the PUT request
-	 * @return a {@link ClientResponse} containing the results of the REST call
-	 */
-	public static ResponseWrapper put(final Client jerseyClient,
-			final String path) {
-		final WebResource webResource = jerseyClient.resource(path);
-		final ClientResponse response = webResource
-				.type(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).put(ClientResponse.class);
-		return toResponseWrapper(response);
-	}
+    /**
+     * Generic PUT request to a service
+     *
+     * @param jerseyClient instance of Jersey client to be used for REST requests
+     * @param path         path to be used for the PUT request
+     * @return a {@link ClientResponse} containing the results of the REST call
+     */
+    public static ResponseWrapper put(@NonNull final Client jerseyClient,
+                                      @NonNull final String path) {
+        final WebResource webResource = jerseyClient.resource(path);
+        final ClientResponse response = webResource
+                .type(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).put(ClientResponse.class);
+        return toResponseWrapper(response);
+    }
 
-	/**
-	 * Generic PUT request to a service
-	 * 
-	 * @param jerseyClient
-	 *            instance of Jersey client to be used for REST requests
-	 * @param path
-	 *            path to be used for the PUT request
-	 * @param data
-	 *            paremeters to be used (JSON format) as a string
-	 * @return a {@link ClientResponse} containing the results of the REST call
-	 */
-	public static ResponseWrapper put(final Client jerseyClient,
-			final String path, final String data) {
-		final WebResource webResource = jerseyClient.resource(path);
-		final ClientResponse response = webResource
-				.type(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.put(ClientResponse.class, data);
-		return toResponseWrapper(response);
-	}
+    /**
+     * Generic PUT request to a service
+     *
+     * @param jerseyClient instance of Jersey client to be used for REST requests
+     * @param path         path to be used for the PUT request
+     * @param data         paremeters to be used (JSON format) as a string
+     * @return a {@link ClientResponse} containing the results of the REST call
+     */
+    public static ResponseWrapper put(@NonNull final Client jerseyClient,
+                                      @NonNull final String path, @NonNull final String data) {
+        final WebResource webResource = jerseyClient.resource(path);
+        final ClientResponse response = webResource
+                .type(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .put(ClientResponse.class, data);
+        return toResponseWrapper(response);
+    }
 
-	/**
-	 * Convert the reponse got from a REST call to bean wrapper
-	 * 
-	 * @param response
-	 *            the response got from a REST call
-	 * @return a {@link ClientResponse} containing the results of the REST call
-	 */
-	private static ResponseWrapper toResponseWrapper(
-			final ClientResponse response) {
-		String responseString = null;
-		if (response != null
-				&& response.getStatus() != HttpStatus.SC_NO_CONTENT) {
-			responseString = response.getEntity(String.class);
-		}
-		// LOGGER.debug("Response got from server : " + responseString);
-		return new ResponseWrapper(responseString, response.getStatus());
-	}
+    /**
+     * Convert the reponse got from a REST call to bean wrapper
+     *
+     * @param response the response got from a REST call
+     * @return a {@link ClientResponse} containing the results of the REST call
+     */
+    private static ResponseWrapper toResponseWrapper(
+            @NonNull final ClientResponse response) {
+        String responseString = null;
+        if (response != null
+                && response.getStatus() != HttpStatus.SC_NO_CONTENT) {
+            responseString = response.getEntity(String.class);
+        }
+        return new ResponseWrapper(responseString, response.getStatus());
+    }
 
 }

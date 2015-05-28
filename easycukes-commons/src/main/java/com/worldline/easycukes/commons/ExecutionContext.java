@@ -17,6 +17,8 @@
  */
 package com.worldline.easycukes.commons;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,7 @@ import java.util.Map;
  * @author aneveux
  * @version 1.0
  */
+@UtilityClass
 public class ExecutionContext {
 
 	private static ThreadLocal<Map<String, String>> context = new ThreadLocal<Map<String, String>>();

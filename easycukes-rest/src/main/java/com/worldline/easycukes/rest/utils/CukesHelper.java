@@ -17,12 +17,10 @@
  */
 package com.worldline.easycukes.rest.utils;
 
-import java.text.ParseException;
-
-import org.apache.log4j.Logger;
-
 import com.worldline.easycukes.commons.ExecutionContext;
-import com.worldline.easycukes.commons.helpers.Constants;
+import lombok.experimental.UtilityClass;
+
+import java.text.ParseException;
 
 /**
  * This {@link CukesHelper} class provides various methods allowing to
@@ -31,58 +29,50 @@ import com.worldline.easycukes.commons.helpers.Constants;
  * @author mechikhi
  * @version 1.0
  */
+@UtilityClass
 public class CukesHelper {
 
-	/**
-	 * {@link Logger} to be used in order to log a few things about execution
-	 */
-	protected final static Logger LOGGER = Logger
-			.getLogger(Constants.CUKES_TESTS_LOGGER);
+    /**
+     * Checks if the given string matching an expression
+     *
+     * @param expression the string to be checked
+     * @Return true if the specified string is an expression
+     */
+    public static boolean isExpression(String expression) {
+        if (expression.startsWith("{") && expression.endsWith("}"))
+            return true;
+        if (expression.startsWith("\"{") && expression.endsWith("}\""))
+            return true;
+        return false;
+    }
 
-	/**
-	 * Checks if the given string matching an expression
-	 *
-	 * @param expression
-	 *            the string to be checked
-	 * @Return true if the specified string is an expression
-	 */
-	public static boolean isExpression(String expression) {
-		if (expression.startsWith("{") && expression.endsWith("}"))
-			return true;
-		if (expression.startsWith("\"{") && expression.endsWith("}\""))
-			return true;
-		return false;
-	}
+    /**
+     * Allows to evaluate the given expression
+     *
+     * @param expression
+     * @return the result of the evaluation of the specified expression
+     * @throws ParseException
+     */
+    public static String evalExpression(String expression)
+            throws ParseException {
+        if (expression == null)
+            return null;
+        final String toEval = expression
+                .substring(expression.indexOf("{") + 1, expression.indexOf("}"))
+                .replaceAll(" ", "").toLowerCase();
+        if (DateHelper.isDateExpression(toEval))
+            return DateHelper.getDateValue(toEval);
+        throw new ParseException(expression + " is not a valid expression!", 0);
+    }
 
-	/**
-	 * Allows to evaluate the given expression
-	 *
-	 * @param expression
-	 * @return the result of the evaluation of the specified expression
-	 * @throws ParseException
-	 */
-	public static String evalExpression(String expression)
-			throws ParseException {
-		if (expression == null)
-			return null;
-		final String toEval = expression
-				.substring(expression.indexOf("{") + 1, expression.indexOf("}"))
-				.replaceAll(" ", "").toLowerCase();
-		if (DateHelper.isDateExpression(toEval))
-			return DateHelper.getDateValue(toEval);
-		throw new ParseException(expression + " is not a valid expression!", 0);
-	}
-
-	/**
-	 * Sets the value in the execution context
-	 *
-	 * @param param
-	 *            the key to be used in the context
-	 * @param value
-	 *            the value to associate with the provided param
-	 */
-	public static void setParameter(String param, String value) {
-		ExecutionContext.put(param.toLowerCase(), value);
-	}
+    /**
+     * Sets the value in the execution context
+     *
+     * @param param the key to be used in the context
+     * @param value the value to associate with the provided param
+     */
+    public static void setParameter(String param, String value) {
+        ExecutionContext.put(param.toLowerCase(), value);
+    }
 
 }
