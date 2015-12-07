@@ -61,6 +61,8 @@ public class RestService {
      * Base URL to be used for rest requests
      */
     private String baseUrl = null;
+    
+    private String nonProxyHost = null;
 
     /**
      * Jersey client to be used for REST requests
@@ -135,6 +137,7 @@ public class RestService {
             httpClient.setHostConfiguration(configuration.configureProxy());
         configuration.configureSSL();
         this.baseUrl = baseUrl;
+        this.nonProxyHost = configuration.getValues().proxy.byPassHost ;
     }
 
     /**
@@ -474,6 +477,9 @@ public class RestService {
 
         }
         try {
+        	if(nonProxyHost!= null && fullpath.contains(nonProxyHost)){
+        		httpClient.getHostConfiguration().setProxyHost(null);
+        	}
             final int statusCode = httpClient.executeMethod(method);
             response = new ResponseWrapper(method.getResponseBodyAsString(),
                     method.getResponseHeaders(), statusCode);
