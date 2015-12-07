@@ -27,5 +27,10 @@ public class ProxyBean {
      * Defines if the proxy should be activated or not
      */
     public boolean enabled;
+    
+    /**
+     * Proxy bypass
+     */
+    public String byPassHost;
 
 }

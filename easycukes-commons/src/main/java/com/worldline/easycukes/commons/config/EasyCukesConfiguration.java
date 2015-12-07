@@ -99,6 +99,9 @@ public class EasyCukesConfiguration<E extends CommonConfigurationBean> {
             log.info(String.format("[EASYCUKES] Now using proxy: %s:%d", configurationBean.proxy.host, configurationBean.proxy.port));
             System.setProperty("https.proxyHost", configurationBean.proxy.host);
             System.setProperty("https.proxyPort", Integer.toString(configurationBean.proxy.port));
+            if(configurationBean.proxy.byPassHost != null){
+            	System.setProperty("http.nonProxyHosts", configurationBean.proxy.byPassHost);
+            }
             return hostCfg;
         }
         return null;
