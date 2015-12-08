@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.worldline.easycukes</groupId>
+  <artifactId>easycukes-examples</artifactId>
+  <version>2.1.0-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20151208.090045</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20151208090045</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>2.1.0-20151208.090045-1</value>
+        <updated>20151208090045</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
