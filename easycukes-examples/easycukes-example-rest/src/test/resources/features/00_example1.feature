@@ -19,7 +19,7 @@ Feature: Example 1
     
   @customer
   Scenario: Consult customer
-    When I send get to "/sqlrest/CUSTOMER/9"
+    When I send get to "/sqlrest/CUSTOMER/8"
     Then the http response code is 200
-    And the response contains "<FIRSTNAME>James</FIRSTNAME>"
-    And the response contains "<LASTNAME>Schneider</LASTNAME>"
+    And the response contains "<FIRSTNAME>Andrew</FIRSTNAME>"
+    And the response contains "<LASTNAME>Miller</LASTNAME>"
