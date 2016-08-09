@@ -293,6 +293,23 @@ public class RestService {
                     .nextInt(jsonArray.size())), property);
         return null;
     }
+    
+    /**
+     * Allows to get the specified 0th property from the response array of
+     * a previous REST call
+     *
+     * @param property
+     * @return the value if it's found (else it'll be null)
+     * @throws ParseException
+     */
+    public String getFirstPropertyFromResponseArray(@NonNull String property)
+            throws ParseException {
+        final JSONArray jsonArray = JSONHelper.toJSONArray(response
+                .getResponseString());
+        if (jsonArray != null && !jsonArray.isEmpty())
+            return JSONHelper.getValue((JSONObject) jsonArray.get(0), property);
+        return null;
+    }
 
     /**
      * Allows to get an item randomly from the response array of a previous REST

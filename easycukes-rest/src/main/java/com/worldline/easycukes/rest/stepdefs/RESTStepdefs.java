@@ -60,7 +60,7 @@ public class RESTStepdefs {
 
     /**
      * Allows to validate that the result of a REST call is containing
-     * expectations
+     * expectations.
      *
      * @param property the element to search for in the JSON response
      * @param result   the result that should be contained in the response property
@@ -210,6 +210,18 @@ public class RESTStepdefs {
                 .getPropertyFromResponseHeader(prop);
         Assert.assertTrue(StringUtils.isNotEmpty(headerValue));
     }
+    
+    /**
+     * Allows to validate that the authentication ticket is null
+     */
+    @Then("^the response header \"(.*)\" has null value$")
+    public void checkIfResponseHeaderIsEmpty(String prop) {
+        log.debug("Asserts that the response header " + prop
+                + " has a value ");
+        final String headerValue = RestService.getInstance()
+                .getPropertyFromResponseHeader(prop);
+        Assert.assertFalse(StringUtils.isNotEmpty(headerValue));
+    }
 
     /**
      * @param prop
@@ -316,6 +328,13 @@ public class RESTStepdefs {
             final String param, final String property) throws Throwable {
         CukesHelper.setParameter(param, RestService.getInstance()
                 .getRandomlyPropertyFromResponseArray(property));
+    }
+    
+    @Given("^I set the parameter \"(.*?)\" to first property \"(.*?)\" in response array$")
+    public void setAParameterToAFirstPropertyFromResponseArray(
+            final String param, final String property) throws Throwable {
+        CukesHelper.setParameter(param, RestService.getInstance()
+                .getFirstPropertyFromResponseArray(property));
     }
 
     @Given("^I set randomly the parameter \"(.*?)\" to an item in response array$")
