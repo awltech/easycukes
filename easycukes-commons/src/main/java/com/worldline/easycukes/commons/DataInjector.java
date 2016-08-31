@@ -41,18 +41,23 @@ public class DataInjector {
     /**
      * Token allowing to define the start of a variable
      */
-    public final static String TOKEN_START = "$__";
+    private static final String TOKEN_START = "$__";
 
     /**
      * Token allowing to define the end of a variable
      */
-    public final static String TOKEN_END = "__$";
+    private static final String TOKEN_END = "__$";
+    
+    /**
+     * Prefix to identify the resource references created by cucumber tests 
+     */
+    private static final String CUCUMBER_PREFIX = "kcutst";
 
     /**
      * {@link Pattern} allowing to find the variables in the {@link String}
      * elements to be submitted
      */
-    protected final static Pattern p = Pattern.compile("\\$__([a-zA-Z]+)__\\$");
+    protected static final Pattern p = Pattern.compile("\\$__([a-zA-Z]+)__\\$");
 
     /**
      * Searches for variables in the provided {@link String}, then replaces them
@@ -93,7 +98,7 @@ public class DataInjector {
                     // 7. We generate a value for the token and put it in
                     // the
                     // context
-                    ExecutionContext.put(token, RandomStringUtils.randomAlphabetic(11)
+                    ExecutionContext.put(token, CUCUMBER_PREFIX+RandomStringUtils.randomAlphabetic(11)
                             .toLowerCase());
             // 8. Then, we'll inject the value from the context directly in the
             // result
