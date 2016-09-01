@@ -17,9 +17,6 @@
  */
 package com.worldline.easycukes.scm.utils;
 
-import java.io.File;
-import java.io.IOException;
-
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +28,13 @@ import org.eclipse.jgit.api.DeleteTagCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.TagCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * {@link GitHelper} allows to ease the manipulation of git repositories. It
@@ -45,82 +47,87 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 @Slf4j
 @UtilityClass
 public class GitHelper {
-
 	private static final String PUSH_MESSAGE = "Pushed the changes in remote Git repository...";
-	private static final String COMMIT_MESSAGE =  "Commited the changes in the Git repository...";
+	
+	private static final String COMMIT_MESSAGE = "Commited the changes in the Git repository...";
+	
+    /**
+     * Clones the specified repository in the specified directory using the
+     * provided credentials for authentication
+     *
+     * @param url       the URL of the git repository to be cloned
+     * @param username  username to be used for cloning the repository
+     * @param password  password matching with the provided username to be used for
+     *                  authentication
+     * @param directory the path in which the git repository should be cloned
+     * @throws GitAPIException if anything's going wrong while cloning the repository
+     */
+    public static void clone(@NonNull String url, String username, String password,
+                             String directory) throws GitAPIException {
+        log.info("Cloning from " + url + " to " + directory);
+        try {
+            final UsernamePasswordCredentialsProvider userCredential = new UsernamePasswordCredentialsProvider(
+                    username, password);
+            Git.cloneRepository().setCredentialsProvider(userCredential)
+                    .setURI(url).setDirectory(new File(directory)).call();
+            log.info("Repository sucessfully cloned");
+        } catch (final InvalidRemoteException e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        } catch (final TransportException e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        } catch (final GitAPIException e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+    }
 
-	/**
-	 * Clones the specified repository in the specified directory using the
-	 * provided credentials for authentication
-	 *
-	 * @param url       the URL of the git repository to be cloned
-	 * @param username  username to be used for cloning the repository
-	 * @param password  password matching with the provided username to be used for
-	 *                  authentication
-	 * @param directory the path in which the git repository should be cloned
-	 * @throws GitAPIException if anything's going wrong while cloning the repository
-	 */
-	public static void clone(@NonNull String url, String username, String password,
-							 String directory) {
-		log.info("Cloning from " + url + " to " + directory);
-		try {
-			final UsernamePasswordCredentialsProvider userCredential = new UsernamePasswordCredentialsProvider(
-					username, password);
-			Git.cloneRepository().setCredentialsProvider(userCredential)
-					.setURI(url).setDirectory(new File(directory)).call();
-			log.info("Repository sucessfully cloned");
-		} catch (final GitAPIException e) {
-			log.error(e.getMessage(), e);
-		}
-	}
-
-
-	/**
-	 * Adds all the files of the specified directory in the local git repository
-	 * (git add .), then commits the changes (git commit .), and finally pushes
-	 * the changes on the remote repository (git push)
-	 *
-	 * @param directory the directory in which the local git repository is located
-	 * @param username  the username to be used while pushing
-	 * @param password  the password matching with the provided username to be used
-	 *                  for authentication
-	 * @param message   the commit message to be used
-	 * @throws GitAPIException if something's going wrong while interacting with Git
-	 * @throws IOException     if something's going wrong while manipulating the local
-	 *                         repository
-	 */
-	public static void commitAndPush(@NonNull File directory, String username, String password, String message) {
-		try {
-			final Git git = Git.open(directory);
-			
-			// git init
-			final AddCommand addCommand = git.add();
-			for (final String filePath : directory.list())
-				if (!".git".equals(filePath))
-					addCommand.addFilepattern(filePath);
-			addCommand.call();
-			log.info("Added content of the directory" + directory
-					+ " in the Git repository located in "
-					+ directory.toString());
-			
-			// git commit
-			final PersonIdent author = new PersonIdent(username, "");
-			git.commit().setCommitter(author).setMessage(message)
-					.setAuthor(author).call();
-			log.info(COMMIT_MESSAGE);
-			
-			//git push
-			final UsernamePasswordCredentialsProvider userCredential = new UsernamePasswordCredentialsProvider(
-					username, password);
-			git.push().setCredentialsProvider(userCredential).call();
-			log.info(PUSH_MESSAGE);
-		} catch (final GitAPIException | IOException e) {
-			log.error(e.getMessage(), e);
-		}
-	}
-
-
-	/**
+    /**
+     * Adds all the files of the specified directory in the local git repository
+     * (git add .), then commits the changes (git commit .), and finally pushes
+     * the changes on the remote repository (git push)
+     *
+     * @param directory the directory in which the local git repository is located
+     * @param username  the username to be used while pushing
+     * @param password  the password matching with the provided username to be used
+     *                  for authentication
+     * @param message   the commit message to be used
+     * @throws GitAPIException if something's going wrong while interacting with Git
+     * @throws IOException     if something's going wrong while manipulating the local
+     *                         repository
+     */
+    public static void commitAndPush(@NonNull File directory, String username,
+                                     String password, String message) throws GitAPIException,
+            IOException {
+        try {
+            final Git git = Git.open(directory);
+            // run the add
+            final AddCommand addCommand = git.add();
+            for (final String filePath : directory.list())
+                if (!".git".equals(filePath))
+                    addCommand.addFilepattern(filePath);
+            addCommand.call();
+            log.info("Added content of the directory" + directory
+                    + " in the Git repository located in "
+                    + directory.toString());
+            // and then commit
+            final PersonIdent author = new PersonIdent(username, "");
+            git.commit().setCommitter(author).setMessage(message)
+                    .setAuthor(author).call();
+            log.info(COMMIT_MESSAGE);
+            // and finally push
+            final UsernamePasswordCredentialsProvider userCredential = new UsernamePasswordCredentialsProvider(
+                    username, password);
+            git.push().setCredentialsProvider(userCredential).call();
+            log.info(PUSH_MESSAGE);
+        } catch (final GitAPIException e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+    }
+    
+    /**
 	 * Create a new branch in the local git repository
 	 * (git checkout -b branchname) and finally pushes new branch on the remote repository (git push)
 	 *
@@ -128,10 +135,7 @@ public class GitHelper {
 	 * @param username  the username to be used while pushing
 	 * @param password  the password matching with the provided username to be used
 	 *                  for authentication
-	 * @param message   the commit message to be used
-	 * @throws GitAPIException if something's going wrong while interacting with Git
-	 * @throws IOException     if something's going wrong while manipulating the local
-	 *                         repository
+	 * @param message   the commit message to be used	 
 	 */
 	public static void createBranch(@NonNull File directory, String branchName, String username,
 									String password, String message) throws GitAPIException {
@@ -169,10 +173,7 @@ public class GitHelper {
 	 * @param username  the username to be used while pushing
 	 * @param password  the password matching with the provided username to be used
 	 *                  for authentication
-	 * @param message   the commit message to be used
-	 * @throws GitAPIException if something's going wrong while interacting with Git
-	 * @throws IOException     if something's going wrong while manipulating the local
-	 *                         repository
+	 * @param message   the commit message to be used	 
 	 */
 	public static void deleteBranch(@NonNull File directory, String branchName, String username,
 									String password, String message) {
@@ -212,10 +213,7 @@ public class GitHelper {
 	 * @param username  the username to be used while pushing
 	 * @param password  the password matching with the provided username to be used
 	 *                  for authentication
-	 * @param message   the commit message to be used
-	 * @throws GitAPIException if something's going wrong while interacting with Git
-	 * @throws IOException     if something's going wrong while manipulating the local
-	 *                         repository
+	 * @param message   the commit message to be used	 
 	 */
 	public static void createTag(@NonNull File directory, String tagName, String username,
 								 String password, String message) {
@@ -254,18 +252,10 @@ public class GitHelper {
 	 * @param username  the username to be used while pushing
 	 * @param password  the password matching with the provided username to be used
 	 *                  for authentication
-	 * @param message   the commit message to be used
-	 * @throws GitAPIException if something's going wrong while interacting with Git
-	 * @throws IOException     if something's going wrong while manipulating the local
-	 *                         repository
+	 * @param message   the commit message to be used	 
 	 */
-	public static void deleteTag(@NonNull File directory,
-								 String tagName,
-								 String username,
-								 String password,
-								 String message) {
-
-		try {
+	public static void deleteTag(@NonNull File directory, String tagName, String username, String password, String message) {
+		try {			
 			final Git git = Git.open(directory);
 
 			final UsernamePasswordCredentialsProvider userCredential = new UsernamePasswordCredentialsProvider(
@@ -281,7 +271,7 @@ public class GitHelper {
 			log.info(message);
 
 			git.push().setCredentialsProvider(userCredential).call();
-			log.info("Pushed the changes in remote Git repository...");
+			log.info(PUSH_MESSAGE);
 		} catch (final GitAPIException | IOException e) {
 			log.error(e.getMessage(), e);
 		}
