@@ -149,8 +149,7 @@ public class GitHelper {
 			CreateBranchCommand branchCommand = git.branchCreate();
 			branchCommand.setName(branchName);
 			branchCommand.call();
-			log.info("Develop branch created");
-
+			
 			// and then commit
 			final PersonIdent author = new PersonIdent(username, "");
 			git.commit().setCommitter(author).setMessage(message)

@@ -17,22 +17,24 @@
  */
 package com.worldline.easycukes.scm.stepdefs;
 
+import java.io.File;
+import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import com.worldline.easycukes.commons.Constants;
 import com.worldline.easycukes.commons.DataInjector;
-import com.worldline.easycukes.commons.ExecutionContext;
 import com.worldline.easycukes.commons.config.EasyCukesConfiguration;
 import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
 import com.worldline.easycukes.scm.utils.GitHelper;
 import com.worldline.easycukes.scm.utils.MercurialHelper;
 import com.worldline.easycukes.scm.utils.SvnHelper;
+
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import lombok.extern.slf4j.Slf4j;
-import org.eclipse.jgit.api.errors.GitAPIException;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * SCMStepdefs are all the step definitions you can use in your cucumber
@@ -47,21 +49,6 @@ public class SCMStepdefs {
 
     protected static final EasyCukesConfiguration<CommonConfigurationBean> configuration = new EasyCukesConfiguration<>(CommonConfigurationBean.class);
     
-	/*
-	 *  Used to convert base url into scm base url 
-	 */
-	private static final String SCM_BASE_URL = "/portal";
-	
-	/*
-	 *  Used to log message after commit
-	 */
-	private static final String COMMIT_DONE_MESSAGE = "Done Commit...";
-	
-	/*
-	 *  Used to log message before commit
-	 */
-	private static final String COMMITING_MESSAGE = "Commiting the project to Git repository...";
-
     /**
      * Allows to clone a remote Git repository into the specified location
      *
@@ -70,15 +57,22 @@ public class SCMStepdefs {
      * @throws Exception if anything's going wrong...
      */
     @Given("^the git repository located in \"([^\"]*)\" is cloned into \"([^\"]*)\"$")
-    public void cloneAGitRepository(String url, String target) throws Exception {
-        final String baseUrl = ExecutionContext.get(Constants.BASEURL);
+    public void cloneAGitRepository(String url, String target) throws Exception {        
+        
         String username = "";
         String password = "";
+        String scmUrl = "";
+        
         if (configuration.getValues().credentials != null) {
             username = configuration.getValues().credentials.getLogin() != null ? configuration.getValues().credentials.getLogin() : "";
             password = configuration.getValues().credentials.getPassword() != null ? configuration.getValues().credentials.getPassword() : "";
         }
-        final String fullPath = baseUrl.replace(SCM_BASE_URL, "") + DataInjector.injectData(url);        
+        
+        if (configuration.getValues().getVariables() != null && configuration.getValues().getVariables().get(Constants.SCMURL) != null)
+        	scmUrl = configuration.getValues().getVariables().get(Constants.SCMURL);
+        
+        final String fullPath = scmUrl + DataInjector.injectData(url);
+        
         // then clone
         GitHelper.clone(fullPath, username, password,
                 DataInjector.injectData(target));
@@ -94,14 +88,19 @@ public class SCMStepdefs {
     @Given("^the mercurial repository located in \"([^\"]*)\" is cloned into \"([^\"]*)\"$")
     public void cloneAMercurialRepository(String url, String target)
             throws Exception {
-        final String baseUrl = ExecutionContext.get(Constants.BASEURL);
+        
         String username = "";
         String password = "";
+        String scmUrl = "";
         if (configuration.getValues().credentials != null) {
             username = configuration.getValues().credentials.getLogin() != null ? configuration.getValues().credentials.getLogin() : "";
             password = configuration.getValues().credentials.getPassword() != null ? configuration.getValues().credentials.getPassword() : "";
         }
-        final String fullPath = baseUrl.replace(SCM_BASE_URL, "") + DataInjector.injectData(url);
+        
+        if (configuration.getValues().getVariables() != null && configuration.getValues().getVariables().get(Constants.SCMURL) != null)
+        	scmUrl = configuration.getValues().getVariables().get(Constants.SCMURL);
+        
+        final String fullPath = scmUrl + DataInjector.injectData(url);
         // then clone
         MercurialHelper.clone(fullPath, username, password,
                 DataInjector.injectData(target));
@@ -149,15 +148,19 @@ public class SCMStepdefs {
                                                     String remoteRepository, String message) throws Throwable {
         log.info("Commiting the project to Mercurial repository ");
 
-        final String baseUrl = ExecutionContext.get(Constants.BASEURL);
         String username = "";
         String password = "";
+        String scmUrl = "";
+        
         if (configuration.getValues().credentials != null) {
             username = configuration.getValues().credentials.getLogin() != null ? configuration.getValues().credentials.getLogin() : "";
             password = configuration.getValues().credentials.getPassword() != null ? configuration.getValues().credentials.getPassword() : "";
         }
 
-        final String fullPath = baseUrl.replace(SCM_BASE_URL, "")+ DataInjector.injectData(remoteRepository);
+        if (configuration.getValues().getVariables() != null && configuration.getValues().getVariables().get(Constants.SCMURL) != null)
+        	scmUrl = configuration.getValues().getVariables().get(Constants.SCMURL);
+        
+        final String fullPath = scmUrl + DataInjector.injectData(remoteRepository);
         
         final File repoLoc = new File(DataInjector.injectData(localRepository));
 
@@ -179,14 +182,20 @@ public class SCMStepdefs {
             throws Throwable {
         log.info("Checkouting from " + url + " to " + target);
 
-        final String baseUrl = ExecutionContext.get(Constants.BASEURL);
+        String scmUrl = "";
         String username = "";
         String password = "";
+        
         if (configuration.getValues().credentials != null) {
             username = configuration.getValues().credentials.getLogin() != null ? configuration.getValues().credentials.getLogin() : "";
             password = configuration.getValues().credentials.getPassword() != null ? configuration.getValues().credentials.getPassword() : "";
         }
-        final String fullPath = baseUrl.replace(SCM_BASE_URL, "") + DataInjector.injectData(url);
+        
+        if (configuration.getValues().getVariables() != null && configuration.getValues().getVariables().get(Constants.SCMURL) != null)
+        	scmUrl = configuration.getValues().getVariables().get(Constants.SCMURL);
+        
+        final String fullPath = scmUrl + DataInjector.injectData(url);
+        
         // then checkout
         SvnHelper.checkout(fullPath, username, password,
                 DataInjector.injectData(target));
@@ -224,6 +233,8 @@ public class SCMStepdefs {
 	 * a git push command in the specified repository using the message provided
 	 * as a commit message
 	 * 
+	 * @param branchName
+	 *            to create a new branch in a git repository             
 	 * @param repository
 	 *            the location in which the git repository is located
 	 * @param message
@@ -231,13 +242,11 @@ public class SCMStepdefs {
 	 * @throws GitAPIException
 	 *             if something's going wrong while interacting with Git
 	 *             commands
-	 * @throws IOException
-	 *             if there's something wrong while committing the files
 	 */
-	@When("^I create a new branch in a git repository located in \"([^\"]*)\" having name \"([^\"]*)\" with the message \"([^\"]*)\"$")
-	public void createGitBarnch(String repository, String branchName,
+	@When("^I create a new branch \"([^\"]*)\" for the git repository located at \"([^\"]*)\" with the message \"([^\"]*)\"$")
+	public void createGitBarnch(String branchName, String repository,
 								String message) throws GitAPIException {
-		log.info(COMMITING_MESSAGE);
+		log.info("Commiting the project to Git repository...");
 		final File gitworkDir = new File(DataInjector.injectData(repository));
 
 		String username = "";
@@ -250,7 +259,7 @@ public class SCMStepdefs {
 		}
 		GitHelper.createBranch(gitworkDir, branchName, username, password,
 				DataInjector.injectData(message));
-		log.info(COMMIT_DONE_MESSAGE);
+		log.info("Done Commit...");
 	}
 
 
@@ -259,6 +268,8 @@ public class SCMStepdefs {
 	 * a git push command in the specified repository using the message provided
 	 * as a commit message
 	 * 
+	 * @param branchName
+	 *            to delete the branch from git repository
 	 * @param repository
 	 *            the location in which the git repository is located
 	 * @param message
@@ -266,13 +277,11 @@ public class SCMStepdefs {
 	 * @throws GitAPIException
 	 *             if something's going wrong while interacting with Git
 	 *             commands
-	 * @throws IOException
-	 *             if there's something wrong while committing the files
 	 */
-	@When("^I delete a branch from a git repository located in \"([^\"]*)\" having name \"([^\"]*)\" with the message \"([^\"]*)\"$")
-	public void deleteGitBarnch(String repository, String branchName,
+	@When("^I delete this \"([^\"]*)\" branch from the git repository located at \"([^\"]*)\" with the message \"([^\"]*)\"$")
+	public void deleteGitBarnch(String branchName, String repository,
 								String message) throws GitAPIException {
-		log.info(COMMITING_MESSAGE);
+		log.info("Commiting the project to Git repository...");
 		final File gitworkDir = new File(DataInjector.injectData(repository));
 
 		String username = "";
@@ -285,7 +294,7 @@ public class SCMStepdefs {
 		}
 		GitHelper.deleteBranch(gitworkDir, branchName, username, password,
 				DataInjector.injectData(message));
-		log.info(COMMIT_DONE_MESSAGE);
+		log.info("Done Commit...");
 	}
 
 
@@ -294,6 +303,8 @@ public class SCMStepdefs {
 	 * git push command in the specified repository using the message provided
 	 * as a commit message
 	 * 
+	 * @param tagName
+	 *            to create a new tag in a git repository
 	 * @param repository
 	 *            the location in which the git repository is located
 	 * @param message
@@ -301,12 +312,10 @@ public class SCMStepdefs {
 	 * @throws GitAPIException
 	 *             if something's going wrong while interacting with Git
 	 *             commands
-	 * @throws IOException
-	 *             if there's something wrong while committing the files
 	 */
-	@When("^I create a new tag in a git repository located in \"([^\"]*)\" having name \"([^\"]*)\" with the message \"([^\"]*)\"$")
-	public void createGitTag(String repository, String tagName, String message) throws GitAPIException {
-		log.info(COMMITING_MESSAGE);
+	@When("^I create a new tag \"([^\"]*)\" for the git repository located at \"([^\"]*)\" with the message \"([^\"]*)\"$")
+	public void createGitTag(String tagName, String repository, String message) throws GitAPIException {
+		log.info("Commiting the project to Git repository...");
 		final File gitworkDir = new File(DataInjector.injectData(repository));
 
 		String username = "";
@@ -319,7 +328,7 @@ public class SCMStepdefs {
 		}
 		GitHelper.createTag(gitworkDir, tagName, username, password,
 				DataInjector.injectData(message));
-		log.info(COMMIT_DONE_MESSAGE);
+		log.info("Done Commit...");
 	}
 
 
@@ -328,6 +337,8 @@ public class SCMStepdefs {
 	 * a git push command in the specified repository using the message provided
 	 * as a commit message
 	 * 
+	 * @param tagName
+	 *            to delete the tag from git repository
 	 * @param repository
 	 *            the location in which the git repository is located
 	 * @param message
@@ -335,12 +346,10 @@ public class SCMStepdefs {
 	 * @throws GitAPIException
 	 *             if something's going wrong while interacting with Git
 	 *             commands
-	 * @throws IOException
-	 *             if there's something wrong while committing the files
 	 */
-	@When("^I delete a tag from a git repository located in \"([^\"]*)\" having name \"([^\"]*)\" with the message \"([^\"]*)\"$")
-	public void deleteGitTag(String repository, String tagName, String message) throws GitAPIException {
-		log.info(COMMITING_MESSAGE);
+	@When("^I delete this \"([^\"]*)\" tag from the git repository located at \"([^\"]*)\" with the message \"([^\"]*)\"$")
+	public void deleteGitTag(String tagName, String repository, String message) throws GitAPIException {
+		log.info("Commiting the project to Git repository...");
 		
 		final File gitworkDir = new File(DataInjector.injectData(repository));
 		
@@ -353,7 +362,7 @@ public class SCMStepdefs {
 					.getValues().credentials.getPassword() : "";
 		}
 		GitHelper.deleteTag(gitworkDir, tagName, username, password, message);
-		log.info(COMMIT_DONE_MESSAGE);
+		log.info("Done Commit...");
 	}
 
 }
