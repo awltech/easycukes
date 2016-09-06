@@ -47,9 +47,6 @@ import java.io.IOException;
 @Slf4j
 @UtilityClass
 public class GitHelper {
-	private static final String PUSH_MESSAGE = "Pushed the changes in remote Git repository...";
-	
-	private static final String COMMIT_MESSAGE = "Commited the changes in the Git repository...";
 	
     /**
      * Clones the specified repository in the specified directory using the
@@ -115,12 +112,12 @@ public class GitHelper {
             final PersonIdent author = new PersonIdent(username, "");
             git.commit().setCommitter(author).setMessage(message)
                     .setAuthor(author).call();
-            log.info(COMMIT_MESSAGE);
+            log.info("Commited the changes in the Git repository...");
             // and finally push
             final UsernamePasswordCredentialsProvider userCredential = new UsernamePasswordCredentialsProvider(
                     username, password);
             git.push().setCredentialsProvider(userCredential).call();
-            log.info(PUSH_MESSAGE);
+            log.info("Pushed the changes in remote Git repository...");
         } catch (final GitAPIException e) {
             log.error(e.getMessage(), e);
             throw e;
@@ -157,7 +154,7 @@ public class GitHelper {
 			log.info(message);
 
 			git.push().setCredentialsProvider(userCredential).call();
-			log.info(PUSH_MESSAGE);
+			log.info("Pushed the changes in remote Git repository...");
 		} catch (final GitAPIException | IOException e) {
 			log.error(e.getMessage(), e);
 		}
@@ -196,7 +193,7 @@ public class GitHelper {
 			log.info(message);
 
 			git.push().setCredentialsProvider(userCredential).call();
-			log.info(PUSH_MESSAGE);
+			log.info("Pushed the changes in remote Git repository...");
 
 		} catch (final GitAPIException | IOException e) {
 			log.error(e.getMessage(), e);
@@ -236,7 +233,7 @@ public class GitHelper {
 			log.info(message);
 
 			git.push().setCredentialsProvider(userCredential).call();
-			log.info(PUSH_MESSAGE);
+			log.info("Pushed the changes in remote Git repository...");
 		} catch (final GitAPIException | IOException e) {
 			log.error(e.getMessage(), e);
 		}
@@ -270,7 +267,7 @@ public class GitHelper {
 			log.info(message);
 
 			git.push().setCredentialsProvider(userCredential).call();
-			log.info(PUSH_MESSAGE);
+			log.info("Pushed the changes in remote Git repository...");
 		} catch (final GitAPIException | IOException e) {
 			log.error(e.getMessage(), e);
 		}
