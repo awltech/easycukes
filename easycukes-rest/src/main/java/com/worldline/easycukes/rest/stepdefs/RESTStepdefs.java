@@ -455,14 +455,14 @@ public class RESTStepdefs {
 	}
 
 
-	@When("^I send put to \"(.*?)\" the parameters:$")
+	@When("^I send a put request to \"(.*?)\" with parameters:$")
 	public void sendPutRequestWithParameters(String path, String params) {
 		log.info("Sending put request to " + path);
 		RestService.getInstance().sendPut(DataInjector.injectData(path), DataInjector.injectData(params));
 	}
 
 
-	@When("^I send delete to \"(.*?)\" the parameters:$")
+	@When("^I send a delete request to \"(.*?)\" with parameters:$")
 	public void sendDeleteRequestWithParameters(String path, String params) {
 		log.info("Sending delete request to " + path);
 		RestService.getInstance().sendDelete(DataInjector.injectData(path), DataInjector.injectData(params));
