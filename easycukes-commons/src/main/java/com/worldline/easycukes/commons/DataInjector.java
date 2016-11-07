@@ -38,21 +38,23 @@ import java.util.regex.Pattern;
  */
 public class DataInjector {
 
+	protected static final EasyCukesConfiguration<CommonConfigurationBean> configuration = new EasyCukesConfiguration<>(CommonConfigurationBean.class);
+	
     /**
      * Token allowing to define the start of a variable
      */
-    public final static String TOKEN_START = "$__";
+    private static final String TOKEN_START = "$__";
 
     /**
      * Token allowing to define the end of a variable
      */
-    public final static String TOKEN_END = "__$";
-
+    private static final String TOKEN_END = "__$";
+    
     /**
      * {@link Pattern} allowing to find the variables in the {@link String}
      * elements to be submitted
      */
-    protected final static Pattern p = Pattern.compile("\\$__([a-zA-Z]+)__\\$");
+    protected static final Pattern p = Pattern.compile("\\$__([a-zA-Z]+)__\\$");
 
     /**
      * Searches for variables in the provided {@link String}, then replaces them
@@ -69,7 +71,12 @@ public class DataInjector {
      * be replaced by the value present in the execution context
      */
     public static String injectData(@NonNull final String s) {
+    	String cucumberPrefix="";
         EasyCukesConfiguration<CommonConfigurationBean> configuration = new EasyCukesConfiguration<>(CommonConfigurationBean.class);
+        
+        if (configuration.getValues().getVariables() != null && configuration.getValues().getVariables().get(Constants.CUCUMBER_PREFIX) != null)
+        	cucumberPrefix = configuration.getValues().getVariables().get(Constants.CUCUMBER_PREFIX);
+        
         // 0. We store the initial string in order to use it for injecting
         // tokens
         String result = s;
@@ -93,7 +100,7 @@ public class DataInjector {
                     // 7. We generate a value for the token and put it in
                     // the
                     // context
-                    ExecutionContext.put(token, RandomStringUtils.randomAlphabetic(11)
+                    ExecutionContext.put(token, cucumberPrefix+RandomStringUtils.randomAlphabetic(11)
                             .toLowerCase());
             // 8. Then, we'll inject the value from the context directly in the
             // result

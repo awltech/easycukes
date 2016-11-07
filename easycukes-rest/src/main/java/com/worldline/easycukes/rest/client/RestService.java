@@ -17,6 +17,27 @@
  */
 package com.worldline.easycukes.rest.client;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Random;
+
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
@@ -29,22 +50,6 @@ import com.worldline.easycukes.commons.config.beans.CommonConfigurationBean;
 import com.worldline.easycukes.commons.helpers.HtmlHelper;
 import com.worldline.easycukes.commons.helpers.JSONHelper;
 import com.worldline.easycukes.rest.utils.RestConstants;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * {@link RestService} is actually the main entry point to be used in order to
@@ -557,4 +562,133 @@ public class RestService {
             });
         requestHeaders.put(header, value);
     }
+    
+    
+    /**
+	 * Allows to send a PUT request, with parameters using JSON format
+	 *
+	 * @param path path to be used for the PUT request
+	 * @param data paremeters to be used (JSON format) as a string
+	 */
+	@SuppressWarnings("unchecked")
+	public void sendPut(final String path, final String data) {
+		String fullpath = path;
+
+		if (path.startsWith("/"))
+			fullpath = baseUrl + path;
+
+		log.info("Sending PUT request to " + fullpath);
+
+		final PutMethod method = new PutMethod(fullpath);
+
+		for (final Map.Entry<String, String> header : requestHeaders.entrySet())
+			method.setRequestHeader(header.getKey(), header.getValue());
+
+		if (data != null) {
+			JSONObject jsonObject = null;
+			try {
+				jsonObject = JSONHelper.toJSONObject(data);
+
+				for (final Iterator<String> iterator = jsonObject.keySet().iterator(); iterator.hasNext();) {
+					final String param = iterator.next();
+					HttpMethodParams methodParams = new HttpMethodParams();
+					methodParams.setParameter(param, (jsonObject.get(param) != null) ? jsonObject.get(param).toString()
+							: null);
+					method.setParams(methodParams);
+				}
+			} catch (final ParseException e) {
+				log.error("Sorry, parameters are not proper JSON...", e);
+			}
+		}
+		
+		try {
+			if (nonProxyHost != null && fullpath.contains(nonProxyHost)) {
+				httpClient.getHostConfiguration().setProxyHost(null);
+			}
+			final int statusCode = httpClient.executeMethod(method);
+			response = new ResponseWrapper(method.getResponseBodyAsString(),
+					method.getResponseHeaders(), statusCode);
+		} catch (final IOException e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			method.releaseConnection();
+		}
+	}
+
+
+	/**
+	 * Allows to send a DELETE request, with parameters using JSON format
+	 *
+	 * @param path path to be used for the DELETE request
+	 * @param data paremeters to be used (JSON format) as a string
+	 */
+	@SuppressWarnings("unchecked")
+	public void sendDelete(final String path, final String data) {
+		String fullpath = path;
+		
+		if (path.startsWith("/"))
+			fullpath = baseUrl + path;
+		
+		log.info("Sending DELETE request to " + fullpath);
+		
+		final DeleteMethod method = new DeleteMethod(fullpath);
+		
+		for (final Map.Entry<String, String> header : requestHeaders.entrySet())
+			method.setRequestHeader(header.getKey(), header.getValue());
+		
+		if (data != null) {
+			JSONObject jsonObject = null;
+			try {
+				jsonObject = JSONHelper.toJSONObject(data);
+
+				for (final Iterator<String> iterator = jsonObject.keySet()
+						.iterator(); iterator.hasNext();) {
+					final String param = iterator.next();
+					HttpMethodParams methodParams = new HttpMethodParams();
+					methodParams.setParameter(param, (jsonObject.get(param) != null) ? jsonObject.get(param).toString()
+							: null);
+					method.setParams(methodParams);
+
+				}
+			} catch (final ParseException e) {
+				log.error("Sorry, parameters are not proper JSON...", e);
+			}
+
+		}
+		try {
+			if (nonProxyHost != null && fullpath.contains(nonProxyHost)) {
+				httpClient.getHostConfiguration().setProxyHost(null);
+			}
+			final int statusCode = httpClient.executeMethod(method);
+			response = new ResponseWrapper(method.getResponseBodyAsString(),
+					method.getResponseHeaders(), statusCode);
+		} catch (final IOException e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			method.releaseConnection();
+		}
+	}
+
+
+	/**
+	 * Allows to get object Id from the response array having not null value for given property of
+	 * a previous REST call
+	 *
+	 * @param property
+	 * @return the value if it's found (else it'll be null)
+	 * @throws ParseException
+	 */
+	public String getIdFromResponseArrayByProperty(@NonNull String property)
+			throws ParseException {
+		final JSONArray jsonArray = JSONHelper.toJSONArray(response
+				.getResponseString());
+
+		for (Object jsonArrayObj : jsonArray) {
+			if (JSONHelper.getValue((JSONObject) jsonArrayObj, property) != null)
+				return JSONHelper.getValue((JSONObject) jsonArrayObj, "id");
+		}
+
+		return null;
+	}
+    
 }

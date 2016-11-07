@@ -20,11 +20,13 @@ package com.worldline.easycukes.scm.utils;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+
 import org.tmatesoft.svn.core.SVNDepth;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.BasicAuthenticationManager;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.wc.*;
 
 import java.io.File;
@@ -64,18 +66,10 @@ public class SvnHelper {
         if (svnClientManager == null) {
             final ISVNOptions options = SVNWCUtil.createDefaultOptions(
                     new File("/tmp/svnconfig"), true);
-            final BasicAuthenticationManager basicAuthenticationManager = new BasicAuthenticationManager(
-                    username, password);
-            if (System.getProperty("https.proxyHost") != null
-                    && System.getProperty("https.proxyPort") != null)
-                basicAuthenticationManager
-                        .setProxy(System.getProperty("https.proxyHost"),
-                                Integer.parseInt(System
-                                        .getProperty("https.proxyPort")), null,
-                                null);
-            // Creates an instance of SVNClientManager
-            svnClientManager = SVNClientManager.newInstance(options,
-                    basicAuthenticationManager);
+            ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(username, password);
+            
+            //Creates an instance of SVNClientManager
+ 			svnClientManager = SVNClientManager.newInstance(options, authManager);
         }
         return svnClientManager;
     }
@@ -154,12 +148,12 @@ public class SvnHelper {
         final SVNProperties revisionProperties = null;
         final SVNClientManager svnClientManager = getSVNClientManager(username,
                 password);
-        final List<File> listToCommit = new ArrayList<File>();
+        final List<File> listToCommit = new ArrayList<>();
         // add to version control
         try {
             final SVNWCClient svnwcClient = svnClientManager.getWCClient();
             for (final String filePath : directory.list())
-                if (!filePath.equals(".svn")) {
+                if (!".svn".equals(filePath)) {
                     final File file = new File(directory, filePath);
                     listToCommit.add(file);
                     svnwcClient.doAdd(file, force, mkdir,

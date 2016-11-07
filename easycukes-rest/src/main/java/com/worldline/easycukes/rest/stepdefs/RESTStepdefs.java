@@ -19,6 +19,7 @@ package com.worldline.easycukes.rest.stepdefs;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 
 import com.worldline.easycukes.commons.DataInjector;
@@ -32,8 +33,6 @@ import com.worldline.easycukes.rest.utils.RestConstants;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * RESTStepdefs are all the step definitions you can use in your Cucumber
@@ -448,4 +447,24 @@ public class RESTStepdefs {
     public void setDateFormat(String format) throws Throwable {
         CukesHelper.setParameter(RestConstants.DATE_FORMAT, format);
     }
+    
+    @Given("^I set the parameter \"(.*?)\" to first not null property \"(.*?)\" in response array$")
+	public void setAParameterToAFirstNotNullPropertyFromResponseArray(final String param, final String property)
+			throws ParseException {
+		CukesHelper.setParameter(param, RestService.getInstance().getIdFromResponseArrayByProperty(property));
+	}
+
+
+	@When("^I send a put request to \"(.*?)\" with parameters:$")
+	public void sendPutRequestWithParameters(String path, String params) {
+		log.info("Sending put request to " + path);
+		RestService.getInstance().sendPut(DataInjector.injectData(path), DataInjector.injectData(params));
+	}
+
+
+	@When("^I send a delete request to \"(.*?)\" with parameters:$")
+	public void sendDeleteRequestWithParameters(String path, String params) {
+		log.info("Sending delete request to " + path);
+		RestService.getInstance().sendDelete(DataInjector.injectData(path), DataInjector.injectData(params));
+	}
 }

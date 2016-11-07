@@ -11,4 +11,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Constants {
     public static final String BASEURL = "baseurl";
+    public static final String SCMURL = "scmurl";
+    public static final String CUCUMBER_PREFIX = "cucumberprefix";
 }
